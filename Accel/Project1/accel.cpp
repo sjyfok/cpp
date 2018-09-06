@@ -78,7 +78,7 @@ void CMainWindow::OnSize(UINT nType, int cx, int cy)
 void CMainWindow::OnPaint()
 {
 	CPaintDC dc(this);
-	dc.SetViewportOrg(m_nHScrollPos, m_nVScrollPos);
+	dc.SetWindowOrg(m_nHScrollPos, m_nVScrollPos);
 	CPen pen(PS_SOLID, 0, RGB(192, 192, 192));
 	CPen *pOldPen = dc.SelectObject(&pen);
 
@@ -143,7 +143,7 @@ void CMainWindow::OnPaint()
 
 void CMainWindow::OnHScroll(UINT nCode, UINT nPos, CScrollBar* pScrollBar)
 {
-	int nDelta;
+	int nDelta = 0;
 	switch (nCode)
 	{
 	case SB_LINELEFT:
@@ -182,5 +182,39 @@ void CMainWindow::OnHScroll(UINT nCode, UINT nPos, CScrollBar* pScrollBar)
 
 void CMainWindow::OnVScroll(UINT nCode, UINT nPos, CScrollBar *pScrollBar)
 {
-	int nDelta;
-}
+	int nDelta = 0;
+
+	switch (nCode)
+	{
+	case SB_LINEUP:
+		nDelta = -LINESIZE;
+		break;
+	case SB_PAGEUP:
+		nDelta = -m_nVPageSize;
+		break;
+	case SB_THUMBTRACK:
+		nDelta = (int)nPos - m_nVScrollPos;
+		break;
+	case SB_PAGEDOWN:
+		nDelta = m_nVPageSize;
+		break;
+	case SB_LINEDOWN:
+		nDelta = LINESIZE;
+		break;
+	default:
+		break;
+	}
+	int nScrollPos = m_nVScrollPos + nDelta;
+	int nMaxPos = m_nViewHeight - m_nVPageSize;
+	if (nScrollPos < 0)
+		nDelta = -m_nVScrollPos;
+	else if (nScrollPos > nMaxPos)
+		nDelta = nMaxPos - m_nVScrollPos;
+
+	if (nDelta != 0)
+	{
+		m_nVScrollPos += nDelta;
+		SetScrollPos(SB_VERT, m_nVScrollPos, TRUE);
+		ScrollWindow(0, -nDelta);
+	}
+}	
