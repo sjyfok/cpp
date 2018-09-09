@@ -14,7 +14,7 @@ public:
 class CMainWindow : public CWnd
 {
 protected:
-	static const CRect m_rcSquaresp[9];
+	static const CRect m_rcSquares[9];
 	int m_nGameGrid[9];
 	int m_nNextChar;
 	int GetRectID(CPoint point);
