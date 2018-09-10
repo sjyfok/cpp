@@ -48,7 +48,7 @@ void CMainWindow::OnMouseMove(UINT nFlags, CPoint point)
 	{
 		CClientDC dc(this);
 		InvertLine(&dc, m_ptFrom, m_ptTo);
-		InvertLine(&dc, m_ptFrom, m_ptTo);
+		InvertLine(&dc, m_ptFrom, point);
 		m_ptTo = point;
 	}
 }
