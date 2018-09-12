@@ -114,12 +114,12 @@ void CMainWindow::OnPaint()
 
 	DrawInputText(&dc);
 	DrawMessageHeader(&dc);
-	DrawMeaages(&dc);
+	DrawMessages(&dc);
 }
 
 void CMainWindow::OnSetFocus(CWnd *pWnd)
 {
-	CreateSolidCaret(max(2, ::GetSystemMetrics(SM_CSBORDER)),
+	CreateSolidCaret(max(2, ::GetSystemMetrics(SM_CXBORDER)),
 		m_cyChar);
 	SetCaretPos(m_ptCarePos);
 	ShowCaret();
@@ -146,5 +146,212 @@ BOOL CMainWindow::OnSetCursor(CWnd *pWnd, UINT nHitTest, UINT message)
 	return CWnd::OnSetCursor(pWnd, nHitTest, message);
 }
 
+void CMainWindow::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	if (m_rcTextBox.PtInRect(point))
+	{
+		m_nTextPos = GetNearestPos(point);
+		PositionCaret();
+	}
+}
 
+void CMainWindow::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	ShowMessage(_T("WM_KEYDOWN"), nChar, nRepCnt, nFlags);
+	switch (nChar)
+	{
+	case VK_LEFT:
+		if (m_nTextPos != 0)
+		{
+			m_nTextPos--;
+			PositionCaret();
+		}
+		break;
+	case VK_RIGHT:
+		if (m_nTextPos != m_strInputText.GetLength())
+		{
+			m_nTextPos++;
+			PositionCaret();
+		}
+		break;
+	case VK_HOME:
+		m_nTextPos = 0;
+		PositionCaret();
+		break;
+	case VK_END:
+		m_nTextPos = m_strInputText.GetLength();
+		PositionCaret();
+		break;
+	default:
+		break;
+	}
+}
 
+void CMainWindow::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	ShowMessage(_T("WM_CHAR"), nChar, nRepCnt, nFlags);
+	CClientDC dc(this);
+	switch (nChar)
+	{
+	case VK_ESCAPE:
+	case VK_RETURN:
+		m_strInputText.Empty();
+		m_nTextPos = 0;
+		break;
+	case VK_BACK:
+		if (m_nTextPos != 0)
+		{
+			m_strInputText = m_strInputText.Left(m_nTextPos - 1) +
+				m_strInputText.Right(m_strInputText.GetLength() -
+					m_nTextPos);
+			m_nTextPos--;
+		}
+		break;
+	default:
+		if ((nChar >= 0) && (nChar <= 31))
+			return;
+		if (m_nTextPos == m_strInputText.GetLength())
+		{
+			m_strInputText += (TCHAR)nChar;
+			m_nTextPos++;
+		}
+		else
+			m_strInputText.SetAt(m_nTextPos++, nChar);
+		CSize size = dc.GetTextExtent(m_strInputText,
+			m_strInputText.GetLength());
+		if ((m_ptTextOrigin.x + size.cx) > m_nTextLimit)
+		{
+			m_strInputText = (TCHAR)nChar;
+			m_nTextPos = 1;
+		}
+		break;
+	}
+	HideCaret();
+	DrawInputText(&dc);
+	PositionCaret(&dc);
+	ShowCaret();
+}
+
+void CMainWindow::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	ShowMessage(_T("WM_KEYUP"), nChar, nRepCnt, nFlags);
+	CWnd::OnKeyUp(nChar, nRepCnt, nFlags);
+}
+
+void CMainWindow::OnSysKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	ShowMessage(_T("WM_SYSKEYDOWN"), nChar, nRepCnt, nFlags);
+	CWnd::OnSysKeyDown(nChar, nRepCnt, nFlags);
+}
+
+void CMainWindow::OnSysChar(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	ShowMessage(_T("WM_SYSCHAR"), nChar, nRepCnt, nFlags);
+	CWnd::OnSysChar(nChar, nRepCnt, nFlags);
+}
+
+void CMainWindow::OnSysKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	ShowMessage(_T("WM_SYSKEYUP"), nChar, nRepCnt, nFlags);
+	CWnd::OnSysKeyUp(nChar, nRepCnt, nFlags);
+}
+
+void CMainWindow::PositionCaret(CDC *pDC)
+{
+	BOOL bRelease = FALSE;
+
+	if (pDC == NULL)
+	{
+		pDC = GetDC();
+		bRelease = TRUE;
+	}
+
+	CPoint point = m_ptTextOrigin;
+	CString string = m_strInputText.Left(m_nTextPos);
+	point.x += (pDC->GetTextExtent(string, string.GetLength())).cx;
+	SetCaretPos(point);
+
+	if (bRelease)
+		ReleaseDC(pDC);
+}
+
+int CMainWindow::GetNearestPos(CPoint point)
+{
+	if (point.x <= m_ptTextOrigin.x)
+		return 0;
+
+	CClientDC dc(this);
+	int nLen = m_strInputText.GetLength();
+	if (point.x >= (m_ptTextOrigin.x +
+		(dc.GetTextExtent(m_strInputText, nLen)).cx))
+		return nLen;
+	int i = 0;
+	int nPrevChar = m_ptTextOrigin.x;
+	int nNextChar = m_ptTextOrigin.x;
+
+	while (nNextChar < point.x)
+	{
+		i++;
+		nPrevChar = nNextChar;
+		nNextChar = m_ptTextOrigin.x +
+			(dc.GetTextExtent(m_strInputText.Left(i), i)).cx;
+	}
+	return ((point.x - nPrevChar) < (nNextChar - point.x)) ? i - 1 : i;
+}
+
+void CMainWindow::DrawInputText(CDC *pDC)
+{
+	pDC->ExtTextOut(m_ptTextOrigin.x, m_ptTextOrigin.y,
+		ETO_OPAQUE, m_rcTextBox, m_strInputText, NULL);
+}
+
+void CMainWindow::ShowMessage(LPCTSTR pszMessage, UINT nChar,
+	UINT nRepCnt, UINT nFlags)
+{
+	CString string;
+	string.Format(_T("%s\t %u\t  %u\t  %u\t %u\t %u\t %%u\t %u"),
+		pszMessage, nChar, nRepCnt, nFlags & 0xFF,
+		(nFlags >> 8) & 0x01,
+		(nFlags >> 13) & 0x01,
+		(nFlags >> 14) & 0x01,
+		(nFlags >> 15) & 0x01);
+	ScrollWindow(0, -m_cyLine, &m_rcScroll);
+	ValidateRect(m_rcScroll);
+
+	CClientDC dc(this);
+	dc.SetBkColor((COLORREF)::GetSysColor(COLOR_3DFACE));
+
+	m_strMessages[m_nMsgPos] = string;
+	dc.TabbedTextOutA(m_ptLowerMsgOrigin.x, m_ptLowerMsgOrigin.y,
+		m_strMessages[m_nMsgPos], m_strMessages[m_nMsgPos].GetLength(),
+		sizeof(m_nTabStops), m_nTabStops, m_ptLowerMsgOrigin.x);
+
+	if (++m_nMsgPos == MAX_STRINGS)
+		m_nMsgPos = 0;
+}
+
+void CMainWindow::DrawMessageHeader(CDC *pDC)
+{
+	static CString string = _T("Message \tChar\tRep\tScan\tExt\tCon\tPrv\tTran");
+
+	pDC->SetBkColor((COLORREF)::GetSysColor(COLOR_3DFACE));
+	pDC->TabbedTextOutA(m_ptHeaderOrigin.x, m_ptHeaderOrigin.y,
+		string, string.GetLength(), sizeof(m_nTabStops), m_nTabStops,
+		m_ptHeaderOrigin.x);
+}
+
+void CMainWindow::DrawMessages(CDC* pDC)
+{
+	int nPos = m_nMsgPos;
+	pDC->SetBkColor((COLORREF)::GetSysColor(COLOR_3DFACE));
+
+	for (int i = 0; i < MAX_STRINGS; i++)
+	{
+		pDC->TabbedTextOutA(m_ptUpperMsgOrigin.x,
+			m_ptUpperMsgOrigin.y + (m_cyLine*i),
+			m_strMessages[nPos], m_strMessages[nPos].GetLength(),
+			sizeof(m_nTabStops), m_nTabStops, m_ptUpperMsgOrigin.x);
+		if (++nPos == MAX_STRINGS)
+			nPos = 0;
+	}
+}

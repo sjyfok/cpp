@@ -41,13 +41,13 @@ public:
 public:
 	CMainWindow();
 protected:
-	int GetNearesPos(CPoint point);
+	int GetNearestPos(CPoint point);
 	void PositionCaret(CDC *pDC = NULL);
 	void DrawInputText(CDC *pDC);
 	void ShowMessage(LPCTSTR pszMessage, UINT nChar, UINT nRepCnt,
 		UINT nFlags);
 	void DrawMessageHeader(CDC *pDC);
-	void DrawMeaages(CDC *pDC);
+	void DrawMessages(CDC *pDC);
 protected:
 	virtual void PostNcDestroy();
 
