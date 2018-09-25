@@ -15,12 +15,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\HelloMFC\hello.h">
+    <ClInclude Include="..\..\Source\FontView\FontView.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Source\HelloMFC\hello.cpp">
+    <ClCompile Include="..\..\Source\FontView\FontView.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
