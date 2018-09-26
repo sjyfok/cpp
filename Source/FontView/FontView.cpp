@@ -32,7 +32,7 @@ CMainWindow::CMainWindow()
 		myApp.LoadStandardIcon(IDI_WINLOGO)
 	);
 	CreateEx(0, strWndClass, _T("FontView"),
-		WS_OVERLAPPED | WS_SYSMENU | WS_CAPTION | WS_MINIMIZE,
+		WS_OVERLAPPED | WS_SYSMENU | WS_CAPTION | WS_MINIMIZEBOX ,
 		CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
 		CW_USEDEFAULT, NULL, NULL, NULL);
 	CRect rect(0, 0, m_cxChar * 68, m_cyChar * 26);
