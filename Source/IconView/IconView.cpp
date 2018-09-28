@@ -13,18 +13,108 @@ BOOL CMyApp::InitInstance()
 }
 
 BEGIN_MESSAGE_MAP(CMainWindow, CFrameWnd)
+	ON_WM_CREATE()
 	ON_WM_PAINT()
+	ON_WM_SETFOCUS()
+	ON_WM_DROPFILES()
+	ON_LBN_SELCHANGE(IDC_LISTBOX, OnSelChange)
 END_MESSAGE_MAP()
 
 CMainWindow::CMainWindow()
 {
-	Create(NULL, _T("The Hello Application"));
+	CString strWndClass = AfxRegisterWndClass(
+		0,
+		myApp.LoadStandardCursor(IDC_ARROW),
+		(HBRUSH)(COLOR_3DFACE + 1),
+		myApp.LoadStandardIcon(IDI_WINLOGO)
+	);
+	CreateEx(0, strWndClass, _T("IconView"),
+		WS_OVERLAPPED | WS_SYSMENU | WS_CAPTION | WS_MINIMIZEBOX,
+		CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
+		NULL, NULL, NULL);
+	CRect rect(0, 0, m_cxChar * 84, m_cyChar * 21);
+	CalcWindowRect(&rect);
+	SetWindowPos(NULL, 0, 0, rect.Width(), rect.Height(),
+		SWP_NOZORDER | SWP_NOMOVE | SWP_NOREDRAW);
+}
+
+int CMainWindow::OnCreate(LPCREATESTRUCT lpcs)
+{
+	if (CWnd::OnCreate(lpcs) == -1)
+	{
+		return -1;
+	}
+	m_font.CreatePointFont(80, _T("MS Sans Serif"));
+
+	CClientDC dc(this);
+	CFont *pOldFont = dc.SelectObject(&m_font);
+	TEXTMETRIC tm;
+	dc.GetTextMetrics(&tm);
+	m_cxChar = tm.tmAveCharWidth;
+	m_cyChar = tm.tmHeight + tm.tmExternalLeading;
+	dc.SelectObject(pOldFont);
+	m_rcImage.SetRect(m_cxChar * 4, m_cyChar * 3, m_cxChar * 46,
+		m_cyChar * 19);
+	m_wndGroupBox.Create(_T("Detail"), WS_CHILD | WS_VISIBLE | BS_GROUPBOX,
+		CRect(m_cxChar * 2, m_cyChar, m_cxChar * 48, m_cyChar * 20),
+		this, (UINT)-1);
+	m_wndLabel.Create(_T("Icons"), WS_CHILD | WS_VISIBLE | SS_LEFT,
+		CRect(m_cxChar * 50, m_cyChar, m_cxChar * 82, m_cyChar * 2),
+		this);
+	m_wndIconListBox.Create(WS_CHILD | WS_VISIBLE | WS_VSCROLL | WS_BORDER | LBS_NOTIFY | LBS_NOINTEGRALHEIGHT,
+		CRect(m_cxChar * 50, m_cyChar * 2, m_cxChar * 82, m_cyChar * 20),
+		this, IDC_LISTBOX);
+	m_wndGroupBox.SetFont(&m_font);
+	m_wndLabel.SetFont(&m_font);
+	DragAcceptFiles();
+	return 0;
+}
+
+void CMainWindow::PostNcDestroy()
+{
+	delete this;
 }
 
 void CMainWindow::OnPaint()
 {
 	CPaintDC dc(this);
-	CRect Rect;
-	GetClientRect(&Rect);
-	dc.DrawText(_T("Hello MFC"), -1, &Rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
+	m_wndIconListBox.ProjectImage(&dc, m_rcImage£¬
+		::GetSysColor(COLOR_3DFACE));
+}
+
+void CMainWindow::OnSetFocus(CWnd *pWnd)
+{
+	m_wndIconListBox.SetFocus();
+}
+
+void CMainWindow::OnDropFiles(HDROP hDropInfo)
+{
+	int nCount = ::DragQueryFile(hDropInfo, (UINT)-1, NULL, 0);
+	if (nCount == 1)
+	{
+		m_wndIconListBox.ResetContent();
+		char szFile[MAX_PATH];
+		::DragQueryFile(hDropInfo, 0, szFile, sizeof(szFile));
+		int nIcons = (int)::ExtractIcon(NULL, szFile, (UINT)-1);
+
+		if (nIcons)
+		{
+			HICON hIcon;
+			for (int i = 0; i < nIcons; i++)
+			{
+				hIcon = ::ExtractIcon(AfxGetInstanceHandle(),
+					szFile, i);
+				m_wndIconListBox.AddIcon(hIcon);
+			}
+		}
+		CString strWndTitle = szFile;
+		strWndTitle += _T("- IconView");
+		SetWindowText(strWndTitle);
+
+		CClientDC dc(this);
+		m_wndIconListBox.SetCurSel(0);
+		m_wndIconListBox.ProjectImage(&dc, m_rcImage,
+			::GetSysColor(COLOR_3DFACE));
+	}
+	::DragFinish(hDropInfo);
 }
