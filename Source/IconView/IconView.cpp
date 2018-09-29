@@ -12,7 +12,7 @@ BOOL CMyApp::InitInstance()
 	return true;
 }
 
-BEGIN_MESSAGE_MAP(CMainWindow, CFrameWnd)
+BEGIN_MESSAGE_MAP(CMainWindow, CWnd)
 	ON_WM_CREATE()
 	ON_WM_PAINT()
 	ON_WM_SETFOCUS()
@@ -78,7 +78,7 @@ void CMainWindow::PostNcDestroy()
 void CMainWindow::OnPaint()
 {
 	CPaintDC dc(this);
-	m_wndIconListBox.ProjectImage(&dc, m_rcImage£¬
+	m_wndIconListBox.ProjectImage(&dc, m_rcImage,
 		::GetSysColor(COLOR_3DFACE));
 }
 
@@ -117,4 +117,77 @@ void CMainWindow::OnDropFiles(HDROP hDropInfo)
 			::GetSysColor(COLOR_3DFACE));
 	}
 	::DragFinish(hDropInfo);
+}
+
+void CMainWindow::OnSelChange()
+{
+	CClientDC dc(this);
+	m_wndIconListBox.ProjectImage(&dc, m_rcImage,
+		::GetSysColor(COLOR_3DFACE));
+}
+
+BOOL CIconListBox::PreCreateWindow(CREATESTRUCT &cs)
+{
+	if (!CListBox::PreCreateWindow(cs))
+		return FALSE;
+
+	cs.dwExStyle |= WS_EX_CLIENTEDGE;
+	cs.style &= ~(CBS_OWNERDRAWVARIABLE | LBS_SORT);
+	cs.style |= LBS_OWNERDRAWFIXED;
+	return TRUE;
+}
+
+void CIconListBox::MeasureItem(LPMEASUREITEMSTRUCT lpmis)
+{
+	lpmis->itemHeight = 36;
+}
+
+void CIconListBox::DrawItem(LPDRAWITEMSTRUCT lpdis)
+{
+	CDC dc;
+	dc.Attach(lpdis->hDC);
+	CRect rect = lpdis->rcItem;
+	int nIndex = lpdis->itemID;
+
+	CBrush *pBrush = new CBrush;
+	pBrush->CreateSolidBrush(::GetSysColor((lpdis->itemState&
+		ODS_SELECTED) ? COLOR_HIGHLIGHT : COLOR_WINDOW));
+	dc.FillRect(rect, pBrush);
+	delete pBrush;
+	if (lpdis->itemState&ODS_FOCUS)
+		dc.DrawFocusRect(rect);
+	if (nIndex != (UINT)-1)
+		dc.DrawIcon(rect.left + 4, rect.top + 2,
+		(HICON)GetItemData(nIndex));
+	dc.Detach();
+}
+
+int CIconListBox::AddIcon(HICON hIcon)
+{
+	int nIndex = AddString(_T(""));
+
+	if ((nIndex != LB_ERR) && (nIndex != LB_ERRSPACE))
+		SetItemData(nIndex, (DWORD)hIcon);
+	return nIndex;
+}
+
+void CIconListBox::ProjectImage(CDC *pDC, LPRECT pRect,
+	COLORREF clrBackColor)
+{
+	CDC dcMem;
+	dcMem.CreateCompatibleDC(pDC);
+
+	CBitmap bitmap;
+	bitmap.CreateCompatibleBitmap(pDC, 32, 32);
+	CBitmap *pOldBitmap = dcMem.SelectObject(&bitmap);
+	CBrush *pBrush = new CBrush(clrBackColor);
+	dcMem.FillRect(CRect(0, 0, 32, 32), pBrush);
+	delete pBrush;
+
+	int nIndex = GetCurSel();
+	if (nIndex != LB_ERR)
+		dcMem.DrawIcon(0, 0, (HICON)GetItemData(nIndex));
+	pDC->StretchBlt(pRect->left, pRect->top, pRect->right - pRect->left,
+		pRect->bottom - pRect->top, &dcMem, 0, 0, 32, 32, SRCCOPY);
+	dcMem.SelectObject(pOldBitmap);
 }

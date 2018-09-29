@@ -19,10 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Source\IconView\IconView.cpp" />
+    <ClInclude Include="..\..\Source\ColorText\ColorText.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\IconView\IconView.h" />
+    <ClCompile Include="..\..\Source\ColorText\ColorText.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
