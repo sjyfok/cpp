@@ -53,4 +53,33 @@ inline void **CSimpleList::GetNextPtr(void *p) const
 {
 	return (void **)((unsigned char*)p + m_nNextOffset);
 }
+
+template <class TYPE>
+class CTypedSimpleList : public CSimpleList
+{
+public :
+	CTypedSimpleList(int nNextOffset = 0)
+		:CSimpleList(nNextOffset) {}
+	void AddHead(TYPE p)
+	{
+		CSimpleList::AddHead((void*)p);
+	}
+	TYPE GetHead()
+	{
+		return (TYPE)CSimpleList::GetHead();
+	}
+	TYPE GetNext(TYPE p)
+	{
+		return (TYPE)CSimpleList::GetNext(p);
+	}
+	bool Remove(TYPE p)
+	{
+		return CSimpleList::Remove(p);
+	}
+	operator TYPE()
+	{
+		return (TYPE)CSimpleList::GetHead();
+	}
+};
+
 #endif // !__AFXTLS_H__
