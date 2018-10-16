@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\ConsoleSource\labc21\labc21.cpp">
+    <ClCompile Include="..\..\ConsoleSource\Count\main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
