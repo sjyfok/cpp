@@ -1,6 +1,9 @@
 #ifndef __AFXTLS_H__
 #define __AFXTLS_H__
 
+#include <Windows.h>
+
+//step 1
 class CSimpleList
 {
 public:
@@ -54,6 +57,8 @@ inline void **CSimpleList::GetNextPtr(void *p) const
 	return (void **)((unsigned char*)p + m_nNextOffset);
 }
 
+
+//step2
 template <class TYPE>
 class CTypedSimpleList : public CSimpleList
 {
@@ -82,4 +87,37 @@ public :
 	}
 };
 
+class CNoTrackObject
+{
+public:
+	void *operator new(size_t nSize);
+	void operator delete(void *);
+	virtual ~CNoTrackObject() {}
+};
+
+struct CSlotData;
+struct CThreadData;
+class CThreadSlotData
+{
+public:
+	CThreadSlotData();
+	int AllocSlot();
+	void FreeSlot(int nSlot);
+	void SetValue(int nSlot, void *pValue);
+	void DeleteValues(HINSTANCE hInst, bool bAll = false);
+
+	DWORD m_tlsIndex;
+	int m_nAlloc;
+	int m_nRover;
+	int m_nMax;
+	CSlotData *m_pSlotData;
+	CTypedSimpleList<CThreadData*>m_list;
+	CRITICAL_SECTION m_cs;
+	void *operator new(size_t, void *p)
+	{
+		return p;
+	}
+	void DeleteValues(CThreadData *pData, HINSTANCE hInst);
+	CThreadSlotData();
+};
 #endif // !__AFXTLS_H__

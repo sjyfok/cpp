@@ -19,7 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\ConsoleSource\Count\main.cpp" />
+    <ClInclude Include="..\..\ConsoleSource\SimpleList\afxtls.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\ConsoleSource\SimpleList\afxtls.cpp" />
+    <ClCompile Include="..\..\ConsoleSource\SimpleList\main.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
