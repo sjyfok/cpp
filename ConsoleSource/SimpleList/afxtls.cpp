@@ -77,3 +77,66 @@ CThreadSlotData::CThreadSlotData()
 	m_tlsIndex = ::TlsAlloc();
 	::InitializeCriticalSection(&m_cs);
 }
+
+int CThreadSlotData::AllocSlot()
+{
+	::EnterCriticalSection(&m_cs);
+	int nAlloc = m_nAlloc;
+	int nSlot = m_nRover;
+	if (nSlot >= nAlloc || m_pSlotData[nSlot].dwFlags &SLOT_USED)
+	{
+		for (nSlot = 1; nSlot < nAlloc && m_pSlotData[nSlot].dwFlags &SLOT_USED; nSlot++);
+		if (nSlot >= nAlloc)
+		{
+			int nNewAlloc = nAlloc + 32;
+			HGLOBAL hSlotData;
+			if (m_pSlotData == NULL)
+			{
+				hSlotData = ::GlobalAlloc(GMEM_MOVEABLE, nNewAlloc * sizeof(CSlotData));
+			}
+			else
+			{
+				hSlotData = ::GlobalHandle(m_pSlotData);
+				::GlobalUnlock(hSlotData);
+				hSlotData = ::GlobalReAlloc(hSlotData,
+					nNewAlloc * sizeof(CSlotData), GMEM_MOVEABLE);
+			}
+			CSlotData *pSlotData = (CSlotData*)::GlobalLock(hSlotData);
+			memset(pSlotData + m_nAlloc, 0, (nNewAlloc - nAlloc) * sizeof(CSlotData));
+			m_nAlloc = nNewAlloc;
+			m_pSlotData = pSlotData;
+		}
+	}
+	if (nSlot >= m_nMax)
+		m_nMax = nSlot + 1;
+	m_pSlotData[nSlot].dwFlags |= SLOT_USED;
+	m_nRover = nSlot + 1;
+	::LeaveCriticalSection(&m_cs);
+	return nSlot;
+}
+
+void CThreadSlotData::SetValue(int nSlot, void *pValue)
+{
+	CThreadData *pData = (CThreadData*)::TlsGetValue(m_tlsIndex);
+	if ((pData == NULL || nSlot >= pData->nCount) && pValue != NULL)
+	{
+		if (pData == NULL)
+		{
+			pData = new CThreadData;
+			pData->nCount = 0;
+			pData->pData = NULL;
+			::EnterCriticalSection(&m_cs);
+			m_list.AddHead(pData);
+			::LeaveCriticalSection(&m_cs);
+		}
+		if (pData->pData == NULL)
+			pData->pData = (void**)::GlobalAlloc(LMEM_FIXED, m_nMax * sizeof(LPVOID));
+		else
+			pData->pData = (void **)::GlobalReAlloc(pData->pData,
+				m_nMax * sizeof(LPVOID), LMEM_MOVEABLE);
+		memset(pData->pData + pData->nCount, 0,
+			(m_nMax - pData->nCount) * sizeof(LPVOID));
+		pData->nCount = m_nMax;
+		::TlsSetValue(m_tlsIndex, pData);
+	}
+}
