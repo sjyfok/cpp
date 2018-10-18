@@ -1,69 +1,40 @@
 #include <iostream>
 #include "afxtls.h"
-
-#undef	USING_SIMPLELIST
-#define  USING_SIMPLELIST_TEMPLATE
-#undef  USING_MYMALLOC
-
+#include <process.h>
 
 using namespace std;
 
-#ifndef USING_MYMALLOC
-struct CThreadData
+struct CMyThreadData:public CNoTrackObject
 {
-	CThreadData *pNext;
 	int nSomeData;
 };
-#else
-struct CThreadData : public CNoTrackObject
+
+THREAD_LOCAL(CMyThreadData, g_myThreadData)
+
+void ShowData();
+
+UINT __stdcall ThreadFunc(LPVOID lpParam)
 {
-	CThreadData *pNext;
-	int nCount;
-	LPVOID pData;
-};
-#endif
+	g_myThreadData->nSomeData = (int)lpParam;
+	ShowData();
+	return 0;
+}
 
 int main(void)
 {
-	CThreadData *pData;
-#ifdef USING_SIMPLELIST	
-	CSimpleList list;
-	list.Construct(offsetof(MyThreadData, pNext));
+	HANDLE h[10];
+	UINT uID;
 	for (int i = 0; i < 10; i++)
-	{
-		pData = new MyThreadData;
-		pData->nSomeData = i;
-		list.AddHead(pData);
-	}
-
-	pData = (MyThreadData*)list.GetHead();
-	while (pData != nullptr)
-	{
-		MyThreadData *pNextData = pData->pNext;
-		cout << "The value of nSomeData is " << pData->nSomeData << endl;
-		delete pData;
-		pData = pNextData;
-	}
-	cout << "\n" << endl;
-#endif
-	//Ê¹ÓÃÄ£°å
-#ifdef  USING_SIMPLELIST_TEMPLATE
-	CTypedSimpleList<CThreadData*>tlist;
-	tlist.Construct(offsetof(CThreadData, pNext));
+		h[i] = (HANDLE)::_beginthreadex(NULL, 0, ThreadFunc, (void*)i, 0, &uID);
+	::WaitForMultipleObjects(10, h, true, INFINITE);
 	for (int i = 0; i < 10; i++)
-	{
-		pData = new CThreadData;
-		pData->nSomeData = i;
-		tlist.AddHead(pData);
-	}
-	pData = tlist;
-	while (pData != nullptr)
-	{
-		CThreadData *pNextData = pData->pNext;
-		cout << "The value of nSomeData is " << pData->nSomeData << endl;
-		delete pData;
-		pData = pNextData;
-	}
-#endif
+		::CloseHandle(h[i]);
 	return 0;
+}
+
+void ShowData()
+{
+	int nData = g_myThreadData->nSomeData;
+	printf("Thread ID:%-5d, nSomeData = %d\n", ::GetCurrentThreadId(), nData);
+
 }

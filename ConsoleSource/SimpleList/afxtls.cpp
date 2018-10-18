@@ -51,7 +51,7 @@ void CNoTrackObject::operator delete(void *p)
 
 //CThreadSoltData
 BYTE __afxThreadData[sizeof(CThreadSlotData)];
-CThreadSlotData *afxThreadData;
+CThreadSlotData *_afxThreadData;
 struct CSlotData
 {
 	DWORD dwFlags;
@@ -139,4 +139,135 @@ void CThreadSlotData::SetValue(int nSlot, void *pValue)
 		pData->nCount = m_nMax;
 		::TlsSetValue(m_tlsIndex, pData);
 	}
+	pData->pData[nSlot] = pValue;
+}
+
+inline void *CThreadSlotData::GetThreadValue(int nSlot)
+{
+	CThreadData *pData = (CThreadData*)::TlsGetValue(m_tlsIndex);
+	if (pData == NULL || nSlot >= pData->nCount)
+		return NULL;
+	return pData->pData[nSlot];
+}
+
+void CThreadSlotData::FreeSlot(int nSlot)
+{
+	::EnterCriticalSection(&m_cs);
+	CThreadData *pData = m_list;
+	while (pData != NULL)
+	{
+		if (nSlot < pData->nCount)
+		{
+			delete(CNoTrackObject*)pData->pData[nSlot];
+			pData->pData[nSlot] = NULL;
+		}
+		pData = pData->pNext;
+	}
+	m_pSlotData[nSlot].dwFlags &= SLOT_USED;
+	::LeaveCriticalSection(&m_cs);
+}
+
+void CThreadSlotData::DeleteValues(HINSTANCE hInst, bool bAll)
+{
+	::EnterCriticalSection(&m_cs);
+	if (!bAll)
+	{
+		CThreadData* pData = (CThreadData*)::TlsGetValue(m_tlsIndex);
+		if (pData != NULL)
+			DeleteValues(pData, hInst);
+	}
+	else
+	{
+		CThreadData *pData = m_list.GetHead();
+		while (pData!= NULL)
+		{
+			CThreadData *pNextData = pData->pNext;
+			DeleteValues(pData, hInst);
+			pData = pNextData;
+		}
+	}
+	::LeaveCriticalSection(&m_cs);
+}
+
+void CThreadSlotData::DeleteValues(CThreadData *pData, HINSTANCE hInst)
+{
+	bool bDelete = true;
+	for (int  i = 1; i < pData->nCount; i++)
+	{
+		if (hInst == NULL || m_pSlotData[i].hInst == hInst)
+		{
+			delete(CNoTrackObject*)pData->pData[i];
+			pData->pData[i] == NULL;
+		}
+		else
+		{
+			if (pData->pData[i] != NULL)
+				bDelete = FALSE;
+		}
+	}
+	if (bDelete)
+	{
+		::EnterCriticalSection(&m_cs);
+		m_list.Remove(pData);
+		::LeaveCriticalSection(&m_cs);
+		::LocalFree(pData->pData);
+		delete pData;
+		::TlsSetValue(m_tlsIndex, NULL);
+	}
+}
+
+CThreadSlotData::~CThreadSlotData()
+{
+	CThreadData *pData = m_list;
+	while (pData != NULL)
+	{
+		CThreadData *pDataNext = pData->pNext;
+		DeleteValues(pData, NULL);
+		pData = pData->pNext;
+	}
+	if (m_tlsIndex != (DWORD)-1)
+		::TlsFree(m_tlsIndex);
+	if (m_pSlotData != NULL)
+	{
+		HGLOBAL hSlotData = ::GlobalHandle(m_pSlotData);
+		::GlobalUnlock(hSlotData);
+		::GlobalFree(m_pSlotData);
+	}
+	::DeleteCriticalSection(&m_cs);
+}
+
+//CThreadLocalObject
+CNoTrackObject* CThreadLocalObject::GetData(CNoTrackObject*(*pfnCreateObject)())
+{
+	if (m_nSlot == 0)
+	{
+		if (_afxThreadData == NULL)
+		{
+			_afxThreadData = new(__afxThreadData)CThreadSlotData;
+		}
+		m_nSlot = _afxThreadData->AllocSlot();
+	}
+	CNoTrackObject *pValue = (CNoTrackObject*)_afxThreadData->GetThreadValue(m_nSlot);
+	if (pValue)
+	{
+		pValue = (*pfnCreateObject)();
+		_afxThreadData->SetValue(m_nSlot, pValue);
+	}
+	return pValue;
+}
+
+CNoTrackObject* CThreadLocalObject::GetDataNA()
+{
+	if (m_nSlot == 0 || _afxThreadData == 0)
+	{
+		return NULL;
+	}
+	return (CNoTrackObject*)_afxThreadData->GetThreadValue(m_nSlot);
+}
+
+CThreadLocalObject::~CThreadLocalObject()
+{
+	if (m_nSlot != 0 && _afxThreadData != NULL)
+		_afxThreadData->FreeSlot(m_nSlot);
+	m_nSlot = 0;
 }
