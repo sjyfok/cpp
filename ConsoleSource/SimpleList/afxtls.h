@@ -87,82 +87,12 @@ public :
 	}
 };
 
-class CNoTrackObject
-{
-public:
-	void *operator new(size_t nSize);
-	void operator delete(void *);
-	virtual ~CNoTrackObject() {}
-};
 
-struct CSlotData;
-struct CThreadData;
-class CThreadSlotData
-{
-public:
-	CThreadSlotData();
-	int AllocSlot();
-	void FreeSlot(int nSlot);
-	void *GetThreadValue(int nSlot);
-	void SetValue(int nSlot, void *pValue);
-	void DeleteValues(HINSTANCE hInst, bool bAll = false);
 
-	DWORD m_tlsIndex;
-	int m_nAlloc;
-	int m_nRover;
-	int m_nMax;
-	CSlotData *m_pSlotData;
-	CTypedSimpleList<CThreadData*>m_list;
-	CRITICAL_SECTION m_cs;
-	void *operator new(size_t, void *p)
-	{
-		return p;
-	}
-	void DeleteValues(CThreadData *pData, HINSTANCE hInst);
-	~CThreadSlotData();
-};
 
-class CThreadLocalObject
-{
-public:
-	CNoTrackObject * GetData(CNoTrackObject *(*pfnCreateObject)());
-	CNoTrackObject * GetDataNA();
-	DWORD m_nSlot;
-	~CThreadLocalObject();
-};
 
-template <class TYPE>
-class CThreadLocal : public CThreadLocalObject
-{
-public:
-	TYPE * GetData()
-	{
-		TYPE *pData = (TYPE*)CThreadLocalObject::GetData(&CreateObject);
-		return pData;
-	}
-	TYPE *GetDataNA()
-	{
-		TYPE* pData = (TYPE*)CThreadLocalObject::GetDataNA();
-		return pData;
-	}
 
-	operator TYPE*()
-	{
-		return GetData();
-	}
-	TYPE * operator->()
-	{
-		return GetData();
-	}
-public:
-	static CNoTrackObject* CreateObject()
-	{
-		return new TYPE;
-	}
-};
 
-#define THREAD_LOCAL(class_name, ident_name) \
-	CThreadLocal<class_name> ident_name;
-#define EXTERN_THREAD_LOCAL(class_name, ident_name) \
-	extern THREAD_LOCAL(class_name, ident_name)
+
+
 #endif // !__AFXTLS_H__

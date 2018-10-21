@@ -15,15 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\ConsoleSource\SimpleList\afxtls.h">
+    <ClInclude Include="..\..\ConsoleSource\MyTls\afxtls.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\ConsoleSource\SimpleList\afxtls.cpp">
+    <ClCompile Include="..\..\ConsoleSource\MyTls\main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ConsoleSource\SimpleList\main.cpp">
+    <ClCompile Include="..\..\ConsoleSource\MyTls\afxtls.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

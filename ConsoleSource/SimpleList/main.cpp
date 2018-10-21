@@ -2,39 +2,47 @@
 #include "afxtls.h"
 #include <process.h>
 
+#define USING_TEMPLATE
+
 using namespace std;
 
-struct CMyThreadData:public CNoTrackObject
+struct CMyThreadData
 {
+	CMyThreadData *pNext;
 	int nSomeData;
 };
 
-THREAD_LOCAL(CMyThreadData, g_myThreadData)
 
-void ShowData();
-
-UINT __stdcall ThreadFunc(LPVOID lpParam)
-{
-	g_myThreadData->nSomeData = (int)lpParam;
-	ShowData();
-	return 0;
-}
 
 int main(void)
 {
-	HANDLE h[10];
-	UINT uID;
+	CMyThreadData *pData;
+#ifdef USING_TEMPLATE
+	CTypedSimpleList<CMyThreadData*>list;
+#else
+	CSimpleList list;
+#endif
+	list.Construct(offsetof(CMyThreadData, pNext));
+
 	for (int i = 0; i < 10; i++)
-		h[i] = (HANDLE)::_beginthreadex(NULL, 0, ThreadFunc, (void*)i, 0, &uID);
-	::WaitForMultipleObjects(10, h, true, INFINITE);
-	for (int i = 0; i < 10; i++)
-		::CloseHandle(h[i]);
+	{
+		pData = new CMyThreadData;
+		pData->nSomeData = i;
+		list.AddHead(pData);
+	}
+
+#ifdef USING_TEMPLATE
+	pData = list;
+#else
+	pData = (CMyThreadData*)list.GetHead();
+#endif
+	while (pData != NULL)
+	{
+		CMyThreadData *pNextData = pData->pNext;
+		printf("The value of nSomeData is : %d\n", pData->nSomeData);
+		delete pData;
+		pData = pNextData;
+	}
 	return 0;
 }
 
-void ShowData()
-{
-	int nData = g_myThreadData->nSomeData;
-	printf("Thread ID:%-5d, nSomeData = %d\n", ::GetCurrentThreadId(), nData);
-
-}
