@@ -61,7 +61,10 @@ int main(void)
 	HANDLE h[10];
 	UINT uID;
 	for (int i = 0; i < 10; i++)
+	{
 		h[i] = (HANDLE)::_beginthreadex(NULL, 0, ThreadFunc, (void*)i, 0, &uID);
+		Sleep(1);   //ÈÃ¶É´¦ÀíÆ÷
+	}
 	::WaitForMultipleObjects(10, h, true, INFINITE);
 	for (int i = 0; i < 10; i++)
 		::CloseHandle(h[i]);
