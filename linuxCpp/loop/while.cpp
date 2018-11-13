@@ -1,0 +1,22 @@
+#include <iostream>
+
+using namespace std;
+
+const int ArSize = 20;
+
+int main(void)
+{
+    char name[ArSize];
+
+    cout << "Your first name, please: ";
+    cin >> name;
+    cout << "Here is your name, verticalized and ASCIIized:\n";
+    int i;
+    while(name[i] != '\0')
+    {
+        cout << name[i] << ": " << int(name[i]) << endl;
+        i ++;
+    }
+
+    return 0;
+}
