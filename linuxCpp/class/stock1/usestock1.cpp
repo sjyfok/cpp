@@ -1,6 +1,8 @@
 #include <iostream>
 #include "stock1.h"
 
+using namespace std;
+
 int main(void)
 {
 
@@ -12,6 +14,7 @@ int main(void)
 
     
     Stock stock1("NanoSmart", 12, 20.0);
+
     stock1.show();
     Stock stock2 = Stock("Boffo objects", 2, 2.0);
     stock2.show();

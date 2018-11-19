@@ -1,9 +1,7 @@
 #ifndef STOCK1_H__
 #define STOCK1_H__
 
-#include <iostream>
 
-using namespace std;
 
 
 class Stock

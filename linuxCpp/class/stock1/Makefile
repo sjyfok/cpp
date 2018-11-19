@@ -6,5 +6,5 @@ usestock0.o: usestock1.cpp stock1.h
 	g++ -c usestock1.cpp stock1.h 
 
 clean:
-	rm *.o *.out *.gch
+	rm *.o *.out 
 
