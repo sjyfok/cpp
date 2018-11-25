@@ -14,6 +14,15 @@ StringBad::StringBad(const char *s)
         << "\" object created\n";
 }
 
+StringBad::StringBad(const StringBad &st)
+{
+    num_strings ++;
+    len = st.len;
+    str = new char [len+1];
+    std::strcpy(str, st.str);
+    cout << num_strings << ": \"" << str
+        << "\" object created \n";
+}
 
 StringBad::StringBad()
 {
