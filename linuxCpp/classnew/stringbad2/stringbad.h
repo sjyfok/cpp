@@ -15,7 +15,7 @@ class StringBad
         StringBad();
         ~StringBad();
         friend std::ostream &operator<<(std::ostream &os, const StringBad &st);
-        friend StringBad & StringBad::operator=(const StringBad &st);
+        StringBad & operator=(const StringBad &st);
 };
 
 #endif
