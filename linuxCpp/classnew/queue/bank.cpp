@@ -65,7 +65,23 @@ int main(void)
     if (customers > 0)
     {
         cout << "customers accepted: " << customers << endl;
-        cout << " "
+        cout << " customers served: " << served << endl;
+        cout << " turnaways: " << turnaways << endl;
+        cout << "average queue size: ";
+        cout.precision(2);
+        cout.setf(ios_base::fixed, ios_base::floatfield);
+        cout << (double) sum_line/cyclelimit << endl;
+        cout << "arverage wait time: "
+            << (double) line_wait/served << " minutes\n";
     }
+    else
+        cout << "No customers!\n";
+    cout << "Done!\n";
+
+    return 0;
 }
 
+bool newcustomer(double x)
+{
+    return (std::rand()*x/RAND_MAX<1);
+}

@@ -14,6 +14,8 @@ class Customer
         int ptime() const { return processtime; }
 };
 
+typedef Customer Item;
+
 class Queue
 {
     private:
@@ -22,8 +24,8 @@ class Queue
         Node *front;
         Node *rear;
         int items;
-        coust int qsize;
-        Queue(const Queue &q) qsize(0){}
+        const int qsize;
+        Queue(const Queue &q): qsize(0){}
         Queue & operator=(const Queue &q) {return *this;}
     public:
         Queue(int qs = Q_SIZE);

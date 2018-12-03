@@ -37,6 +37,7 @@ bool Queue::enqueue(const Item & item)
 {
     if (isfull())
         return false;
+    Node *add = new Node;
     add->item = item;
     add->next = NULL;
     items ++;
@@ -53,7 +54,7 @@ bool Queue::dequeue(Item &item)
     if (front == NULL)
         return false;
     item = front->item;
-    item --;
+    items --;
     Node *temp = front;
     front = front->next;
     delete temp;
