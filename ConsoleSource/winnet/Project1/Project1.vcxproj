@@ -19,10 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\GetAllIps\main.cpp" />
+    <ClInclude Include="..\netcomm\initsock.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\netcomm\initsock.h" />
+    <ClCompile Include="..\tcpsercli\selectserver.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
