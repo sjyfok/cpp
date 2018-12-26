@@ -1,4 +1,4 @@
-#include "afxtls.h"
+#include "_afxtls.h"
 #include <Windows.h>
 
 

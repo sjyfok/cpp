@@ -10,6 +10,7 @@ struct CMyThreadData:public CNoTrackObject
 };
 
 THREAD_LOCAL(CMyThreadData, g_myThreadData)
+//CThreadLocal<CMyThreadData> g_myThreadData;
 /*class CThreadLocalObject
 {
 public:
@@ -63,7 +64,7 @@ int main(void)
 	for (int i = 0; i < 10; i++)
 	{
 		h[i] = (HANDLE)::_beginthreadex(NULL, 0, ThreadFunc, (void*)i, 0, &uID);
-		Sleep(1);   //让渡处理器
+	//	Sleep(1);   //让渡处理器
 	}
 	::WaitForMultipleObjects(10, h, true, INFINITE);
 	for (int i = 0; i < 10; i++)
