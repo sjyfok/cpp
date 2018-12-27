@@ -23,4 +23,7 @@ public:
 	HANDLE m_hDirEvent;
 	HANDLE m_hExitEvent;
 };
+
+
+UINT FinderEntry(LPVOID lpParam);
 #endif // !__RAPIDFINDER_H__

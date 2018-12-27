@@ -19,11 +19,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\ConsoleSource\MyTls\afxtls.h" />
+    <ClCompile Include="..\..\ConsoleSource\RapidFinder\main.cpp" />
+    <ClCompile Include="..\..\ConsoleSource\RapidFinder\RapidFinder.cpp" />
+    <ClCompile Include="..\..\ConsoleSource\wincommon\afxstat.cpp" />
+    <ClCompile Include="..\..\ConsoleSource\wincommon\afxtls.cpp" />
+    <ClCompile Include="..\..\ConsoleSource\wincommon\thrdcore.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\ConsoleSource\MyTls\afxtls.cpp" />
-    <ClCompile Include="..\..\ConsoleSource\MyTls\main.cpp" />
+    <ClInclude Include="..\..\ConsoleSource\RapidFinder\RapidFinder.h" />
+    <ClInclude Include="..\..\ConsoleSource\wincommon\_afxstat.h" />
+    <ClInclude Include="..\..\ConsoleSource\wincommon\_afxtls.h" />
+    <ClInclude Include="..\..\ConsoleSource\wincommon\_afxwin.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -91,6 +97,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
