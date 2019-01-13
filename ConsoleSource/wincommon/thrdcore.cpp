@@ -2,6 +2,7 @@
 #include "_afxtls.h"
 #include "_afxstat.h"
 #include <process.h>
+#include "_afx.h"
 
 struct _AFX_THREAD_STARTUP
 {
@@ -143,3 +144,73 @@ void CWinThread::Delete()
 	if (m_bAutoDelete)
 		delete this;
 }
+
+int CWinThread::Run()
+{
+	BOOL bIdle = TRUE;
+	LONG lIdleCount = 0;
+	for (;;)
+	{
+		while (bIdle && !::PeekMessage(&m_msgCur, NULL, 0, 0, PM_NOREMOVE))
+		{
+			if (!OnIdle(lIdleCount++))
+			{
+				bIdle = FALSE;
+			}
+		}
+		do
+		{
+			if (!PumpMessage())
+			{
+				return ExitInstance();
+			}
+			if (IsIdleMessage(&m_msgCur))
+			{
+				bIdle = TRUE;
+				lIdleCount = 0;
+			}
+		} while (::PeekMessage(&m_msgCur, NULL, 0, 0, PM_NOREMOVE));
+	}
+	ASSERT(FALSE);
+}
+
+BOOL CWinThread::PreTranslateMessage(MSG *pMsg)
+{
+	return FALSE;
+}
+
+BOOL CWinThread::PumpMessage()
+{
+	if (!::GetMessage(&m_msgCur, NULL, NULL, NULL))
+	{
+		return FALSE;
+	}
+	if (!PreTranslateMessage(&m_msgCur))
+	{
+		::TranslateMessage(&m_msgCur);
+		::DispatchMessage(&m_msgCur);
+	}
+	return TRUE;
+}
+
+BOOL CWinThread::OnIdle(LONG lCount)
+{
+	return lCount < 0;
+}
+
+BOOL CWinThread::IsIdleMessage(MSG *pMsg)
+{
+	return TRUE;
+}
+
+BOOL CWinThread::InitInstance()
+{
+	return FALSE;
+}
+
+int CWinThread::ExitInstance()
+{
+	int nResult = m_msgCur.lParam;
+	return nResult;
+}
+
