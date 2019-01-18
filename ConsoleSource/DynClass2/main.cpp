@@ -1,5 +1,5 @@
 #include <iostream>
-#include   "../wincommon/_afx.h"
+#include "COMMON/_AFX.H"
 #include <process.h>
 
 using namespace std;
@@ -7,7 +7,9 @@ using namespace std;
 class CPerson :public CObject
 {
 	DECLARE_DYNCREATE(CPerson)
+	
 };
+IMPLEMENT_DYNCREATE(CPerson, CObject)
 
 class CStudent : public CPerson
 {

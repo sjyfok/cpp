@@ -4,6 +4,8 @@
 #include <process.h>
 #include "_afx.h"
 
+IMPLEMENT_DYNCREATE(CWinThread, CObject)
+
 struct _AFX_THREAD_STARTUP
 {
 	CWinThread *pThread;
