@@ -28,7 +28,7 @@ public:
 	CWinApp *m_pCurrentWinApp;
 	HINSTANCE m_hCurrentInstanceHandle;
 	HINSTANCE m_hCurrentResourceHandle;
-	THREAD_LOCAL(AFX_MODULE_THREAD_STATE m_thread)
+	THREAD_LOCAL(AFX_MODULE_THREAD_STATE, m_thread)
 };
 
 AFX_MODULE_STATE* AfxGetAppModuleState();
@@ -44,6 +44,6 @@ public:
 	HHOOK m_hHookOldCbtFilter;
 };
 
-EXTERN_THREAD_LOCAL(_AFX_THREAD_STATE, _afxThreadData);
+EXTERN_THREAD_LOCAL(_AFX_THREAD_STATE, _afxThreadState);
 _AFX_THREAD_STATE* AfxGetThreadState();
 #endif // !__AFXSTAT_H__

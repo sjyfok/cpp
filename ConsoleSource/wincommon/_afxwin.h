@@ -3,13 +3,25 @@
 
 #include <Windows.h>
 
+#include "_afxstat.h"
 #include "_afxtls.h"
+#include "_afx.h"
+
+
 
 extern CThreadSlotData* _afxThreadData;
+
 
 typedef UINT(__cdecl* AFX_THREADPROC)(LPVOID);
 class CWinThread : public CObject
 {
+//#define DECLARE_DYNCREATE(class_name)\
+//	DECLARE_DYNAMIC(class_name)\
+//	static CObject* __stdcall CreateObject();
+
+	DECLARE_DYNCREATE(CWinThread)
+
+
 public:
 	CWinThread();
 	BOOL CreateThread(DWORD dwCreateFlags = 0, UINT nStackSize = 0,
@@ -81,20 +93,22 @@ public:
 	virtual int Run();
 };
 
-__inline HCURSOR CWinApp::LoadCursor(UINT nIDResource) const;
+__inline HCURSOR CWinApp::LoadCursor(UINT nIDResource) const
 {
-	return::LoadCursor(AfxGetModuleState()->m_hCurrentResourceHandle, (LPCTSTR)FindResource); 
+	return::LoadCursor(AfxGetModuleState()->m_hCurrentResourceHandle, (LPCTSTR)nIDResource);
 }
 
 __inline HICON CWinApp::LoadIcon(UINT nIDResource) const
 {
-	return ::LoadIcon(AfxGetModuleState()->m_hCurrentResoutceHandle, (LPCTSTR)nIDResource);
+	return ::LoadIcon(AfxGetModuleState()->m_hCurrentResourceHandle, (LPCTSTR)nIDResource);
 }
 
-BOOL AfxWinInit(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow);
 CWinApp *AfxGetApp();
 __inline CWinApp *AfxGetApp()
 {
 	return AfxGetModuleState()->m_pCurrentWinApp;
 }
+
+BOOL AfxWinInit(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow);
+
 #endif // !__AFXTLS_H__

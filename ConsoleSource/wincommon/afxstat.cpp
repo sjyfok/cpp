@@ -1,6 +1,7 @@
-#include "_afxwin.h"
-#include "_afxstat.h"
 #include "_afx.h"
+#include "_afxstat.h"
+
+
 
 AFX_MODULE_THREAD_STATE * AfxGetModuleThreadState()
 {
@@ -9,12 +10,13 @@ AFX_MODULE_THREAD_STATE * AfxGetModuleThreadState()
 }
 
 THREAD_LOCAL(AFX_MODULE_THREAD_STATE, __afxModuleThreadState)
+THREAD_LOCAL(_AFX_THREAD_STATE, _afxThreadState);
 
 _AFX_THREAD_STATE* AfxGetThreadState()
 {
 	return _afxThreadState.GetData();
 }
-THREAD_LOCAL(_AFX_THREAD_STATE, _afxThreadState);
+
 
 AFX_MODULE_STATE _afxBaseModuleState;
 AFX_MODULE_STATE *AfxGetAppModuleState()

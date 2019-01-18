@@ -19,27 +19,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\ConsoleSource\UseFrame\UseFrame.h" />
-    <ClInclude Include="..\..\ConsoleSource\wincommon\winhand_.h" />
-    <ClInclude Include="..\..\ConsoleSource\wincommon\_afx.h" />
-    <ClInclude Include="..\..\ConsoleSource\wincommon\_afxcoll.h" />
-    <ClInclude Include="..\..\ConsoleSource\wincommon\_afxplex_.h" />
-    <ClInclude Include="..\..\ConsoleSource\wincommon\_afxstat.h" />
-    <ClInclude Include="..\..\ConsoleSource\wincommon\_afxtls.h" />
-    <ClInclude Include="..\..\ConsoleSource\wincommon\_afxwin.h" />
+    <ClCompile Include="..\..\wincommon\afxtls.cpp" />
+    <ClCompile Include="..\..\wincommon\dumpout.cpp" />
+    <ClCompile Include="..\..\wincommon\objcore.cpp" />
+    <ClCompile Include="..\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\ConsoleSource\UseFrame\UseFrame.cpp" />
-    <ClCompile Include="..\..\ConsoleSource\wincommon\afxstat.cpp" />
-    <ClCompile Include="..\..\ConsoleSource\wincommon\afxtls.cpp" />
-    <ClCompile Include="..\..\ConsoleSource\wincommon\appcore.cpp" />
-    <ClCompile Include="..\..\ConsoleSource\wincommon\appinit.cpp" />
-    <ClCompile Include="..\..\ConsoleSource\wincommon\dumpout.cpp" />
-    <ClCompile Include="..\..\ConsoleSource\wincommon\map_pp.cpp" />
-    <ClCompile Include="..\..\ConsoleSource\wincommon\objcore.cpp" />
-    <ClCompile Include="..\..\ConsoleSource\wincommon\plex.cpp" />
-    <ClCompile Include="..\..\ConsoleSource\wincommon\thrdcore.cpp" />
-    <ClCompile Include="..\..\ConsoleSource\wincommon\winmain.cpp" />
+    <ClInclude Include="..\..\wincommon\_afx.h" />
+    <ClInclude Include="..\..\wincommon\_afxcoll.h" />
+    <ClInclude Include="..\..\wincommon\_afxtls.h" />
+    <ClInclude Include="..\..\wincommon\_afxwin.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

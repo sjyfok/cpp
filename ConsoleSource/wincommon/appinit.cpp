@@ -15,7 +15,7 @@ BOOL AfxWinInit(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, 
 	{
 		pApp->m_hInstance = hInstance;
 		pApp->m_hPrevInstance = hInstance;
-		pApp->m_lpCmdline = lpCmdLine;
+		pApp->m_lpCmdLine = lpCmdLine;
 		pApp->m_nCmdShow = nCmdShow;
 	}
 	return TRUE;
