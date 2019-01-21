@@ -12,6 +12,7 @@ class AFX_MODULE_THREAD_STATE : public CNoTrackObject
 {
 public:
 	CWinThread * m_pCurrentWinThread;
+	//´°¿Ú¾ä±úÓ³Éä
 	CHandleMap *m_pmapHWND;
 	CHandleMap *m_pmapHDC;
 };
@@ -42,6 +43,7 @@ public:
 	TCHAR m_szTempClassName[96];
 	CWnd *m_pWndInit;
 	HHOOK m_hHookOldCbtFilter;
+	MSG m_lastSendMsg;
 };
 
 EXTERN_THREAD_LOCAL(_AFX_THREAD_STATE, _afxThreadState);

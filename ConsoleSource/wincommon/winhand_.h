@@ -30,12 +30,12 @@ __inline void CHandleMap::RemoveHandle(HANDLE h)
 	m_permanentMap.RemoveKey(h);
 }
 
-__inline CObject CHandleMap::FromHandle(HANDLE h)
+__inline CObject* CHandleMap::FromHandle(HANDLE h)
 {
 	return LookupPermanent(h);
 }
 
-}
+
 
 
 

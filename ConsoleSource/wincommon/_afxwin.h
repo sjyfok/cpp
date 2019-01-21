@@ -11,6 +11,32 @@
 
 extern CThreadSlotData* _afxThreadData;
 
+class CCmdTarget :public CObject
+{
+	DECLARE_DYNCREATE(CCmdTarget)
+public:
+	CCmdTarget();
+};
+
+class CWnd :public CCmdTarget
+{
+	DECLARE_DYNCREATE(CWnd)
+public:
+	CWnd();
+	virtual ~CWnd();
+	HWND m_hWnd;
+	operator HWND() const { return m_hWnd; }
+	HWND GetSafeHwnd() { return this == NULL ? NULL : m_hWnd; }
+	static CWnd *FromHandle(HWND hWnd);
+	static CWnd *FromHandlePermanent(HWND hWnd);
+	BOOL Attach(HWND hWndNew);
+	HWND Detach();
+protected:
+	virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
+protected:
+	friend LRESULT AfxCallWndProc(CWnd*, HWND, UINT, WPARAM, LPARAM);
+};
+
 
 typedef UINT(__cdecl* AFX_THREADPROC)(LPVOID);
 class CWinThread : public CObject

@@ -48,6 +48,9 @@
     <ClCompile Include="..\UseFrame.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\wincommon\wincore.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\wincommon\_afx.h">

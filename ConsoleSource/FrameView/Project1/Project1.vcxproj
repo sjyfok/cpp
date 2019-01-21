@@ -28,6 +28,7 @@
     <ClCompile Include="..\..\wincommon\objcore.cpp" />
     <ClCompile Include="..\..\wincommon\plex.cpp" />
     <ClCompile Include="..\..\wincommon\thrdcore.cpp" />
+    <ClCompile Include="..\..\wincommon\wincore.cpp" />
     <ClCompile Include="..\..\wincommon\winmain.cpp" />
     <ClCompile Include="..\UseFrame.cpp" />
   </ItemGroup>
