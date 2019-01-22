@@ -44,6 +44,9 @@ public:
 	CWnd *m_pWndInit;
 	HHOOK m_hHookOldCbtFilter;
 	MSG m_lastSendMsg;
+
+	CWnd *m_pWndInit;
+	HHOOK m_hHookOldCbtFilter;
 };
 
 EXTERN_THREAD_LOCAL(_AFX_THREAD_STATE, _afxThreadState);

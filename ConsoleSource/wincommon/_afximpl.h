@@ -7,8 +7,8 @@
 #define AFX_WND	("Wnd")
 #define AFX_WNDFRAMEORVIEW	("FrameOrView")
 
-extern const TCHAR _afx Wnd[];
-extern const TCHAR _afx WndFrameOrView[];
+extern const TCHAR _afxWnd[];
+extern const TCHAR _afxWndFrameOrView[];
 
 #endif // !__AFXIMPL_H__
 

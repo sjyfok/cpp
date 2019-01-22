@@ -11,6 +11,11 @@
 
 extern CThreadSlotData* _afxThreadData;
 
+LPCTSTR AfxRegisterWndClass(UINT nClassStyle,
+	HCURSOR hCursor = 0, HBRUSH hbrBackground = 0, HICON hIcon = 0);
+BOOL AfxRegisterClass(WNDCLASS *lpWndClass);
+BOOL AfxEndDeferRegisterClass(LONG fToRegister);
+
 class CCmdTarget :public CObject
 {
 	DECLARE_DYNCREATE(CCmdTarget)
@@ -35,6 +40,25 @@ protected:
 	virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
 protected:
 	friend LRESULT AfxCallWndProc(CWnd*, HWND, UINT, WPARAM, LPARAM);
+protected:
+	WNDPROC m_pfnSuper;
+	virtual WNDPROC *GetSuperWndProcAddr();
+	LRESULT Default();
+	virtual LRESULT DefWindowProc(UINT message, WPARAM wParam, LPARAM lParam);
+	friend LRESULT __stdcall _AfxCbtFilterHook(int, WPARAM, LPARAM);
+public:
+	virtual BOOL Create(LPCTSTR lpszClassName,
+		LPCTSTR lpszWindowName, DWORD dwStyle,
+		const RECT &rect,
+		CWnd * pParentWnd, UINT nID,
+		LPVOID lpParam = NULL);
+	BOOL CreateEx(DWORD dwExStyle, LPCTSTR lpszClassName,
+		LPCTSTR lpszWindowName, DWORD dwStyle,
+		int x, int y, int nWidth, int nHeight,
+		HWND hWndParent, HMENU nIDorHMenu, LPVOID lpParam = NULL);
+	virtual BOOL PerCreateWindow(CREATESTRUCT &cs);
+	virtual void PostNcDestroy();
+	virtual void PreSubclassWindow();
 };
 
 

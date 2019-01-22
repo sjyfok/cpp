@@ -5,6 +5,7 @@
 const TCHAR _afxWnd[] = AFX_WND;
 const TCHAR _afxWndFrameOrView[] = AFX_WNDFRAMEORVIEW;
 
+
 CWnd::CWnd()
 {
 	m_hWnd = NULL;
@@ -75,6 +76,64 @@ HWND CWnd::Detach()
 	return hWnd;
 }
 
+WNDPROC* CWnd::GetSuperWndProcAddr()
+{
+	return &m_pfnSuper;
+}
+
+LRESULT CWnd::Default()
+{
+	_AFX_THREAD_STATE *pThreadState = AfxGetThreadState();
+	return DefWindowProc(pThreadState->m_lastSendMsg.message,
+		pThreadState->m_lastSendMsg.wParam, pThreadState->m_lastSendMsg.lParam);
+}
+
+LRESULT CWnd::DefWindowProc(UINT message, WPARAM wParam, LPARAM lParam)
+{
+	if (m_pfnSuper != NULL)
+	{
+		return ::CallWindowProc(m_pfnSuper, m_hWnd, message, wParam, lParam);
+	}
+	WNDPROC pfnWndProc;
+	if ((pfnWndProc = *GetSuperWndProcAddr()) == NULL)
+	{
+		return ::DefWindowProc(m_hWnd, message, wParam, lParam);
+	}
+	else
+	{
+		return ::CallWindowProc(pfnWndProc, m_hWnd, message, wParam, lParam);
+	}
+}
+
+BOOL CWnd::Create(LPCTSTR lpszClassName,
+	LPCTSTR lpszWindowName, DWORD dwStyle,
+	const RECT &rect,
+	CWnd * pParentWnd, UINT nID,
+	LPVOID lpParam)
+{
+	ASSERT(pParentWnd != NULL);
+	ASSERT((dwStyle&WS_POPUP) == 0);
+	return CreateEx(0, lpszClassName, lpszWindowName,
+		dwStyle | WS_CHILD,
+		rect.left, rect.top,
+		rect.right - rect.left, rect.bottom - rect.top,
+		pParentWnd->GetSafeHwnd(), (HMENU)nID, (LPVOID)lpParam);
+}
+
+BOOL CWnd::CreateEx(DWORD dwExStyle, LPCTSTR lpszClassName,
+	LPCTSTR lpszWindowName, DWORD dwStyle,
+	int x, int y, int nWidth, int nHeight,
+	HWND hWndParent, HMENU nIDorHMenu, LPVOID lpParam)
+{
+	CREATESTRUCT cs;
+	cs.dwExStyle = dwExStyle;
+	cs.lpszClass = lpszClassName;
+	cs.lpszName = lpszWindowName;
+	cs.style = dwStyle;
+	cs.x = x;
+	cs.y = y;
+	cs.cx = nWidth;
+}
 
 LRESULT __stdcall AfxWndProc(HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -104,6 +163,9 @@ LRESULT CWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
 	return 0;
 }
+
+
+IMPLEMENT_DYNCREATE(CWnd, CCmdTarget)
 
 BOOL AfxEndDeferRegisterClass(LONG fToRegister)
 {
@@ -145,18 +207,19 @@ BOOL AfxRegisterClass(WNDCLASS *lpWndClass)
 }
 
 LPCTSTR AfxRegisterWndClass(UINT nClassStyle, HCURSOR hCursor,
-	HBRUSH hbtBackground, HICON hIcon)
+	HBRUSH hbrBackground, HICON hIcon)
 {
 	LPTSTR lpszName = AfxGetThreadState()->m_szTempClassName;
 	HINSTANCE hInst = AfxGetModuleState()->m_hCurrentInstanceHandle;
-	if (hCursor == NULL && hbrBackground == NULL && hIcon = NULL)
+
+	if ((hCursor == NULL) && (hbrBackground == NULL) && (hIcon = NULL))
 	{
 		wsprintf(lpszName, "Afx:%d:%d", (int)hInst, nClassStyle);
 	}
 	else
 	{
 		wsprintf(lpszName, "Afx:%d:%d:%d:%d", (int)hInst, nClassStyle,
-			(int)hCursor, (int)hbtBackground, (int)hIcon);
+			(int)hCursor, (int)hbrBackground, (int)hIcon);
 	}
 	WNDCLASS wc = { 0 };
 	if (::GetClassInfo(hInst, lpszName, &wc))
@@ -178,3 +241,71 @@ LPCTSTR AfxRegisterWndClass(UINT nClassStyle, HCURSOR hCursor,
 	}
 	return lpszName;
 }	
+
+void AfxHookWindowCreate(CWnd* pWnd)
+{
+	_AFX_THREAD_STATE *pThreadState = AfxGetThreadState();
+	if (pThreadState->m_pWndInit == pWnd)
+	{
+		return;
+	}
+	if (pThreadState->m_hHookOldCbtFilter == NULL)
+	{
+		pThreadState->m_hHookOldCbtFilter = ::SetWindowsHookEx(WH_CBT,
+			_AfxCbtFilterHook, NULL, ::GetCurrentThreadId());
+		ASSERT(pWnd != NULL);
+		ASSERT(pWnd->m_hWnd == NULL);
+		ASSERT(pThreadState->m_pWndInit == NULL);
+		pThreadState->m_pWndInit = pWnd;
+	}
+}
+
+BOOL AfxUnhookWindowCreate()
+{
+	_AFX_THREAD_STATE *pThreadState = AfxGetThreadState();
+	if (pThreadState->m_hHookOldCbtFilter != NULL)
+	{
+		::UnhookWindowsHookEx(pThreadState->m_hHookOldCbtFilter);
+		pThreadState->m_hHookOldCbtFilter = NULL;
+	}
+	if (pThreadState->m_pWndInit != NULL)
+	{
+		pThreadState->m_pWndInit = NULL;
+		return FALSE;
+	}
+	return TRUE;
+}
+
+WNDPROC AfxGetAfxWndProc()
+{
+	return &AfxWndProc;
+}
+
+LRESULT __stdcall _AfxCbtFilterHook(int code, WPARAM wParam, LPARAM lParam)
+{
+	_AFX_THREAD_STATE *pThreadState = AfxGetThreadState();
+	if (code != HCBT_CREATEWND)
+	{
+		return ::CallNextHookEx(pThreadState->m_hHookOldCbtFilter, code, wParam, lParam);
+	}
+	HWND hWnd = (HWND)wParam;
+	CWnd *pWndInit = pThreadState->m_pWndInit;
+	if (pWndInit != NULL)
+	{
+		ASSERT(CWnd::FromHandlePermanent(hWnd) == NULL);
+		pWndInit->Attach(hWnd);
+		pWndInit->PreSubclassWindows();
+		WNDPROC *pOldWndProc = pWndInit->GetSuperWndProcAddr();
+		ASSERT(pOldWndProc != NULL);
+		WNDPROC afxWndProc = AfxGetAfxWndProc();
+		WNDPROC oldWndProc = (WNDPROC)::SetWindowLong(hWnd, 
+			GWL_WNDPROC, (DWORD)afxWndProc);
+		ASSERT(oldWndProc != NULL);
+		if (oldWndProc != afxWndProc)
+		{
+			*pOldWndProc = oldWndProc;			
+		}
+		pThreadState->m_pWndInit = NULL;		
+	}
+	return ::CallNextHookEx(pThreadState->m_hHookOldCbtFilter, code, wParam, lParam);
+}

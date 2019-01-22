@@ -23,6 +23,7 @@
     <ClCompile Include="..\..\wincommon\afxtls.cpp" />
     <ClCompile Include="..\..\wincommon\appcore.cpp" />
     <ClCompile Include="..\..\wincommon\appinit.cpp" />
+    <ClCompile Include="..\..\wincommon\cmdtarg.cpp" />
     <ClCompile Include="..\..\wincommon\dumpout.cpp" />
     <ClCompile Include="..\..\wincommon\map_pp.cpp" />
     <ClCompile Include="..\..\wincommon\objcore.cpp" />
