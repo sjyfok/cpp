@@ -231,47 +231,48 @@ WNDPROC AfxGetAfxWndProc()
 
 LRESULT __stdcall _AfxCbtFilterHook(int code, WPARAM wParam, LPARAM lParam)
 {
-	//_AFX_THREAD_STATE* pThreadState = AfxGetThreadState();
-	//if(code != HCBT_CREATEWND)
-	//{
-	//	// 只对HCBT_CREATEWND通知事件感兴趣
-	//	return ::CallNextHookEx(pThreadState->m_hHookOldCbtFilter, code, wParam, lParam);
-	//}
+	_AFX_THREAD_STATE* pThreadState = AfxGetThreadState();
+	if(code != HCBT_CREATEWND)
+	{
+		// 只对HCBT_CREATEWND通知事件感兴趣
+		return ::CallNextHookEx(pThreadState->m_hHookOldCbtFilter, code, wParam, lParam);
+	}
 
-	//// 得到正在初始化的窗口的窗口句柄和CWnd对象的指针
-	//HWND hWnd = (HWND)wParam;
-	//CWnd* pWndInit = pThreadState->m_pWndInit;
+	// 得到正在初始化的窗口的窗口句柄和CWnd对象的指针
+	HWND hWnd = (HWND)wParam;
+	CWnd* pWndInit = pThreadState->m_pWndInit;
 
-	//// 将hWnd关联到pWndInit指向的CWnd对象中，并设置窗口的窗口函数的地址
-	//if(pWndInit != NULL)
-	//{
-	//	// hWnd不应该在永久句柄映射中
-	//	ASSERT(CWnd::FromHandlePermanent(hWnd) == NULL);
+	// 将hWnd关联到pWndInit指向的CWnd对象中，并设置窗口的窗口函数的地址
+	if(pWndInit != NULL)
+	{
+		// hWnd不应该在永久句柄映射中
+		ASSERT(CWnd::FromHandlePermanent(hWnd) == NULL);
 
-	//	// 附加窗口句柄
-	//	pWndInit->Attach(hWnd);
-	//
-	//	// 允许其它子类化窗口的事件首先发生
-	//	pWndInit->PreSubclassWindow();
+		// 附加窗口句柄
+		pWndInit->Attach(hWnd);
+	
+		// 允许其它子类化窗口的事件首先发生
+		pWndInit->PreSubclassWindow();
 
-	//	// 下面要改变窗口函数的地址
+		// 下面要改变窗口函数的地址
 
-	//	// 要在pOldWndProc指向的变量中保存原来的窗口函数
-	//	WNDPROC* pOldWndProc = pWndInit->GetSuperWndProcAddr();
-	//	ASSERT(pOldWndProc != NULL);
+		// 要在pOldWndProc指向的变量中保存原来的窗口函数
+		WNDPROC* pOldWndProc = pWndInit->GetSuperWndProcAddr();
+		ASSERT(pOldWndProc != NULL);
 
-	//	// 子类化此窗口（改变窗口函数的地址）
-	//	WNDPROC afxWndProc = AfxGetAfxWndProc();
-	//	WNDPROC oldWndProc = (WNDPROC)::SetWindowLong(hWnd, 
-	//						GWL_WNDPROC, (DWORD)afxWndProc);
-	//	ASSERT(oldWndProc != NULL);
-	//	if(oldWndProc != afxWndProc) // 如果确实改变了
-	//		*pOldWndProc = oldWndProc;
+		// 子类化此窗口（改变窗口函数的地址）
+		WNDPROC afxWndProc = AfxGetAfxWndProc();
+		//WNDPROC oldWndProc = (WNDPROC)::SetWindowLong(hWnd, 
+							//GWL_WNDPROC, (DWORD)afxWndProc);
+		WNDPROC oldWndProc = (WNDPROC)::SetWindowLongPtr(hWnd, GWLP_WNDPROC, (DWORD_PTR)afxWndProc);
+		ASSERT(oldWndProc != NULL);
+		if(oldWndProc != afxWndProc) // 如果确实改变了
+			*pOldWndProc = oldWndProc;
 
-	//	pThreadState->m_pWndInit = NULL;
-	//}
-	//return ::CallNextHookEx(pThreadState->m_hHookOldCbtFilter, code, wParam, lParam);
-	return NULL;
+		pThreadState->m_pWndInit = NULL;
+	}
+	return ::CallNextHookEx(pThreadState->m_hHookOldCbtFilter, code, wParam, lParam);
+	//return NULL;
 }
 
 void AfxHookWindowCreate(CWnd* pWnd)

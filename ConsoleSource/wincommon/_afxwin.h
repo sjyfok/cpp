@@ -56,7 +56,7 @@ public:
 		LPCTSTR lpszWindowName, DWORD dwStyle,
 		int x, int y, int nWidth, int nHeight,
 		HWND hWndParent, HMENU nIDorHMenu, LPVOID lpParam = NULL);
-	virtual BOOL PerCreateWindow(CREATESTRUCT &cs);
+	virtual BOOL PreCreateWindow(CREATESTRUCT &cs);
 	virtual void PostNcDestroy();
 	virtual void PreSubclassWindow();
 };
@@ -73,6 +73,7 @@ class CWinThread : public CObject
 
 
 public:
+	CWnd * m_pMainWnd;	// Ö÷´°¿Ú
 	CWinThread();
 	BOOL CreateThread(DWORD dwCreateFlags = 0, UINT nStackSize = 0,
 		LPSECURITY_ATTRIBUTES lpSecurtyAttrs = NULL);

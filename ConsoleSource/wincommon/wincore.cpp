@@ -5,6 +5,9 @@
 const TCHAR _afxWnd[] = AFX_WND;
 const TCHAR _afxWndFrameOrView[] = AFX_WNDFRAMEORVIEW;
 
+void AfxHookWindowCreate(CWnd* pWnd);
+BOOL AfxUnhookWindowCreate();
+LRESULT __stdcall _AfxCbtFilterHook(int code, WPARAM wParam, LPARAM lParam);
 
 CWnd::CWnd()
 {
@@ -133,6 +136,51 @@ BOOL CWnd::CreateEx(DWORD dwExStyle, LPCTSTR lpszClassName,
 	cs.x = x;
 	cs.y = y;
 	cs.cx = nWidth;
+	cs.cy = nHeight;
+	cs.hwndParent = hWndParent;
+	cs.hMenu = nIDorHMenu;
+	cs.hInstance = AfxGetModuleState()->m_hCurrentInstanceHandle;
+	cs.lpCreateParams = lpParam;
+	if (!PreCreateWindow(cs))
+	{
+		PostNcDestroy();
+		return FALSE;
+	}
+	AfxHookWindowCreate(this);
+	HWND hWnd = ::CreateWindowEx(cs.dwExStyle, cs.lpszClass,
+		cs.lpszName, cs.style, cs.x, cs.y, cs.cx, cs.cy,
+		cs.hwndParent, cs.hMenu, cs.hInstance, cs.lpCreateParams);
+	if (!AfxUnhookWindowCreate())
+	{
+		PostNcDestroy();
+	}
+	if (hWnd == NULL)
+	{
+		return FALSE;
+	}
+	ASSERT(hWnd == m_hWnd);
+	return TRUE;
+}
+
+BOOL CWnd::PreCreateWindow(CREATESTRUCT &cs)
+{
+	if (cs.lpszClass == NULL)
+	{
+		VERIFY(AfxEndDeferRegisterClass(AFX_WND_REG));
+		ASSERT(cs.style&WS_CHILD);
+		cs.lpszClass = _afxWnd;
+	}
+	return TRUE;
+}
+
+void CWnd::PostNcDestroy()
+{
+
+}
+
+void CWnd::PreSubclassWindow()
+{
+
 }
 
 LRESULT __stdcall AfxWndProc(HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam)
@@ -294,12 +342,11 @@ LRESULT __stdcall _AfxCbtFilterHook(int code, WPARAM wParam, LPARAM lParam)
 	{
 		ASSERT(CWnd::FromHandlePermanent(hWnd) == NULL);
 		pWndInit->Attach(hWnd);
-		pWndInit->PreSubclassWindows();
+		pWndInit->PreSubclassWindow();
 		WNDPROC *pOldWndProc = pWndInit->GetSuperWndProcAddr();
 		ASSERT(pOldWndProc != NULL);
 		WNDPROC afxWndProc = AfxGetAfxWndProc();
-		WNDPROC oldWndProc = (WNDPROC)::SetWindowLong(hWnd, 
-			GWL_WNDPROC, (DWORD)afxWndProc);
+		WNDPROC oldWndProc = (WNDPROC)::SetWindowLongPtr(hWnd, GWLP_WNDPROC,(DWORD_PTR)afxWndProc);// SetWindowLong(hWnd, GWL_WNDPROC, (DWORD)afxWndProc);
 		ASSERT(oldWndProc != NULL);
 		if (oldWndProc != afxWndProc)
 		{

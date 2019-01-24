@@ -43,10 +43,7 @@ public:
 	TCHAR m_szTempClassName[96];
 	CWnd *m_pWndInit;
 	HHOOK m_hHookOldCbtFilter;
-	MSG m_lastSendMsg;
-
-	CWnd *m_pWndInit;
-	HHOOK m_hHookOldCbtFilter;
+	MSG m_lastSendMsg;	
 };
 
 EXTERN_THREAD_LOCAL(_AFX_THREAD_STATE, _afxThreadState);
