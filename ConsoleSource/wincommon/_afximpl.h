@@ -10,5 +10,13 @@
 extern const TCHAR _afxWnd[];
 extern const TCHAR _afxWndFrameOrView[];
 
+union MessageMapFunctions
+{
+	AFX_PMSG pfn;
+	void (CWnd::*pfn_vv)(void);
+	void (CWnd::*pfn_vw)(UINT);
+	int (CWnd::*pfn_is)(LPTSTR);
+};
+
 #endif // !__AFXIMPL_H__
 

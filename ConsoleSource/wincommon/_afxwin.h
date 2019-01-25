@@ -7,7 +7,44 @@
 #include "_afxtls.h"
 #include "_afx.h"
 
+class CCmdTarget;
+typedef void (CCmdTarget::*AFX_PMSG)(void);
 
+struct AFX_MSGMAP_ENTRY
+{
+	UINT nMessage;
+	UINT nCode;
+	UINT nID;
+	UINT nLastID;
+	UINT nSig;
+	AFX_PMSG pfn;
+};
+
+struct AFX_MSGMAP
+{
+	const AFX_MSGMAP * pBaseMap;
+	const AFX_MSGMAP_ENTRY *pEntries;
+};
+
+#define DECLARE_MESSAGE_MAP() \
+private:\
+	static const AFX_MSGMAP_ENTRY _messageEntries[];\
+protected:\
+	static const AFX_MSGMAP messageMap;\
+	virtual const AFX_MSGMAP * GetMessageMap() const; \
+
+#define BEGIN_MESSAGE_MAP(theClass, baseClass)\
+	const AFX_MSGMAP* theClass::GetMessageMap() const \
+		{return &theClass::messageMap;}\
+	const AFX_MSGMAP theClass::messageMap=\
+	{&baseClass::messageMap, &theClass::_messageEntries[0]};\
+	const AFX_MSGMAP_ENTRY theClass::_messageEntries[]=\
+	{\
+
+#define END_MESSAGE_MAP()\
+	{0,0,0,0,0,(AFX_PMSG)0}\
+	};\
+	
 
 extern CThreadSlotData* _afxThreadData;
 
@@ -21,6 +58,7 @@ class CCmdTarget :public CObject
 	DECLARE_DYNCREATE(CCmdTarget)
 public:
 	CCmdTarget();
+	DECLARE_MESSAGE_MAP()
 };
 
 class CWnd :public CCmdTarget
@@ -59,8 +97,23 @@ public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT &cs);
 	virtual void PostNcDestroy();
 	virtual void PreSubclassWindow();
+	DECLARE_MESSAGE_MAP()
+	 int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	 void OnPaint();
+	 void OnClose();
+	 void OnDestroy();
+	 void OnNcDestroy();
+	 void OnTimer(UINT nIDEvent);
+protected:	
+	virtual BOOL OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT *pResult);
+	virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
+	virtual BOOL OnNotify(WPARAM wParam, LPARAM lParam, LRESULT *pResult);
 };
 
+const AFX_MSGMAP_ENTRY *AfxFindMessageEntry(const AFX_MSGMAP_ENTRY *lpEntry,
+	UINT nMsg, UINT nCode, UINT nID);
+
+typedef void (CWnd::*AFX_PMSGW)(void);
 
 typedef UINT(__cdecl* AFX_THREADPROC)(LPVOID);
 class CWinThread : public CObject

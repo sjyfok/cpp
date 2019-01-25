@@ -1,6 +1,7 @@
 #include "_afxwin.h"
 #include "winhand_.h"
 #include "_afximpl.h"
+#include "_afxmsg_.h"
 
 const TCHAR _afxWnd[] = AFX_WND;
 const TCHAR _afxWndFrameOrView[] = AFX_WNDFRAMEORVIEW;
@@ -8,6 +9,10 @@ const TCHAR _afxWndFrameOrView[] = AFX_WNDFRAMEORVIEW;
 void AfxHookWindowCreate(CWnd* pWnd);
 BOOL AfxUnhookWindowCreate();
 LRESULT __stdcall _AfxCbtFilterHook(int code, WPARAM wParam, LPARAM lParam);
+
+BEGIN_MESSAGE_MAP(CWnd, CCmdTarget)
+ON_WM_CREATE()
+END_MESSAGE_MAP()
 
 CWnd::CWnd()
 {
@@ -183,6 +188,134 @@ void CWnd::PreSubclassWindow()
 
 }
 
+int CWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
+	return Default();
+}
+
+void CWnd::OnPaint()
+{
+	Default();
+}
+
+void CWnd::OnClose()
+{
+	Default();
+}
+
+void CWnd::OnDestroy()
+{
+	Default();
+}
+
+void CWnd::OnNcDestroy()
+{
+	CWinThread *pThread = AfxGetThread();
+	if (pThread != NULL)
+	{
+		if (pThread->m_pMainWnd == this)
+		{
+			if (pThread == AfxGetApp())
+			{
+				::PostQuitMessage(0);
+			}
+			pThread->m_pMainWnd = NULL;
+		}
+	}
+	Default();
+	Detach();
+	PostNcDestroy();
+}
+
+void CWnd::OnTimer(UINT nIDEvent)
+{
+	Default();
+}
+
+
+
+BOOL CWnd::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT *pResult)
+{
+	LRESULT lResult = 0;
+	if (message == WM_COMMAND)
+	{
+		if (OnCommand(wParam, lParam))
+		{
+			lResult = 1;
+			goto LReturnTrue;
+		}
+		return FALSE;
+	}
+	if (message == WM_NOTIFY)
+	{
+		NMHDR *pHeader = (NMHDR*)lParam;
+		if (pHeader->hwndFrom != NULL && OnNotify(wParam, lParam, &lResult))
+		{
+			goto LReturnTrue;
+		}
+		return FALSE;
+	}
+	const AFX_MSGMAP* pMessageMap;
+	const AFX_MSGMAP_ENTRY *lpEntry;
+	for (pMessageMap = GetMessageMap(); pMessageMap != NULL; pMessageMap = pMessageMap->pBaseMap)
+	{
+		ASSERT(pMessageMap != pMessageMap->pBaseMap);
+		if ((lpEntry = AfxFindMessageEntry(pMessageMap->pEntries, message, 0, 0))!=NULL)
+		{
+			goto LDispatch;
+		}
+	}
+	return FALSE;
+LDispatch:
+	union MessageMapFunctions mmf;
+	mmf.pfn = lpEntry->pfn;
+	switch (lpEntry->nSig)
+	{
+	default:
+		return FALSE;
+	case AfxSig_vw:
+		(this->*mmf.pfn_vw)(wParam);
+		break;
+	case AfxSig_vv:
+		(this->*mmf.pfn_vv)();
+		break;
+	case AfxSig_is:
+		(this->*mmf.pfn_is)((LPTSTR)lParam);
+		break;
+	}
+LReturnTrue:
+	if (pResult != NULL)
+	{
+		*pResult = lResult;
+	}
+	return TRUE;
+}
+
+const AFX_MSGMAP_ENTRY *AfxFindMessageEntry(const AFX_MSGMAP_ENTRY *lpEntry,
+	UINT nMsg, UINT nCode, UINT nID)
+{
+	while (lpEntry->nSig != AfxSig_end)
+	{
+		if (lpEntry->nMessage == nMsg && lpEntry->nCode == nCode &&
+			(nID>=lpEntry->nID && nID <= lpEntry->nLastID))
+		{
+			return lpEntry;
+		}
+		lpEntry++;
+	}
+	return NULL;
+}
+
+BOOL CWnd::OnCommand(WPARAM wParam, LPARAM lParam)
+{
+	return FALSE;
+}
+
+BOOL CWnd::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT *pResult)
+{
+	return FALSE;
+}
+
 LRESULT __stdcall AfxWndProc(HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam)
 {
 	CWnd *pWnd = CWnd::FromHandlePermanent(hWnd);
@@ -209,7 +342,12 @@ LRESULT AfxCallWndProc(CWnd *pWnd, HWND hWnd, UINT nMsg,
 
 LRESULT CWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
-	return 0;
+	LRESULT lResult;
+	if (!OnWndMsg(message, wParam, lParam, &lResult))
+	{
+		lResult = DefWindowProc(message, wParam, lParam);
+	}
+	return lResult;	
 }
 
 
