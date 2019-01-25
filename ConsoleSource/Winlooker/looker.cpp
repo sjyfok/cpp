@@ -11,3 +11,10 @@ BOOL CMyApp::InitInstance()
 
 	return TRUE;
 }
+
+CMainWindow::CMainWindow()
+{
+	m_bCatchMouseDown = FALSE;
+	m_hCursorArrow = AfxGetApp()->LoadStandardCursor(IDC_ARROW);
+	m_hCursorTarget = AfxGetApp()->LoadCursor(IDC_TARGET);
+}
