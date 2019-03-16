@@ -52,5 +52,20 @@
 #define STATE_NUM2			(13)
 #define STATE_NUM1			(14)
 #define STATE_EMPTY			(15)
+
 #define ATTRIB_EMPTY		(0)
 #define ATTRIB_MINE			(1)
+
+//color
+#define COLOR_BLACK			RGB(0, 0, 0)
+#define COLOR_DARK_GRAY		RGB(128, 128, 128)
+#define COLOR_GRAY			RGB(192, 192, 192)
+#define COLOR_WHITE			RGB(255, 255, 255)
+
+
+//ÓÎÏ·×´Ì¬
+#define GS_WAIT				(0)
+#define GS_RUN				(1)
+#define GS_DEAD				(2)
+#define GS_VICTORY			(3)
+

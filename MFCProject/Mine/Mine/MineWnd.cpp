@@ -22,6 +22,11 @@ void CMineWnd::SizeWindow()
 		LINE_WIDTH_0 * 3 + SIDE_WIDTH_0 * 2 + SIDE_WIDTH_1 + SHELL_S_H;
 	SetWindowPos(&wndTopMost, 0, 0, uWidth, uHeight,
 		SWP_NOZORDER | SWP_NOMOVE | SWP_NOCOPYBITS);
+	GetClientRect(&m_rcClient);
+	m_uBtnRect[0] = m_rcClient.right / 2 - 12;
+	m_uBtnRect[1] = m_rcClient.right / 2 - 13;
+	m_uBtnRect[2] = m_rcClient.right / 2 + 12;
+
 }
 BEGIN_MESSAGE_MAP(CMineWnd, CWnd)
 	ON_COMMAND(ID_MENU_PRIMARY, &CMineWnd::OnMenuPrimary)
@@ -30,6 +35,7 @@ BEGIN_MESSAGE_MAP(CMineWnd, CWnd)
 	ON_COMMAND(ID_MENU_ABOUT, &CMineWnd::OnMenuAbout)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
+	ON_WM_RBUTTONDOWN()
 END_MESSAGE_MAP()
 
 
@@ -91,11 +97,76 @@ void CMineWnd::OnLButtonDown(UINT nFlags, CPoint point)
 	CWnd::OnLButtonDown(nFlags, point);
 }
 
+WINEWND* CMineWnd::GetMine(long x, long y)
+{
+	if (x < MINEAREA_FRAME_X || y < MINEAREA_FRAME_Y)
+	{
+		return NULL;
+	}
+	UINT uCol = (UINT)(x - MINEAREA_FRAME_X) / 16;
+	UINT uRow = (UINT)(y - MINEAREA_FRAME_Y) / 16;
+	return &m_pMines[uRow][uCol];
+}
+
+void CMineWnd::LoadBitmap()
+{
+	if (m_bColorful)
+	{
+		m_clrDark = COLOR_DARK_GRAY;
+		m_bmpMine.DeleteObject();
+		m_bmpMine.LoadBitmap(IDB_MINE_COLOR);
+		m_bmpNumber.DeleteObject();
+		m_bmpNumber.LoadBitmap(IDB_NUM_COLOR);
+		m_bmpButton.DeleteObject();
+		m_bmpButton.LoadBitmap(IDB_BTN_COLOR);
+	}
+	else
+	{
+		m_clrDark = COLOR_BLACK;
+		m_bmpMine.DeleteObject();
+		m_bmpMine.LoadBitmap(IDB_MINE_GRAY);
+		m_bmpNumber.DeleteObject();
+		m_bmpNumber.LoadBitmap(IDB_NUM_GRAY);
+		m_bmpButton.DeleteObject();
+		m_bmpButton.LoadBitmap(IDB_BTN_GRAY);
+	}
+}
+
+void CMineWnd::InitGame()
+{
+	LoadBitmap();
+	m_nLeaveNum = m_uMineNum;
+	m_uSleepTime = 0;
+	m_uBtnState = BUTTON_NORMAL;
+	m_uGameState = GS_WAIT;
+
+	if (m_uTimer)
+	{
+		KillTimer(ID_TIMER_EVENT);
+		m_uTimer = 0;
+	}
+
+	m_pNewMine = NULL;
+	m_pOldMine = NULL;
+
+	FreeMines();
+	for (UINT i = 0; i < m_uYNum; i++)
+	{
+		for (UINT j = 0; j < m_uXNum; j++)
+		{
+			m_pMines[i][j].uRow = i;
+			m_pMines[i][j].uCol = j;
+			m_pMines[i][j].uState = STATE_NORMAL;
+			m_pMines[i][j].uAttrib = ATTRIB_EMPTY;
+			m_pMines[i][j].uOldState = STATE_NORMAL;
+		}
+	}
+}
 
 void CMineWnd::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
-	CRect rcBtn(m_uBtnRect[1], 15, m_uBtnRect[2], 39);
+	CRect rcBtn(m_uBtnRect[1], 15, m_uBtnRect[2], 39); //中间的笑脸
 	CRect rcMineArea(MINE_AREA_LEFT, MINE_AREA_TOP,
 		MINE_AREA_LEFT + m_uXNum * MINE_WIDTH,
 		MINE_AREA_TOP + m_uYNum * MINE_HEIGHT);
@@ -120,7 +191,8 @@ void CMineWnd::OnLButtonUp(UINT nFlags, CPoint point)
 			}
 			if (m_bLRBtnDown)
 			{
-
+				m_bLRBtnDown = FALSE;
+				OnLRBtnUp(m_pOldMine->uRow, m_pOldMine->uCol);
 			}
 			else
 			{
@@ -183,4 +255,123 @@ void CMineWnd::OnLButtonUp(UINT nFlags, CPoint point)
 	}
 	ReleaseCapture();
 	CWnd::OnLButtonUp(nFlags, point);
+}
+
+
+BOOL CMineWnd::IsMine(UINT row, UINT col)
+{
+	// TODO: 在此处添加实现代码.
+	return (m_pMines[row][col].uAttrib == ATTRIB_MINE);
+}
+
+
+UINT CMineWnd::GetAroundNum(UINT row, UINT col)
+{
+	// TODO: 在此处添加实现代码.
+	UINT i, j;
+	UINT around = 0;
+	UINT minRow = (row == 0) ? 0 : row - 1;
+	UINT maxRow = row + 2;
+	UINT minCol = (col == 0) ? 0 : col - 1;
+	UINT maxCol = col + 2;
+	for (i = minRow; i < maxRow; i++)
+	{
+		for (j = minCol; j < maxCol; j++)
+		{
+			if (!IsInMineArea(i, j))
+			{
+				continue;
+			}
+			if (m_pMines[i][j].uAttrib == ATTRIB_MINE)
+			{
+				around++;
+			}
+		}
+	}
+	return around;
+}
+
+
+void CMineWnd::ExPandMines(UINT row, UINT col)
+{
+	// TODO: 在此处添加实现代码.
+	UINT i, j;
+	UINT minRow = (row == 0) ? 0 : row - 1;
+	UINT maxRow = row + 2;
+	UINT minCol = (col == 0) ? 0 : col - 1;
+	UINT maxCol = col + 2;
+	UINT around = GetAroundNum(row, col);
+	
+	m_pMines[row][col].uState = 15 - around;
+	m_pMines[row][col].uOldState = 15 - around;
+
+	DrawSpecialMine(row, col);
+	if (around == 0)
+	{
+		for (i = minRow; i < maxRow; i++)
+		{
+			for (j = minCol; j < maxCol; j++)
+			{
+				if (!(i == row && j == col)&&m_pMines[i][j].uState == STATE_NORMAL
+					&&m_pMines[i][j].uAttrib != ATTRIB_MINE)
+				{
+					if (!IsInMineArea(i, j))
+					{
+						continue;
+					}
+					ExPandMines(i, j);
+				}
+			}
+		}
+	}
+}
+
+
+
+BOOL CMineWnd::Victory()
+{
+	// TODO: 在此处添加实现代码.
+	UINT i, j;
+	CRect rcBtn(m_uBtnRect[1], 15, m_uBtnRect[2], 39);
+	for (i = 0; i < m_uYNum; i++)
+	{
+		for (j = 0; j  < m_uXNum; j ++)
+		{
+			if (m_pMines[i][j].uState == STATE_NORMAL)
+			{
+				return FALSE;
+			}
+			if (m_pMines[i][j].uState == STATE_DICEY)
+			{
+				return FALSE;
+			}
+		}
+	}
+	m_uBtnState = BUTTON_VICTORY;
+	m_uGameState = GS_VICTORY;
+	Invalidate();
+	if (m_uTimer != 0)
+	{
+		KillTimer(ID_TIMER_EVENT);
+		m_uTimer = 0;
+	}
+	return TRUE;
+}
+
+
+void CMineWnd::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	CRect rcBtn(m_uBtnRect[1], 15, m_uBtnRect[2], 39);
+	CRect rcMineArea(MINE_AREA_LEFT, MINE_AREA_TOP,
+		MINE_AREA_LEFT + m_uXNum * MINE_WIDTH,
+		MINE_AREA_TOP + m_uYNum * MINE_HEIGHT);
+	if (rcMineArea.PtInRect(point))
+	{
+		if (m_uGameState == GS_WAIT||m_uGameState == GS_RUN)
+		{
+
+		}
+	}
+	CWnd::OnRButtonDown(nFlags, point);
 }
