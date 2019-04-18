@@ -33,6 +33,12 @@
     <ClInclude Include="MineWnd.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="DlgCustom.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgHero.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Mine.cpp">
@@ -44,6 +50,12 @@
     <ClCompile Include="MineWnd.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="DlgCustom.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgHero.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Mine.rc">
@@ -52,6 +64,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\Mine.rc2">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\wave1.bin">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\wave2.bin">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\mave1.bin">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\mave2.bin">
       <Filter>资源文件</Filter>
     </None>
   </ItemGroup>
@@ -65,5 +89,34 @@
     <Image Include="res\Toolbar.bmp">
       <Filter>资源文件</Filter>
     </Image>
+    <Image Include="res\BITMAP30.BMP">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\BITMAP31.BMP">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\BITMAP10.BMP">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\BITMAP11.BMP">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\BITMAP20.BMP">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\BITMAP21.BMP">
+      <Filter>资源文件</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="res\WAV1.WAV">
+      <Filter>资源文件</Filter>
+    </Media>
+    <Media Include="res\WAV2.WAV">
+      <Filter>资源文件</Filter>
+    </Media>
+    <Media Include="res\WAV3.WAV">
+      <Filter>资源文件</Filter>
+    </Media>
   </ItemGroup>
 </Project>

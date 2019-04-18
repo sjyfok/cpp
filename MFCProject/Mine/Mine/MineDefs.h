@@ -1,4 +1,9 @@
 #pragma once
+
+#define DEFAULT_LEVEL		(0)
+#define DEFAULT_RECORD		(999)
+#define DEFAULT_HOLDER		_T("匿名")
+
 #define PRIMARY_XNUM		(9)
 #define PRIMARY_YNUM		(9)
 #define PRIMARY_MINENUM		(10)
@@ -10,6 +15,13 @@
 #define ADVANCE_XNUM		(30)
 #define ADVANCE_YNUM		(16)
 #define ADVANCE_MINENUM		(99)
+
+#define GAME_SETTING		_T("GameSetting")
+#define GAME_LEVEL			_T("CurrentLevel")
+
+#define CUSTOM_XNUM			_T("CustomXNum")
+#define CUSTOM_YNUM			_T("CustomYNum")
+#define CUSTOM_MINENUM		_T("CustomMineNum")
 
 //窗口宽度相关定义
 #define DEFAULT_FRAME_X		(6)
@@ -68,4 +80,17 @@
 #define GS_RUN				(1)
 #define GS_DEAD				(2)
 #define GS_VICTORY			(3)
+
+//游戏级别
+#define LEVEL_PRIMARY			(0)
+#define LEVEL_SECONDRY			(1)
+#define LEVEL_ADVANCE			(2)
+#define LEVEL_CUSTOM			(3)
+
+//笑脸按钮矩形图形 状态
+#define BUTTON_DOWN				(0)
+#define BUTTON_VICTORY			(1)
+#define BUTTON_DEAD				(2)
+#define BUTTON_CLICK			(3)
+#define BUTTON_NORMAL			(4)
 

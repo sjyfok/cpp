@@ -183,6 +183,8 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DlgCustom.h" />
+    <ClInclude Include="DlgHero.h" />
     <ClInclude Include="Mine.h" />
     <ClInclude Include="MineDefs.h" />
     <ClInclude Include="MineWnd.h" />
@@ -191,6 +193,8 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DlgCustom.cpp" />
+    <ClCompile Include="DlgHero.cpp" />
     <ClCompile Include="Mine.cpp" />
     <ClCompile Include="MineWnd.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -204,12 +208,27 @@
     <ResourceCompile Include="Mine.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\mave1.bin" />
+    <None Include="res\mave2.bin" />
     <None Include="res\Mine.rc2" />
+    <None Include="res\wave1.bin" />
+    <None Include="res\wave2.bin" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\BITMAP10.BMP" />
+    <Image Include="res\BITMAP11.BMP" />
+    <Image Include="res\BITMAP20.BMP" />
+    <Image Include="res\BITMAP21.BMP" />
+    <Image Include="res\BITMAP30.BMP" />
+    <Image Include="res\BITMAP31.BMP" />
     <Image Include="res\Mine.ico" />
     <Image Include="res\MineDoc.ico" />
     <Image Include="res\Toolbar.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="res\WAV1.WAV" />
+    <Media Include="res\WAV2.WAV" />
+    <Media Include="res\WAV3.WAV" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
