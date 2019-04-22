@@ -124,11 +124,6 @@ public:
 	afx_msg void OnMenuAbout();	
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg void OnInitMenu(CMenu* pMenu);	
-	afx_msg void OnClose();
-	
-	
-	
-	
-	
+	afx_msg void OnClose();	
 	afx_msg void OnMenuHero();
 };

@@ -291,72 +291,6 @@ void CMineWnd::LayMines(UINT row, UINT col)
 }
 
 
-void CMineWnd::OnLButtonDown(UINT nFlags, CPoint point)
-{
-	// TODO: 在此添加消息处理程序代码和/或调用默认值
-	CRect rcBtn(m_uBtnRect[1], 15, m_uBtnRect[2], 39);
-	CRect rcMineArea(MINE_AREA_LEFT, MINE_AREA_TOP,
-		MINE_AREA_LEFT + m_uXNum * MINE_WIDTH, MINE_AREA_TOP + m_uYNum * MINE_HEIGHT);
-	SetCapture();
-	m_bClickBtn = FALSE;
-	m_bLRBtnDown = FALSE;
-
-	if (rcBtn.PtInRect(point))
-	{
-		m_bClickBtn = TRUE;
-		m_uBtnState = BUTTON_DOWN;
-		InvalidateRect(rcBtn);
-	}
-	else if (rcMineArea.PtInRect(point))
-	{
-		switch (m_uGameState)
-		{
-		default:
-			break;
-		case GS_WAIT:
-		case GS_RUN:
-			m_pNewMine = GetMine(point.x, point.y);
-			if (!m_pNewMine)
-			{
-				return;
-			}
-			if (m_pNewMine->uState == STATE_NORMAL)
-			{
-				m_pNewMine->uState = STATE_EMPTY;
-			}
-			if (m_pNewMine->uState == STATE_DICEY)
-			{
-				m_pNewMine->uState = STATE_DICEY_DOWN;
-			}
-			m_pOldMine = m_pNewMine;
-			break;
-		case GS_DEAD:
-		case GS_VICTORY:
-			return;
-			break;
-		}
-		m_uBtnState = BUTTON_CLICK;
-		InvalidateRect(rcBtn);
-		if (nFlags == (MK_LBUTTON | MK_RBUTTON))
-		{
-			m_bLRBtnDown = TRUE;
-			OnLRBtnDown(m_pOldMine->uRow, m_pOldMine->uCol);
-		}
-		InvalidateRect(rcMineArea);
-	}
-	else
-	{
-		if (m_uGameState == GS_WAIT || m_uGameState == GS_RUN)
-		{
-			m_uBtnState = BUTTON_CLICK;
-			InvalidateRect(rcBtn);
-		}
-	}
-	
-	
-
-	CWnd::OnLButtonDown(nFlags, point);
-}
 
 MINEWND* CMineWnd::GetMine(long x, long y)
 {
@@ -571,6 +505,74 @@ void CMineWnd::DrawDownNum(MINEWND *mine, UINT num)
 	CRect rcMine(mine->uCol * 16, mine->uRow * 16, (mine->uCol + 1) * 16, (mine->uRow + 1) * 16);
 	InvalidateRect(rcMine);
 }
+
+void CMineWnd::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	CRect rcBtn(m_uBtnRect[1], 15, m_uBtnRect[2], 39);
+	CRect rcMineArea(MINE_AREA_LEFT, MINE_AREA_TOP,
+		MINE_AREA_LEFT + m_uXNum * MINE_WIDTH, MINE_AREA_TOP + m_uYNum * MINE_HEIGHT);
+	SetCapture();
+	m_bClickBtn = FALSE;
+	m_bLRBtnDown = FALSE;
+
+	if (rcBtn.PtInRect(point))
+	{
+		m_bClickBtn = TRUE;
+		m_uBtnState = BUTTON_DOWN;
+		InvalidateRect(rcBtn);
+	}
+	else if (rcMineArea.PtInRect(point))
+	{
+		switch (m_uGameState)
+		{
+		default:
+			break;
+		case GS_WAIT:
+		case GS_RUN:
+			m_pNewMine = GetMine(point.x, point.y);
+			if (!m_pNewMine)
+			{
+				return;
+			}
+			if (m_pNewMine->uState == STATE_NORMAL)
+			{
+				m_pNewMine->uState = STATE_EMPTY;
+			}
+			if (m_pNewMine->uState == STATE_DICEY)
+			{
+				m_pNewMine->uState = STATE_DICEY_DOWN;
+			}
+			m_pOldMine = m_pNewMine;
+			break;
+		case GS_DEAD:
+		case GS_VICTORY:
+			return;
+			break;
+		}
+		m_uBtnState = BUTTON_CLICK;
+		InvalidateRect(rcBtn);
+		if (nFlags == (MK_LBUTTON | MK_RBUTTON))
+		{
+			m_bLRBtnDown = TRUE;
+			OnLRBtnDown(m_pOldMine->uRow, m_pOldMine->uCol);
+		}
+		InvalidateRect(rcMineArea);
+	}
+	else
+	{
+		if (m_uGameState == GS_WAIT || m_uGameState == GS_RUN)
+		{
+			m_uBtnState = BUTTON_CLICK;
+			InvalidateRect(rcBtn);
+		}
+	}
+
+
+
+	CWnd::OnLButtonDown(nFlags, point);
+}
+
 
 void CMineWnd::OnLButtonUp(UINT nFlags, CPoint point)
 {
