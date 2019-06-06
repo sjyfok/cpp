@@ -80,39 +80,39 @@ void CMainFrame::Dump(CDumpContext& dc) const
 //	// TODO: 在此添加命令处理程序代码
 //}
 
-
+extern CMultiDocTemplate* pDocTemplate;
 void CMainFrame::OnWindowNew()
 {
 	// TODO: 在此添加命令处理程序代码
-	AfxMessageBox("Hello");
-	static CMultiDocTemplate* pDocTemple;
-	static BOOL bChildCreated = FALSE;
-	if (FALSE == bChildCreated)
-	{
-		AfxMessageBox("Hello1");
-		pDocTemple = new CMultiDocTemplate(
-			IDR_MDISQUTYPE,
-			RUNTIME_CLASS(CSquaresDoc),
-			RUNTIME_CLASS(CChildFrame), // custom MDI child frame
-			RUNTIME_CLASS(CTestScroll));
-			if (!pDocTemple)
-		{
-			AfxMessageBox(_T("Can't Create new MultiDocTemplate!\n"));
-			return;
-		}
-		AfxGetApp()->AddDocTemplate(pDocTemple);
+	
+	//static CMultiDocTemplate* pDocTemple;
+	//static BOOL bChildCreated = FALSE;
+	//if (FALSE == bChildCreated)
+	//{
+	//	AfxMessageBox("Hello1");
+	//	pDocTemple = new CMultiDocTemplate(
+	//		IDR_MDISQUTYPE,
+	//		RUNTIME_CLASS(CSquaresDoc),
+	//		RUNTIME_CLASS(CChildFrame), // custom MDI child frame
+	//		RUNTIME_CLASS(CTestScroll));
+	//		if (!pDocTemple)
+	//	{
+	//		AfxMessageBox(_T("Can't Create new MultiDocTemplate!\n"));
+	//		return;
+	//	}
+	//	AfxGetApp()->AddDocTemplate(pDocTemple);
 
 		CMDIChildWnd* pChildActive = MDIGetActive();
 		CSquaresDoc* pDoc = (CSquaresDoc*)pChildActive->GetActiveDocument();
-		CMDIChildWnd* pColorChild = (CMDIChildWnd*)pDocTemple->CreateNewFrame(
+		CMDIChildWnd* pColorChild = (CMDIChildWnd*)pDocTemplate->CreateNewFrame(
 			pDoc, NULL);
 		if (!pColorChild)
 		{
 			AfxMessageBox(_T("Can't Create new Child Frame!\n"));
 			return;
 		}
-		pDocTemple->InitialUpdateFrame(pColorChild, pDoc);
+		pDocTemplate->InitialUpdateFrame(pColorChild, pDoc);
 		MDITile(MDITILE_ZORDER);
-	}
+	/*}*/
 
 }

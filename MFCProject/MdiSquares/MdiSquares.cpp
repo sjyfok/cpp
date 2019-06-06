@@ -44,14 +44,14 @@ CMdiSquaresApp theApp;
 
 /////////////////////////////////////////////////////////////////////////////
 // CMdiSquaresApp initialization
-
+CMultiDocTemplate* pDocTemplate;
 BOOL CMdiSquaresApp::InitInstance()
 {
 	SetRegistryKey(_T("Local AppWizard-Generated Applications"));
 
 	LoadStdProfileSettings();  // Load standard INI file options (including MRU)
 
-	CMultiDocTemplate* pDocTemplate;
+//	CMultiDocTemplate* pDocTemplate;
 	pDocTemplate = new CMultiDocTemplate(
 		IDR_MDISQUTYPE,
 		RUNTIME_CLASS(CSquaresDoc),
