@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2042
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MdiSquares", "MdiSquares.vcxproj", "{24B5425A-D8BA-4897-B3D8-E2B3E2DB898B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{24B5425A-D8BA-4897-B3D8-E2B3E2DB898B}.Debug|x86.ActiveCfg = Debug|Win32
+		{24B5425A-D8BA-4897-B3D8-E2B3E2DB898B}.Debug|x86.Build.0 = Debug|Win32
+		{24B5425A-D8BA-4897-B3D8-E2B3E2DB898B}.Release|x86.ActiveCfg = Release|Win32
+		{24B5425A-D8BA-4897-B3D8-E2B3E2DB898B}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C97A6C42-D448-42C4-988F-7430EEBCCFD1}
+	EndGlobalSection
+EndGlobal
