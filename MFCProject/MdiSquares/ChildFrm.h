@@ -17,7 +17,7 @@ public:
 
 // Attributes
 public:
-
+	CSplitterWnd m_wndSplitter;
 // Operations
 public:
 
@@ -42,6 +42,7 @@ protected:
 		//    DO NOT EDIT what you see in these blocks of generated code!
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+	virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext);
 };
 
 /////////////////////////////////////////////////////////////////////////////

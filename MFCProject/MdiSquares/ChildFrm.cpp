@@ -5,6 +5,9 @@
 #include "MdiSquares.h"
 
 #include "ChildFrm.h"
+#include "SquaresDoc.h"
+#include "SquaresView.h"
+#include "TestView.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -60,3 +63,17 @@ void CChildFrame::Dump(CDumpContext& dc) const
 
 /////////////////////////////////////////////////////////////////////////////
 // CChildFrame message handlers
+
+
+BOOL CChildFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
+{
+	// TODO: 在此添加专用代码和/或调用基类
+	if (!m_wndSplitter.CreateStatic(this, 1, 2) ||
+		!m_wndSplitter.CreateView(0, 1, RUNTIME_CLASS
+		(CSquaresView), CSize(0, 0), pContext) ||
+		!m_wndSplitter.CreateView(0, 0, RUNTIME_CLASS(CTestView),
+			CSize(192, 0), pContext))
+		return FALSE;
+	return true;
+	return CMDIChildWnd::OnCreateClient(lpcs, pContext);
+}
