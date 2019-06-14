@@ -138,7 +138,7 @@ class CThreadLocal : public CThreadLocalObject
 public:
 	TYPE * GetData()
 	{
-		TYPE *pData = (TYPE*)CThreadLocalObject::Getata(&CreateObject);
+		TYPE *pData = (TYPE*)CThreadLocalObject::GetData(&CreateObject);
 		return pData;
 	}
 	TYPE *GetDataNA()

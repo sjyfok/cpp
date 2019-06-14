@@ -90,10 +90,11 @@ int CThreadSlotData::AllocSlot()
 		for (nSlot = 1; nSlot < nAlloc && m_pSlotData[nSlot].dwFlags &SLOT_USED; nSlot++);
 		if (nSlot >= nAlloc)
 		{
-			int nNewAlloc = nAlloc + 32;
+			int nNewAlloc = nAlloc + 32;  //每次分配比原来增加32个
 			HGLOBAL hSlotData;
 			if (m_pSlotData == NULL)
 			{
+				//首次执行
 				hSlotData = ::GlobalAlloc(GMEM_MOVEABLE, nNewAlloc * sizeof(CSlotData));
 			}
 			else
@@ -104,7 +105,7 @@ int CThreadSlotData::AllocSlot()
 					nNewAlloc * sizeof(CSlotData), GMEM_MOVEABLE);
 			}
 			CSlotData *pSlotData = (CSlotData*)::GlobalLock(hSlotData);
-			memset(pSlotData + m_nAlloc, 0, (nNewAlloc - nAlloc) * sizeof(CSlotData));
+			memset(pSlotData + m_nAlloc, 0, (nNewAlloc - nAlloc) * sizeof(CSlotData));  //将新分配的空间设置成0
 			m_nAlloc = nNewAlloc;
 			m_pSlotData = pSlotData;
 		}
@@ -245,6 +246,8 @@ CNoTrackObject* CThreadLocalObject::GetData(CNoTrackObject*(*pfnCreateObject)())
 	{
 		if (_afxThreadData == NULL)
 		{
+			// new CThreadSlotData 调用CThreadSlotData的new重载运算符
+			// new CThreadSlotData 调用CThreadSlotData的构造函数创建CThreadSlotData
 			_afxThreadData = new(__afxThreadData)CThreadSlotData;
 		}
 		m_nSlot = _afxThreadData->AllocSlot();

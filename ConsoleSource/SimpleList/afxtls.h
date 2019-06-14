@@ -17,9 +17,10 @@ public:
 	void *GetNext(void *p)const;
 	bool Remove(void *p);
 
+	void **GetNextPtr(void *p) const;
+
 	void *m_pHead;
 	size_t m_nNextOffset;
-	void **GetNextPtr(void *p) const;
 };
 inline CSimpleList::CSimpleList(int nNextOffset)
 {
