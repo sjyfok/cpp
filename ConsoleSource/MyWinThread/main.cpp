@@ -1,7 +1,7 @@
 #include <iostream>
 #include <process.h>
-#include "../wincommon/_afxwin.h"
-#include "../wincommon/_afxtls.h"
+#include "afxwin.h"
+#include "afxtls.h"
 
 using namespace std;
 
