@@ -21,3 +21,6 @@ cpp慕课的实验代码
 
 
 删除远程分支：git push origin --delete 分支名（remotes/origin/分支名）
+
+git reset HEAD 撤销add
+git reset HEAD filename  撤销 ADD filename
