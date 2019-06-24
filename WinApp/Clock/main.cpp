@@ -9,6 +9,7 @@ LRESULT CALLBACK MainWndProc(HWND, UINT, WPARAM, LPARAM);
 void OnPaint(HWND hWnd);
 void SetIsotropic(HDC hdc, int cx, int cy);
 void DrawClockFace(HDC hdc);
+void DrawHand(HDC hdc, int nLenth, int nWidth, int nDegrees, COLORREF clrColor);
 
 int APIENTRY WinMain(HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
@@ -38,7 +39,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	HWND hWnd = ::CreateWindowEx(
 		0,
 		szClassName,
-		"定时器的使用",
+		"时钟",
 		WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
@@ -66,11 +67,18 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	return msg.wParam;
 }
 
+static int s_nPerHour;
+static int s_nPerMinute;
+static int s_nPerSecond;
+
+static int s_cxClient;
+static int s_cyClient;
+
+static int s_bTopMost;
 
 LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	char szText[56];
-	static int nNum, bSetTimer;
 
 	switch (message)
 	{
@@ -83,8 +91,15 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 		::PostQuitMessage(0);
 		return 0;
 	case WM_CREATE:   //加载菜单的方法2
-		bSetTimer = FALSE;
-		break;
+		{
+		SYSTEMTIME time;
+		::GetLocalTime(&time);
+		s_nPerHour = time.wHour % 12;
+		s_nPerMinute = time.wMinute;
+		s_nPerSecond = time.wSecond;
+		::SetTimer(hWnd, IDT_TIMERDEMO, 1000, NULL);
+		return 0;
+		}
 	case WM_COMMAND:
 		switch (LOWORD(wParam))
 		{
@@ -96,14 +111,34 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 		}
 		break;
 	case WM_TIMER:
-	/*	if (wParam == IDT_TIMERDEMO)
 		{
-			HDC hdc = GetDC(hWnd);
-			wsprintf(szText, "计数: %d", nNum++);
-			::TextOut(hdc, 10, 10, szText, strlen(szText));
-			::MessageBeep(MB_OK);
-		}*/
-		return 0;
+			if (::IsIconic(hWnd))
+			{
+				return 0;
+			}
+			SYSTEMTIME time;
+			::GetLocalTime(&time);
+			HDC hdc = ::GetDC(hWnd);
+			SetIsotropic(hdc, s_cxClient, s_cyClient);
+			COLORREF crfColor = RGB(255, 255, 255);//::GetSysColor(WHITE_BRUSH);
+			if (time.wMinute != s_nPerMinute)
+			{
+				DrawHand(hdc, 200, 8, s_nPerHour * 30 + s_nPerMinute / 2, crfColor);
+				DrawHand(hdc, 400, 6, s_nPerMinute * 6, crfColor);
+				s_nPerHour = time.wHour;
+				s_nPerMinute = time.wMinute;
+			}
+			if (time.wSecond != s_nPerSecond)
+			{
+				DrawHand(hdc, 400, 1, s_nPerSecond * 6, crfColor);
+
+				DrawHand(hdc, 400, 1, time.wSecond * 6, RGB(0, 0, 0));
+				DrawHand(hdc, 200, 8, time.wHour*30+time.wMinute/2, RGB(0, 0, 0));
+				DrawHand(hdc, 400, 6, time.wMinute * 6, RGB(0, 0, 0));
+				s_nPerSecond = time.wSecond;
+			}
+			return 0;
+		}
 	case WM_LBUTTONDOWN:
 		/*{
 			if (bSetTimer)
@@ -125,11 +160,15 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 		}*/
 		break;
 	case WM_CLOSE:
-		if (bSetTimer)
 		{
 			::KillTimer(hWnd, IDT_TIMERDEMO);
+			::DestroyWindow(hWnd);
+			return 0;
 		}
-		break;
+	case WM_SIZE:
+		s_cxClient = LOWORD(lParam);
+		s_cyClient = HIWORD(lParam);
+		return 0;
 	}
 	return ::DefWindowProc(hWnd, message, wParam, lParam);
 }
@@ -144,6 +183,10 @@ void OnPaint(HWND hWnd)
 	SetIsotropic(hdc, rt.right - rt.left, rt.bottom - rt.top);
 	DrawClockFace(hdc);
 	
+	DrawHand(hdc, 200, 8, s_nPerHour * 30 + s_nPerMinute / 2, RGB(0, 0, 0));
+	DrawHand(hdc, 400, 6, s_nPerMinute * 6, RGB(0, 0, 0));
+	DrawHand(hdc, 400, 1, s_nPerSecond * 6, RGB(0, 0, 0));
+
 	//::SetMapMode(hdc, MM_ANISOTROPIC);
 	//::SetWindowExtEx(hdc, 500, 500, NULL);
 	//::SetViewportExtEx(hdc, 0, 0, NULL);
@@ -185,4 +228,22 @@ void DrawClockFace(HDC hdc)
 		::Ellipse(hdc, pt[i].x - SQUARESIZE, pt[i].y + SQUARESIZE,
 			pt[i].x + SQUARESIZE, pt[i].y - SQUARESIZE);
 	}
+}
+
+void DrawHand(HDC hdc, int nLenth, int nWidth, int nDegrees, COLORREF clrColor)
+{
+	double nRadians = (double)nDegrees*0.0174533;
+
+	POINT pt[2];
+	pt[0].x = (int)(nLenth*sin(nRadians));
+	pt[0].y = (int)(nLenth*cos(nRadians));
+	pt[1].x = -pt[0].x / 5;
+	pt[1].y = -pt[0].y / 5;
+
+	HPEN hPen = ::CreatePen(PS_SOLID, nWidth, clrColor);
+	HPEN hOldPen = (HPEN)::SelectObject(hdc, hPen);
+	::MoveToEx(hdc, pt[0].x, pt[0].y, NULL);
+	::LineTo(hdc, pt[1].x, pt[1].y);
+	::SelectObject(hdc, hOldPen);
+	::DeleteObject(hPen);
 }
