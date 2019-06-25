@@ -29,8 +29,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	wndclass.hCursor = ::LoadCursor(NULL, IDC_ARROW);
 	wndclass.hbrBackground = (HBRUSH)::GetStockObject(WHITE_BRUSH);
 	//wndclass.hbrBackground = (HBRUSH)(COLOR_3DFACE + 1);
-	wndclass.lpszMenuName = (LPSTR)IDR_TYPER ;  //加载菜单的方法1  
-	//wndclass.lpszMenuName = NULL;
+	//wndclass.lpszMenuName = (LPSTR)IDR_TYPER ;  //加载菜单的方法1  
+	wndclass.lpszMenuName = NULL;
 	wndclass.lpszClassName = szClassName;
 	wndclass.hIconSm = NULL;
 	
@@ -40,11 +40,12 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 		0,
 		szClassName,
 		"时钟",
-		WS_OVERLAPPEDWINDOW,
-		CW_USEDEFAULT,
-		CW_USEDEFAULT,
-		CW_USEDEFAULT,
-		CW_USEDEFAULT,
+		//WS_OVERLAPPEDWINDOW,
+		WS_POPUP | WS_SYSMENU | WS_SIZEBOX,
+		100,//CW_USEDEFAULT,
+		100,//CW_USEDEFAULT,
+		300,//CW_USEDEFAULT,
+		300,//CW_USEDEFAULT,
 		NULL,
 		NULL,
 		hInstance,
@@ -76,6 +77,9 @@ static int s_cyClient;
 
 static int s_bTopMost;
 
+const int IDM_TOPMOST = 101;
+const int IDM_HELP = 100;
+
 LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	char szText[56];
@@ -98,6 +102,11 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 		s_nPerMinute = time.wMinute;
 		s_nPerSecond = time.wSecond;
 		::SetTimer(hWnd, IDT_TIMERDEMO, 1000, NULL);
+		HMENU hSysMenu;
+		hSysMenu = ::GetSystemMenu(hWnd, FALSE);
+		::AppendMenu(hSysMenu, MF_SEPARATOR, 0, NULL);
+		::AppendMenu(hSysMenu, MF_STRING, IDM_TOPMOST, "总在最前面");
+		::AppendMenu(hSysMenu, MF_STRING, IDM_HELP, "帮助");
 		return 0;
 		}
 	case WM_COMMAND:
@@ -169,7 +178,53 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 		s_cxClient = LOWORD(lParam);
 		s_cyClient = HIWORD(lParam);
 		return 0;
+	case WM_NCHITTEST:
+		UINT nHitTest;
+		nHitTest = ::DefWindowProc(hWnd, message, wParam, lParam);
+		if (nHitTest == HTCLIENT && ::GetAsyncKeyState(MK_LBUTTON)<0)
+			nHitTest = HTCAPTION;
+		return nHitTest;
+	case WM_CONTEXTMENU:
+		POINT pt;
+		pt.x = LOWORD(lParam);
+		pt.y = HIWORD(lParam);
+		{
+			HMENU hSysMenu = ::GetSystemMenu(hWnd, FALSE);
+			int nID = ::TrackPopupMenu(hSysMenu, TPM_LEFTALIGN | TPM_RETURNCMD,
+				pt.x, pt.y, 0, hWnd, NULL);
+			if (nID)
+				::SendMessage(hWnd, WM_SYSCOMMAND, nID, 0);
+			return 0;
+		}
+	case WM_SYSCOMMAND:
+	{
+		int nID = wParam;
+		if (nID == IDM_HELP)
+		{
+			::MessageBox(hWnd, "一个时钟的例子", "时钟", 0);
+		}
+		else if (nID == IDM_TOPMOST)
+		{
+			HMENU hSysMenu = ::GetSystemMenu(hWnd, FALSE);
+			if (s_bTopMost)
+			{
+				::CheckMenuItem(hSysMenu, IDM_TOPMOST, MF_UNCHECKED);
+				::SetWindowPos(hWnd, HWND_NOTOPMOST, 0, 0, 0, 0,
+					SWP_NOMOVE | SWP_NOREDRAW | SWP_NOSIZE);
+				s_bTopMost = FALSE;
+			}
+			else
+			{
+				::CheckMenuItem(hSysMenu, IDM_TOPMOST, MF_CHECKED);
+				::SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0
+					, SWP_NOMOVE | SWP_NOREDRAW | SWP_NOSIZE);
+				s_bTopMost = TRUE;
+			}
+		}
+		return ::DefWindowProc(hWnd, WM_SYSCOMMAND, nID, 0) ;
 	}
+	}
+
 	return ::DefWindowProc(hWnd, message, wParam, lParam);
 }
 
