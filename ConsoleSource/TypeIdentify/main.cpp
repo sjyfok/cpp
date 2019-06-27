@@ -12,10 +12,10 @@ public:
 		return (CRuntimeClass*)&classCPerson;
 	}
 	
-	static CObject* __stdcall CreateObject()
-	{
-		return new CPerson;
-	}
+	//static CObject* __stdcall CreateObject()
+	//{
+	//	return new CPerson;
+	//}
 
 	static const CRuntimeClass classCPerson;
 };
@@ -23,7 +23,7 @@ public:
 
 const CRuntimeClass CPerson::classCPerson =
 {
-	"CPerson", sizeof(CPerson), 0xFFFF, &CPerson::CreateObject, (CRuntimeClass*)&CObject::classCObject, NULL
+	"CPerson", sizeof(CPerson), 0xFFFF, NULL, (CRuntimeClass*)&CObject::classCObject, NULL
 };
 
 
