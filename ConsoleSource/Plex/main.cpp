@@ -1,6 +1,6 @@
 #include <iostream>
-#include   "../wincommon/_afx.h"
-#include "../wincommon/_afxplex_.h"
+#include   "_afx.h"
+#include "_afxples_.h"
 #include <process.h>
 
 using namespace std;
