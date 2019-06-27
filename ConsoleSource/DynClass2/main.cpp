@@ -1,46 +1,52 @@
 #include <iostream>
-#include "COMMON/_AFX.H"
 #include <process.h>
+#include   "_afx.h"
 
 using namespace std;
 
 class CPerson :public CObject
 {
-	DECLARE_DYNCREATE(CPerson)
+public:	
+
+	//代替下面两个定义
 	
+	DECLARE_DYNCREATE(CPerson)
+	//static CObject* __stdcall CreateObject()
+	//{
+	//	return new CPerson;
+	//}
+	//static const CRuntimeClass classCPerson;
+	//virtual CRuntimeClass *GetRuntimeClass() const
+	//{
+	//	return (CRuntimeClass*)&classCPerson;
+	//}
 };
+
 IMPLEMENT_DYNCREATE(CPerson, CObject)
+//const CRuntimeClass CPerson::classCPerson =
+//{
+//	"CPerson", sizeof(CPerson), 0xFFFF, &CPerson::CreateObject, (CRuntimeClass*)&CObject::classCObject, NULL
+//};
+//virtual CRuntimeClass *GetRuntimeClass() const
+//{
+//	return (CRuntimeClass*)&classCPerson;
+//}
 
-class CStudent : public CPerson
-{
-	DECLARE_DYNCREATE(CStudent)
-};
-IMPLEMENT_DYNCREATE(CStudent, CPerson)
 
-//IMPLEMENT_DYNCREATE( CPerson, CObject)
 
 int main(void)
 {
-	CRuntimeClass *pRuntimeclass = RUNTIME_CLASS(CStudent);
-	//CRuntimeClass *pRuntimeclass = RUNTIME_CLASS(CPerson);
+	
+	CRuntimeClass *pRuntimeclass = RUNTIME_CLASS(CPerson);
 	CObject *pObject = pRuntimeclass->CreateObject();
-	ASSERT(pObject);
-	if (pObject != NULL && pObject->IsKindOf(RUNTIME_CLASS(CStudent)))
-	//if (pObject != NULL && pObject->IsKindOf(RUNTIME_CLASS(CPerson)))
+	if (pObject != NULL && pObject->IsKindOf(RUNTIME_CLASS(CPerson)))
 	{
 		cout << "创建成功!\n";
 		delete pObject;
 	}
-	/*if (pMyObject->IsKindOf(RUNTIME_CLASS(CPerson)))
-	{
-		CPerson *pMyPerson = (CPerson*)pMyObject;
-		cout << "a CPerson Object!\n";
-		delete pMyPerson;
-	}
-	else
-	{
-		delete pMyObject;
-	}*/
+
+	
+
 
 	system("pause");
 	return 0;

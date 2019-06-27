@@ -15,31 +15,34 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\_afx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\_afxstat.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\_afxtls.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\_afxwin.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\_afxstate.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\_afxtls.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\_OBJCORE.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\_thrdcore.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
     <ClCompile Include="..\main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\COMMON\AFXTLS.CPP">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\COMMON\DUMPOUT.CPP">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\COMMON\OBJCORE.CPP">
-      <Filter>源文件</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\COMMON\_AFX.H">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\COMMON\_AFXCOLL.H">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\COMMON\_AFXTLS_.H">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\COMMON\_AFXWIN.H">
-      <Filter>头文件</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

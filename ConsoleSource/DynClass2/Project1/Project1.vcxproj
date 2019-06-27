@@ -19,16 +19,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\COMMON\AFXTLS.CPP" />
-    <ClCompile Include="..\COMMON\DUMPOUT.CPP" />
-    <ClCompile Include="..\COMMON\OBJCORE.CPP" />
-    <ClCompile Include="..\main.cpp" />
+    <ClInclude Include="..\_afx.h" />
+    <ClInclude Include="..\_afxstat.h" />
+    <ClInclude Include="..\_afxtls.h" />
+    <ClInclude Include="..\_afxwin.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\COMMON\_AFX.H" />
-    <ClInclude Include="..\COMMON\_AFXCOLL.H" />
-    <ClInclude Include="..\COMMON\_AFXTLS_.H" />
-    <ClInclude Include="..\COMMON\_AFXWIN.H" />
+    <ClCompile Include="..\main.cpp" />
+    <ClCompile Include="..\_afxstate.cpp" />
+    <ClCompile Include="..\_afxtls.cpp" />
+    <ClCompile Include="..\_OBJCORE.cpp" />
+    <ClCompile Include="..\_thrdcore.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
