@@ -1,21 +1,23 @@
 #include <iostream>
-#include   "../wincommon/_afx.h"
 #include <process.h>
+#include   "_afx.h"
 
 using namespace std;
 
 class CPerson :public CObject
 {
 public:
-	virtual CRuntimeClass *GetRuntimeClass() const
+	virtual CRuntimeClass *GetRuntimeClass() const	
 	{
 		return (CRuntimeClass*)&classCPerson;
 	}
-	static const CRuntimeClass classCPerson;
+	
 	static CObject* __stdcall CreateObject()
 	{
 		return new CPerson;
 	}
+
+	static const CRuntimeClass classCPerson;
 };
 
 
@@ -28,15 +30,15 @@ const CRuntimeClass CPerson::classCPerson =
 
 int main(void)
 {
-	//CObject *pMyObject = new CPerson;
-	CRuntimeClass *pRuntimeclass = RUNTIME_CLASS(CPerson);
-	CObject *pObject = pRuntimeclass->CreateObject();
-	if (pObject != NULL && pObject->IsKindOf(RUNTIME_CLASS(CPerson)))
-	{
-		cout << "创建成功!\n";
-		delete pObject;
-	}
-	/*if (pMyObject->IsKindOf(RUNTIME_CLASS(CPerson)))
+	CObject *pMyObject = new CPerson;
+	//CRuntimeClass *pRuntimeclass = RUNTIME_CLASS(CPerson);
+	//CObject *pObject = pRuntimeclass->CreateObject();
+	//if (pObject != NULL && pObject->IsKindOf(RUNTIME_CLASS(CPerson)))
+	//{
+	//	cout << "创建成功!\n";
+	//	delete pObject;
+	//}
+	if (pMyObject->IsKindOf(RUNTIME_CLASS(CPerson)))
 	{
 		CPerson *pMyPerson = (CPerson*)pMyObject;
 		cout << "a CPerson Object!\n";
@@ -45,7 +47,7 @@ int main(void)
 	else
 	{
 		delete pMyObject;
-	}*/
+	}
 
 	system("pause");
 	return 0;
