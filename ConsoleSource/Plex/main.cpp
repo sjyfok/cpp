@@ -17,7 +17,7 @@ int main(void)
 {
 	CPlex *pBlocks = NULL;
 	CPlex::Create(pBlocks, 10, sizeof(CMyData));
-	CMyData *pData = (CMyData*)pBlocks->data();
+	CMyData *pData = (CMyData*)pBlocks->data();	
 	CPlex::Create(pBlocks, 10, sizeof(CMyData));
 	pData = (CMyData*)pBlocks->data();
 	pBlocks->FreeDataChain();

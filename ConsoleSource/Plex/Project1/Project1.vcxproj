@@ -28,6 +28,7 @@
   <ItemGroup>
     <ClCompile Include="..\DUMPOUT.cpp" />
     <ClCompile Include="..\main.cpp" />
+    <ClCompile Include="..\plex.cpp" />
     <ClCompile Include="..\_afxstate.cpp" />
     <ClCompile Include="..\_afxtls.cpp" />
     <ClCompile Include="..\_OBJCORE.cpp" />

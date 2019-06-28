@@ -4,27 +4,9 @@
 struct CPlex
 {
 	CPlex *pNext;
-	void *data() { return this + 1; }
+	void *data() { return this + 1; }   //此处设计是和create相关的，Create分配空间时 是一个CPlex空间+指定的数量*元素大小空间
+										//this +1 正好跳过CPlex空间，指向真正存放数据的空间
 	static CPlex *Create(CPlex *&pHead, UINT nMax, UINT cbElement);
 	void FreeDataChain();
 };
 
-CPlex* CPlex::Create(CPlex*& pHead, UINT nMax, UINT cbElement)
-{
-	CPlex *p = (CPlex*)new BYTE[sizeof(CPlex) + nMax * cbElement];
-	p->pNext = pHead;
-	pHead = p;
-	return p;
-}
-
-void CPlex::FreeDataChain()
-{
-	CPlex *p = this;
-	while (p!= NULL)
-	{
-		BYTE *pBytes = (BYTE*)p;
-		CPlex* pNext = p->pNext;
-		delete[] pBytes;
-		p = pNext;
-	}
-}
