@@ -1,5 +1,5 @@
 #include <iostream>
-#include   "../wincommon/_afxcoll.h"
+#include   "_afxcoll.h"
 #include <process.h>
 
 using namespace std;
