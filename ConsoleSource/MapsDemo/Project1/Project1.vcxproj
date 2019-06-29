@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\winhand_.h" />
     <ClInclude Include="..\_afx.h" />
     <ClInclude Include="..\_afxcoll.h" />
     <ClInclude Include="..\_afxples_.h" />
