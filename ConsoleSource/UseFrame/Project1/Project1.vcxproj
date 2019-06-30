@@ -19,27 +19,27 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\wincommon\afxstat.cpp" />
-    <ClCompile Include="..\..\wincommon\afxtls.cpp" />
-    <ClCompile Include="..\..\wincommon\appcore.cpp" />
-    <ClCompile Include="..\..\wincommon\appinit.cpp" />
-    <ClCompile Include="..\..\wincommon\dumpout.cpp" />
-    <ClCompile Include="..\..\wincommon\map_pp.cpp" />
-    <ClCompile Include="..\..\wincommon\objcore.cpp" />
-    <ClCompile Include="..\..\wincommon\plex.cpp" />
-    <ClCompile Include="..\..\wincommon\thrdcore.cpp" />
-    <ClCompile Include="..\..\wincommon\winmain.cpp" />
-    <ClCompile Include="..\UseFrame.cpp" />
+    <ClInclude Include="..\UseFrame.h" />
+    <ClInclude Include="..\winhand_.h" />
+    <ClInclude Include="..\_afx.h" />
+    <ClInclude Include="..\_afxcoll.h" />
+    <ClInclude Include="..\_afxples_.h" />
+    <ClInclude Include="..\_afxstat.h" />
+    <ClInclude Include="..\_afxtls.h" />
+    <ClInclude Include="..\_afxwin.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\wincommon\winhand_.h" />
-    <ClInclude Include="..\..\wincommon\_afx.h" />
-    <ClInclude Include="..\..\wincommon\_afxcoll.h" />
-    <ClInclude Include="..\..\wincommon\_afxplex_.h" />
-    <ClInclude Include="..\..\wincommon\_afxstat.h" />
-    <ClInclude Include="..\..\wincommon\_afxtls.h" />
-    <ClInclude Include="..\..\wincommon\_afxwin.h" />
-    <ClInclude Include="..\UseFrame.h" />
+    <ClCompile Include="..\appcore.cpp" />
+    <ClCompile Include="..\appinit.cpp" />
+    <ClCompile Include="..\DUMPOUT.cpp" />
+    <ClCompile Include="..\map_pp.cpp" />
+    <ClCompile Include="..\plex.cpp" />
+    <ClCompile Include="..\UseFrame.cpp" />
+    <ClCompile Include="..\winmain.cpp" />
+    <ClCompile Include="..\_afxstate.cpp" />
+    <ClCompile Include="..\_afxtls.cpp" />
+    <ClCompile Include="..\_OBJCORE.cpp" />
+    <ClCompile Include="..\_thrdcore.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

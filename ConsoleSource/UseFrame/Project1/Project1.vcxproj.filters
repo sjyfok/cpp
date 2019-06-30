@@ -15,64 +15,64 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\wincommon\winmain.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\wincommon\thrdcore.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\wincommon\objcore.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\wincommon\plex.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\wincommon\map_pp.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\wincommon\dumpout.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\wincommon\appinit.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\wincommon\appcore.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\wincommon\afxtls.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\wincommon\afxstat.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\UseFrame.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\wincommon\_afx.h">
+    <ClInclude Include="..\_afx.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\wincommon\_afxcoll.h">
+    <ClInclude Include="..\_afxcoll.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\wincommon\_afxplex_.h">
+    <ClInclude Include="..\_afxples_.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\wincommon\_afxstat.h">
+    <ClInclude Include="..\_afxstat.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\wincommon\_afxtls.h">
+    <ClInclude Include="..\_afxtls.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\wincommon\_afxwin.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\wincommon\winhand_.h">
+    <ClInclude Include="..\_afxwin.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\UseFrame.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\winhand_.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\_afxstate.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\_afxtls.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\_OBJCORE.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\_thrdcore.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DUMPOUT.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\map_pp.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plex.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UseFrame.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\appcore.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\winmain.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\appinit.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
