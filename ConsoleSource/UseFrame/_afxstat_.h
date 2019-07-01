@@ -1,6 +1,6 @@
 #pragma once
 #ifndef __AFXTLS_H__
-#include "_afxtls.h"
+#include "_afxtls_.h"
 #endif
 
 class CWinThread;

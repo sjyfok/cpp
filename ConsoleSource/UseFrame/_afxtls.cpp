@@ -1,4 +1,4 @@
-#include "_afxtls.h"
+#include "_afxtls_.h"
 #include <Windows.h>
 
 
@@ -170,7 +170,7 @@ void CThreadSlotData::FreeSlot(int nSlot)
 	::LeaveCriticalSection(&m_cs);
 }
 
-void CThreadSlotData::DeleteValues(HINSTANCE hInst, bool bAll)
+void CThreadSlotData::DeleteValues(HINSTANCE hInst, BOOL bAll)
 {
 	::EnterCriticalSection(&m_cs);
 	if (!bAll)
@@ -200,7 +200,7 @@ void CThreadSlotData::DeleteValues(CThreadData *pData, HINSTANCE hInst)
 		if (hInst == NULL || m_pSlotData[i].hInst == hInst)
 		{
 			delete(CNoTrackObject*)pData->pData[i];
-			pData->pData[i] == NULL;
+			pData->pData[i] = NULL;
 		}
 		else
 		{

@@ -1,4 +1,4 @@
-#include "_afxples_.h"
+#include "_afxplex_.h"
 
 CPlex* CPlex::Create(CPlex*& pHead, UINT nMax, UINT cbElement)
 {

@@ -23,9 +23,9 @@
     <ClInclude Include="..\winhand_.h" />
     <ClInclude Include="..\_afx.h" />
     <ClInclude Include="..\_afxcoll.h" />
-    <ClInclude Include="..\_afxples_.h" />
-    <ClInclude Include="..\_afxstat.h" />
-    <ClInclude Include="..\_afxtls.h" />
+    <ClInclude Include="..\_afxplex_.h" />
+    <ClInclude Include="..\_afxstat_.h" />
+    <ClInclude Include="..\_afxtls_.h" />
     <ClInclude Include="..\_afxwin.h" />
   </ItemGroup>
   <ItemGroup>

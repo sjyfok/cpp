@@ -1,8 +1,8 @@
 #pragma once
 #include <Windows.h>
 #include "_afx.h"
-#include "_afxtls.h"
-#include "_afxstat.h"
+#include "_afxtls_.h"
+#include "_afxstat_.h"
 
 extern CThreadSlotData* _afxThreadData;
 

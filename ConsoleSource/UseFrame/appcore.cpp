@@ -1,5 +1,5 @@
 #include "_afxwin.h"
-#include "_afxstat.h"
+#include "_afxstat_.h"
 
 CWinApp::CWinApp()
 {

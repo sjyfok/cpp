@@ -106,7 +106,7 @@ public:
 	void FreeSlot(int nSlot);
 	void *GetThreadValue(int nSlot);
 	void SetValue(int nSlot, void *pValue);
-	void DeleteValues(HINSTANCE hInst, bool bAll = false);
+	void DeleteValues(HINSTANCE hInst, BOOL bAll = false);
 
 	DWORD m_tlsIndex;
 	int m_nAlloc;

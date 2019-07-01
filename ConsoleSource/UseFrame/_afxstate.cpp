@@ -15,6 +15,8 @@ _AFX_THREAD_STATE* AfxGetThreadState()
 	return _afxThreadState.GetData();
 }
 
+THREAD_LOCAL(_AFX_THREAD_STATE, _afxThreadState);
+
 AFX_MODULE_STATE _afxBaseModuleState;
 AFX_MODULE_STATE* AfxGetAppModuleState()
 {

@@ -1,5 +1,5 @@
 #include "_afxwin.h"
-#include "_afxstat.h"
+#include "_afxstat_.h"
 #include <process.h>
 
 struct AFX_THREAD_STARTUP

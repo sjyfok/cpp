@@ -1,7 +1,7 @@
 #pragma once
 
 #include "_afxwin.h"
-#include "_afxples_.h"
+#include "_afxplex_.h"
 
 class CMapPtrToPtr
 {
@@ -15,11 +15,11 @@ protected:
 public:
 	CMapPtrToPtr(int nBlockSize = 10);
 	int GetCount() const;
-	bool IsEmpty() const;
-	bool Lookup(void* key, void *&rValue);
+	BOOL IsEmpty() const;
+	BOOL Lookup(void* key, void *&rValue);
 	void *& operator[](void *key);
 	void SetAt(void* key, void *newValue);
-	bool RemoveKey(void *key);
+	BOOL RemoveKey(void *key);
 	void RemoveAll();
 	UINT GetHashTableSize() const;
 	void InitHashTable(UINT nHashSize, BOOL bAllocNow = TRUE);
@@ -42,7 +42,7 @@ inline int CMapPtrToPtr::GetCount() const
 	return m_nCount;
 }
 
-inline bool CMapPtrToPtr::IsEmpty() const
+inline BOOL CMapPtrToPtr::IsEmpty() const
 {
 	return m_nCount == 0;
 }

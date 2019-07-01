@@ -65,7 +65,7 @@ CMapPtrToPtr::CAssoc* CMapPtrToPtr::GetAssocAt(void *key, UINT &nHash) const
 	return NULL;
 }
 
-bool CMapPtrToPtr::Lookup(void *key, void *& rValue)
+BOOL CMapPtrToPtr::Lookup(void *key, void *& rValue)
 {
 	UINT nHash;
 	CAssoc *pAssoc = GetAssocAt(key, nHash);
@@ -95,7 +95,7 @@ void *&CMapPtrToPtr::operator[](void *key)
 	return pAssoc->value;
 }
 
-bool CMapPtrToPtr::RemoveKey(void *key)
+BOOL CMapPtrToPtr::RemoveKey(void *key)
 {
 	if (m_pHashTable == NULL)
 	{

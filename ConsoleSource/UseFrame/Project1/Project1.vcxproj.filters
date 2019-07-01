@@ -21,15 +21,6 @@
     <ClInclude Include="..\_afxcoll.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\_afxples_.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\_afxstat.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\_afxtls.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\_afxwin.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -37,6 +28,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\winhand_.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\_afxplex_.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\_afxstat_.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\_afxtls_.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -53,6 +53,12 @@
     <ClCompile Include="..\_thrdcore.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\appcore.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\appinit.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
     <ClCompile Include="..\DUMPOUT.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -65,13 +71,7 @@
     <ClCompile Include="..\UseFrame.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\appcore.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\winmain.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\appinit.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
