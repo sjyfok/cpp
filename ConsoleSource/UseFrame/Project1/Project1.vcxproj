@@ -29,17 +29,17 @@
     <ClInclude Include="..\_afxwin.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\afxstate.cpp" />
+    <ClCompile Include="..\afxtls.cpp" />
     <ClCompile Include="..\appcore.cpp" />
     <ClCompile Include="..\appinit.cpp" />
     <ClCompile Include="..\DUMPOUT.cpp" />
     <ClCompile Include="..\map_pp.cpp" />
+    <ClCompile Include="..\OBJCORE.cpp" />
     <ClCompile Include="..\plex.cpp" />
+    <ClCompile Include="..\thrdcore.cpp" />
     <ClCompile Include="..\UseFrame.cpp" />
     <ClCompile Include="..\winmain.cpp" />
-    <ClCompile Include="..\_afxstate.cpp" />
-    <ClCompile Include="..\_afxtls.cpp" />
-    <ClCompile Include="..\_OBJCORE.cpp" />
-    <ClCompile Include="..\_thrdcore.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

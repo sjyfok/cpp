@@ -41,18 +41,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\_afxstate.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\_afxtls.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\_OBJCORE.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\_thrdcore.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\appcore.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -72,6 +60,18 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\winmain.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\afxstate.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\afxtls.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\OBJCORE.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\thrdcore.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
