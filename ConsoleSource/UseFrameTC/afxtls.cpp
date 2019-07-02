@@ -200,7 +200,7 @@ void CThreadSlotData::DeleteValues(CThreadData *pData, HINSTANCE hInst)
 		if (hInst == NULL || m_pSlotData[i].hInst == hInst)
 		{
 			delete(CNoTrackObject*)pData->pData[i];
-			pData->pData[i] == NULL;
+			pData->pData[i] = NULL;
 		}
 		else
 		{
