@@ -10,12 +10,12 @@ public:
 	CSimpleList(int nNextOffset = 0);
 	void Construct(int nNextOffset);
 
-	bool IsEmpty() const;
+	BOOL IsEmpty() const;
 	void AddHead(void *p);
 	void RemoveAll();
 	void *GetHead() const;
 	void *GetNext(void *p)const;
-	bool Remove(void *p);
+	BOOL Remove(void *p);
 
 	void *m_pHead;
 	size_t m_nNextOffset;
@@ -32,7 +32,7 @@ inline void CSimpleList::Construct(int nNextOffset)
 	m_nNextOffset = nNextOffset;
 }
 
-inline bool CSimpleList::IsEmpty() const
+inline BOOL CSimpleList::IsEmpty() const
 {
 	return m_pHead == nullptr;
 }

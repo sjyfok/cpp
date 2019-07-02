@@ -96,7 +96,7 @@ inline HICON CWinApp::LoadIcon(UINT nIDResource) const
 {
 	return ::LoadIcon(AfxGetModuleState()->m_hCurrentResourceHandle, (LPCTSTR)nIDResource);
 }
-
+CWinApp* AfxGetApp();
 inline CWinApp* AfxGetApp()
 {
 	return AfxGetModuleState()->m_pCurrentWinApp;

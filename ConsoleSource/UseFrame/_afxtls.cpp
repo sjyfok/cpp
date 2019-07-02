@@ -1,5 +1,5 @@
 #include "_afxtls_.h"
-#include <Windows.h>
+
 
 
 void CSimpleList::AddHead(void *p)
@@ -8,7 +8,7 @@ void CSimpleList::AddHead(void *p)
 	m_pHead = p;
 }
 
-bool CSimpleList::Remove(void *p)
+BOOL CSimpleList::Remove(void *p)
 {
 	if (p == nullptr)
 	{

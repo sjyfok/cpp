@@ -3,7 +3,7 @@
 int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPTSTR lpCmdLine, int nCmdShow)
 {
-	ASSERT(hPrevInstance = NULL);
+	ASSERT(hPrevInstance == NULL);
 	int nReturnCode = -1;
 	CWinThread *pThread = AfxGetThread();
 	CWinApp *pApp = AfxGetApp();

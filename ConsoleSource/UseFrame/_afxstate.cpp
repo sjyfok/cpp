@@ -1,5 +1,5 @@
 #include "_afx.h"
-#include "_afxstat.h"
+#include "_afxstat_.h"
 
 AFX_MODULE_THREAD_STATE *AfxGetModuleThreadState()
 {
