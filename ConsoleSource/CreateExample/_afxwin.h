@@ -32,8 +32,7 @@ protected:
 	WNDPROC m_pfnSuper;
 	virtual WNDPROC* GetSuperWndProcAddr();
 	LRESULT Default();
-	virtual LRESULT DefWindowProc(UINT message, WPARAM wParam, LPARAM lParam);
-	BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID);
+	virtual LRESULT DefWindowProc(UINT message, WPARAM wParam, LPARAM lParam);	
 	friend LRESULT __stdcall _AfxCbtFilterHook(int, WPARAM, LPARAM);
 public:
 	virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle,

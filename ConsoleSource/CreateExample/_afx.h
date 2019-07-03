@@ -13,7 +13,7 @@ void __cdecl AfxTrace(LPCTSTR lpszFormat, ...);
 inline void __cdecl AfxTrace(LPCTSTR, ...) {}
 #define	ASSERT(f) ((void)0)
 #define	VERIFY(f)((void)(f))
-#define TRACE		(oid)0
+#define TRACE		(void)0
 #endif // _DEBUG
 
 

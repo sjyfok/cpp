@@ -144,8 +144,8 @@ BOOL CWnd::CreateEx(DWORD dwExStyle, LPCTSTR lpszClassName, LPCTSTR lpszWindowNa
 	}
 	AfxHookWindowCreate(this);
 	          
-	HWND hWnd = ::CreateWindowEx(cs.dwExStyle, cs.lpszClass, cs.lpszName, cs.style,
-		cs.x, cs.y, cs.cx, cs.cy,		
+	HWND hWnd = ::CreateWindowEx(cs.dwExStyle, cs.lpszClass, 
+		cs.lpszName, cs.style,	cs.x, cs.y, cs.cx, cs.cy,		
 		cs.hwndParent, cs.hMenu, cs.hInstance, cs.lpCreateParams	);
 	if (!AfxUnhookWindowCreate())
 	{
@@ -339,7 +339,7 @@ LRESULT __stdcall _AfxCbtFilterHook(int code, WPARAM wParam, LPARAM lParam)
 		WNDPROC *pOldWndProc = pWndInit->GetSuperWndProcAddr();
 		ASSERT(pOldWndProc != NULL);
 		WNDPROC afxWndProc = AfxGetAfxWndProc();
-		WNDPROC oldWndProc = (WNDPROC)::SetWindowLongPtr(hWnd, GWLP_WNDPROC, (DWORD)afxWndProc);
+		WNDPROC oldWndProc = (WNDPROC)::SetWindowLongPtr(hWnd, GWLP_WNDPROC, (DWORD_PTR)afxWndProc);
 		ASSERT(oldWndProc != NULL);
 		if (oldWndProc != afxWndProc)
 		{
