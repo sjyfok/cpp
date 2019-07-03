@@ -1,7 +1,7 @@
 #include <iostream>
 #include <Windows.h>
 #include "Meminfo.h"
-#include "_afxmsg_.h"
+#include "../wincommon/_afxmsg_.h"
 #define IDT_TIMER  (101)
 
 CMyApp theApp;

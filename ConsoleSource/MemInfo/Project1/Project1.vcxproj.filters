@@ -15,76 +15,76 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\wincommon\winmain.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\wincommon\thrdcore.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\wincommon\objcore.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\wincommon\plex.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\wincommon\map_pp.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\wincommon\dumpout.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\wincommon\appinit.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\wincommon\appcore.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\wincommon\afxtls.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\wincommon\afxstat.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\wincommon\wincore.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\wincommon\cmdtarg.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Meminfo.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\wincommon\_afx.h">
+    <ClInclude Include="..\_afx.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\wincommon\_afxcoll.h">
+    <ClInclude Include="..\_afxcoll.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\wincommon\_afxplex_.h">
+    <ClInclude Include="..\_afxwin.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\wincommon\_afxstat.h">
+    <ClInclude Include="..\winhand_.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\wincommon\_afxtls.h">
+    <ClInclude Include="..\_afxplex_.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\wincommon\_afxwin.h">
+    <ClInclude Include="..\_afxstat_.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\wincommon\winhand_.h">
+    <ClInclude Include="..\_afxtls_.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\_afximpl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\_afxmsg_.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\Meminfo.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\wincommon\_afximpl.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\wincommon\_afxmsg_.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\appcore.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\appinit.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DUMPOUT.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\map_pp.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plex.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\winmain.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\afxstate.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\afxtls.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\OBJCORE.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\thrdcore.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cmdtarg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\wincore.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Meminfo.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

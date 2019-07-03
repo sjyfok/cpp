@@ -1,4 +1,4 @@
-#include "_afxwin.h"
+#include "../wincommon/_afxwin.h"
 
 class CMyApp :public CWinApp
 {
