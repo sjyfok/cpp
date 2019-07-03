@@ -25,5 +25,5 @@ enum AfxSig
 	{WM_NCDESTROY, 0, 0, 0, AfxSig_vv, \
 		(AFX_PMSG)(AFX_PMSGW)(int(CWnd::*)(void))&OnNcDestroy},
 #define ON_WM_TIMER() \
-	{WM_CLOSE, 0, 0, 0, AfxSig_vw, \
+	{WM_TIMER, 0, 0, 0, AfxSig_vw, \
 		(AFX_PMSG)(AFX_PMSGW)(int(CWnd::*)(UINT))&OnTimer},
