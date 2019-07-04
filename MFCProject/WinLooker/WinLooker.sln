@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2042
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WinLooker", "WinLooker\WinLooker.vcxproj", "{EEA3DBD1-78A6-4695-BEB8-06CE6651DB9F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EEA3DBD1-78A6-4695-BEB8-06CE6651DB9F}.Debug|x64.ActiveCfg = Debug|x64
+		{EEA3DBD1-78A6-4695-BEB8-06CE6651DB9F}.Debug|x64.Build.0 = Debug|x64
+		{EEA3DBD1-78A6-4695-BEB8-06CE6651DB9F}.Debug|x86.ActiveCfg = Debug|Win32
+		{EEA3DBD1-78A6-4695-BEB8-06CE6651DB9F}.Debug|x86.Build.0 = Debug|Win32
+		{EEA3DBD1-78A6-4695-BEB8-06CE6651DB9F}.Release|x64.ActiveCfg = Release|x64
+		{EEA3DBD1-78A6-4695-BEB8-06CE6651DB9F}.Release|x64.Build.0 = Release|x64
+		{EEA3DBD1-78A6-4695-BEB8-06CE6651DB9F}.Release|x86.ActiveCfg = Release|Win32
+		{EEA3DBD1-78A6-4695-BEB8-06CE6651DB9F}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4A941558-025B-4D13-95B8-A169EA5CBB07}
+	EndGlobalSection
+EndGlobal
