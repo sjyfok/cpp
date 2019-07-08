@@ -52,9 +52,9 @@ BOOL __stdcall DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 			NULL, hDlg, IDC_STAUTS);
 		::SendMessage(hWndStatus, SB_SETBKCOLOR, 0, RGB(0xa6, 0xca, 0xf0));
 		int pInt[] = { 152, -1 };
-		::SendMessage(hWndStatus, SB_SETPARTS, 2, (long)pInt);
-		::SendMessage(hWndStatus, SB_SETTEXT, 0, (long)" 准备就绪");
-		::SendMessage(hWndStatus, SB_SETTEXT, 1, (long)"Windows 程序设计进阶之路");
+		::SendMessage(hWndStatus, SB_SETPARTS, 2, (LPARAM)pInt);
+		::SendMessage(hWndStatus, SB_SETTEXT, 0, (LPARAM)" 准备就绪");
+		::SendMessage(hWndStatus, SB_SETTEXT, 1, (LPARAM)"Windows 程序设计进阶之路");
 		UpdateProcess(hWndList);
 	}
 	break;
@@ -142,7 +142,7 @@ void UpdateProcess(HWND hWndList)
 			item.iItem = nItem;
 			item.mask = LVIF_TEXT;
 			item.pszText = (LPTSTR)pe32.szExeFile;
-			::SendMessage(hWndList, LVM_INSERTITEM, 0, (long)&item);
+			::SendMessage(hWndList, LVM_INSERTITEM, 0, (LPARAM)&item);
 			LVITEM lvi;
 			lvi.iSubItem = 1;
 			lvi.pszText = (LPTSTR)szID;
