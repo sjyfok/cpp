@@ -1,6 +1,6 @@
 
 #include "example.h"
-
+#include "Project/resource.h"
 CMyApp theApp;
 
 
@@ -20,10 +20,17 @@ END_MESSAGE_MAP()
 
 CMainWindow::CMainWindow()
 {
-	LPCTSTR lpszClassName = AfxRegisterWndClass(CS_HREDRAW | CS_VREDRAW, 
+	//LPCTSTR lpszClassName = AfxRegisterWndClass(CS_HREDRAW | CS_VREDRAW, 
+	//	::LoadCursor(NULL, IDC_ARROW), (HBRUSH)(COLOR_3DFACE + 1));
+
+	//CreateEx(WS_EX_CLIENTEDGE, lpszClassName, 
+	//	"框架程序测创建的窗口", WS_OVERLAPPEDWINDOW,
+	//	CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL);
+
+	LPCTSTR lpszClassName = AfxRegisterWndClass(CS_HREDRAW | CS_VREDRAW,
 		::LoadCursor(NULL, IDC_ARROW), (HBRUSH)(COLOR_3DFACE + 1));
 
-	CreateEx(WS_EX_CLIENTEDGE, lpszClassName, 
+	CreateEx(WS_EX_CLIENTEDGE, lpszClassName,
 		"框架程序测创建的窗口", WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL);
 }
@@ -60,6 +67,47 @@ void CMainWindow::OnModeless()
 void CMainWindow::PostNcDestroy()
 {
 	delete this;
+}
+
+CMyDialog::CMyDialog(CWnd *pParentWnd) :CDialog(IDD_MYDIALOG, pParentWnd)
+{
+	m_bModeless = FALSE;
+}
+
+BEGIN_MESSAGE_MAP(CMyDialog, CDialog)
+	ON_BN_CLICKED(IDC_START, OnStart)
+END_MESSAGE_MAP()
+
+BOOL CMyDialog::OnInitDialog()
+{
+	CDialog::OnInitDialog();
+	SetWindowText("框架程序窗口的对话框");
+	return TRUE;
+}
+
+void CMyDialog::OnCancel()
+{
+	if (m_bModeless)
+	{
+		DestroyWindow();
+	}
+	else
+	{
+		CDialog::OnCancel();
+	}
+}
+
+void CMyDialog::OnStart()
+{
+	MessageBox("开始！");
+}
+
+void CMyDialog::PostNcDestroy()
+{
+	if (m_bModeless)
+	{
+		delete this;
+	}
 }
 //int CMyApp::ExitInstance()
 //{
