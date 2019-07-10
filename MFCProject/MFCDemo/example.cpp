@@ -40,8 +40,8 @@ BOOL CMainWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	m_btnModel.Create("Model Dialog", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
 		CRect(50, 30, 180, 70), this, IDC_MODEL);
-	m_btnModel.Create("Modeless Dialog", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
-		CRect(220, 30, 350, 70), this, IDC_MODEL);
+	m_btnModeless.Create("Modeless Dialog", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+		CRect(220, 30, 350, 70), this, IDC_MODELESS);
 	
 
 	return TRUE;
