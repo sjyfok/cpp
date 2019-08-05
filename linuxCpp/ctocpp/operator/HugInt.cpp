@@ -41,12 +41,23 @@ public:
 		}
 	}
 };
+
+char *test()
+{
+	
+	char *str = "hello";
+	return str;
+	
+}
+
 int  main()
 {
 	char s[210];
 	int n;
 
-	while (cin >> s >> n) {
+	cout << test();
+
+	/*while (cin >> s >> n) {
 		CHugeInt a(s);
 		CHugeInt b(n);
 
@@ -57,6 +68,7 @@ int  main()
 		cout << ++b << endl;
 		cout << b++ << endl;
 		cout << b << endl;
-	}
+	}*/
+	cout.flush();
 	return 0;
 }
