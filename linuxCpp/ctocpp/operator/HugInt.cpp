@@ -10,54 +10,114 @@ class CHugeInt {
 private:
 	char sNum[220];
 public:
+	void Rev()
+	{
+		int len = strlen(sNum);
+		int i = 0, j = len-1;
+		while (i < j)
+		{
+			char tch = sNum[i];
+			sNum[i] = sNum[j];
+			sNum[j] = tch;
+			i++;
+			j--;
+		}	
+	}
+
 	CHugeInt(char *s)
 	{
+		memset(sNum, 0, sizeof(sNum));
 		if (s != NULL)
 		{
 			strcpy(sNum, s);
 		}
+		Rev();
 	}
 	CHugeInt(int n)
 	{
+		memset(sNum, 0, sizeof(sNum));
 		sprintf(sNum, "%d", n);
+		Rev();
 	}
 
-	char * operator+(CHugeInt a)
+	CHugeInt operator+(int a)
 	{
-		int len1, len2, len;
+		return *this + CHugeInt(a);
+	}
+
+	CHugeInt operator+(const CHugeInt &a)
+	{
+		CHugeInt tmp(0);
+		int carry = 0;
+		int len1, len2, len, i;
 		len1 = strlen(sNum);
 		len2 = strlen(a.sNum);
 		if (len1 > len2)
-		{
-			len = len2;
-		}
-		else
-		{
 			len = len1;
+		else len = len2;
+		i = 0;
+		while (i < len)
+		{
+			int k = sNum[i] - 0x30 + a.sNum[i] - 0x30 + carry;
+			if (k >= 10)
+			{
+				carry = 1;
+				tmp.sNum[i] = k - 10 + 0x30;
+			}
+			else
+			{
+				carry = 0;
+				tmp.sNum[i] = k + 0x30;
+			}
+			i++;			
 		}
+		if (carry)
+		{
+			tmp.sNum[i] = carry + 0x30;
+		}
+		tmp.Rev();
+		return tmp;
+	}
+
+	friend CHugeInt operator+(int n, const CHugeInt & a)
+	{
+		
+	}
+
+	friend ostream& operator<<(ostream &os, const CHugeInt &a)
+	{
+		int len = strlen(a.sNum);
 		for (int i = 0; i < len; i++)
 		{
-
+			os << a.sNum[i];
 		}
+		return os;
 	}
+
+	CHugeInt& operator+=(int n)
+	{
+
+		return *this;
+	}
+
+	CHugeInt& operator++()
+	{
+		return *this;
+	}
+
+	CHugeInt  operator++(int)
+	{
+		
+	}	
 };
 
-char *test()
-{
-	
-	char *str = "hello";
-	return str;
-	
-}
 
 int  main()
 {
 	char s[210];
 	int n;
 
-	cout << test();
-
-	/*while (cin >> s >> n) {
+	while (cin >> s >> n) {
 		CHugeInt a(s);
 		CHugeInt b(n);
 
@@ -68,7 +128,6 @@ int  main()
 		cout << ++b << endl;
 		cout << b++ << endl;
 		cout << b << endl;
-	}*/
-	cout.flush();
+	}
 	return 0;
 }
