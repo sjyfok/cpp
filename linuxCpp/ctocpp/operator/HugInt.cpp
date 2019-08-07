@@ -40,6 +40,11 @@ public:
 		Rev();
 	}
 
+	//CHugeInt(const CHugeInt &a)
+	//{
+	//	strcpy(sNum, a.sNum);
+	//}
+
 	CHugeInt operator+(int a)
 	{
 		return *this + CHugeInt(a);
@@ -58,7 +63,18 @@ public:
 		i = 0;
 		while (i < len)
 		{
-			int k = sNum[i] - 0x30 + a.sNum[i] - 0x30 + carry;
+			char ch1 = sNum[i], ch2 = a.sNum[i];
+
+			if (ch1)
+			{				
+				ch1 -= 0x30;
+			}
+			if (ch2)
+			{
+				ch2 -= 0x30;
+			}
+			
+			int k = ch1 + ch2 + carry;
 			if (k >= 10)
 			{
 				carry = 1;
@@ -75,19 +91,21 @@ public:
 		{
 			tmp.sNum[i] = carry + 0x30;
 		}
-		tmp.Rev();
+	//	tmp.Rev();
 		return tmp;
 	}
 
 	friend CHugeInt operator+(int n, const CHugeInt & a)
 	{
-		
+		CHugeInt temp(n);
+		temp = temp + a;
+		return temp;
 	}
 
 	friend ostream& operator<<(ostream &os, const CHugeInt &a)
 	{
 		int len = strlen(a.sNum);
-		for (int i = 0; i < len; i++)
+		for (int i = len-1; i >= 0; i--)
 		{
 			os << a.sNum[i];
 		}
@@ -96,18 +114,25 @@ public:
 
 	CHugeInt& operator+=(int n)
 	{
+		CHugeInt temp(n);
+		*this = *this + temp;
 
 		return *this;
 	}
 
 	CHugeInt& operator++()
 	{
+		CHugeInt temp(1);
+		*this = *this + temp;
 		return *this;
 	}
 
 	CHugeInt  operator++(int)
 	{
-		
+		CHugeInt temp(this->sNum);
+		temp.Rev();
+		*this = temp + 1;	
+		return temp;
 	}	
 };
 
@@ -123,8 +148,9 @@ int  main()
 
 		cout << a + b << endl;
 		cout << n + a << endl;
-		cout << a + n << endl;
+		cout << a + n << endl;		
 		b += n;
+		
 		cout << ++b << endl;
 		cout << b++ << endl;
 		cout << b << endl;
