@@ -10,7 +10,7 @@ enum WarriorType
 	WOLF,
 };
 
-enum GroupType
+enum HeadquarterType
 {
 	RED = 0,
 	BLUE,
@@ -44,16 +44,16 @@ public:
 
 
 #define  WARRIOR_NUM		5
+class Headquarter;
 class Warrior
 {
 public:
-	WarriorType type;
-	
-	Warrior(WarriorType t, int l, GroupType g, int n) 
-		:type(t), live(l), group(g), num(n)
+	Warrior(WarriorType t, int l, int n)
+		:type(t), live(l), num(n)
 	{
-		
+
 	}
+
 	char *GetName()
 	{
 		return m_Name[type];
@@ -67,15 +67,34 @@ public:
 		return live;
 	}
 
-	virtual void Display()
-	{}
+	void Display()
+	{
+		m_pHeadquarter;
+	//	if ( group == RED)
+		//if(m_pHeadquarter->m_Color == RED)
+		//{
+		//	cout << " red " << m_Name[type] << " " << num <<
+		//		" born with strength " << live << "," << 
+		//	//	m_pHeadquarter->GetWarriorCnt(type) << " " <<
+		//		 m_Name[type] << " in red headquarter" << endl;			
+		//}
+		//else
+		//{
+		//	cout << " blue " << m_Name[type] << " " << num <<
+		//		" born with strength " << live << "," << 
+		////		m_pHeadquarter->GetWarriorCnt(type) << " " <<
+		//		 m_Name[type] << " in blue headquarter" << endl;
+		//}
+	}
+public:
+	Headquarter *m_pHeadquarter;  //所属司令部
+	WarriorType type;
 
 protected:
 	char *m_Name[WARRIOR_NUM] = { "dragon", "ninja","iceman","lion", "wolf" };
 	
 	int num;
-	int live; //声明元
-	GroupType group; //派别
+	int live; //声明元	
 };
 
 class CDragon : public Warrior
@@ -83,28 +102,22 @@ class CDragon : public Warrior
 public:
 	virtual void Display()
 	{
-		if (group == RED)
-		{
-			cout << " red " << m_Name[type] << " " << num << 
-				" born with strength " << live << "," << 
-		}
-		cout << " red " << pWarrior->GetName() << " " << pWarrior->GetNum() <<
-			" born with strength " << pWarrior->GetLive() << ","
-			<< m_warriorcnt[pWarrior->type] << " " << pWarrior->GetName()
-			<< " in red headquarter" << endl;
+		Warrior::Display();
+
 	}
 };
 
 
 
-
+///////////////////////////////////////////////////////////////////////
 class Headquarter
 {
 	
 public:
 	static int time;
 	
-	Headquarter(int live, int lives[]) :m_total_live(live)
+	Headquarter(int live, int lives[], HeadquarterType color) 
+		:m_total_live(live), m_Color(color)
 	{
 		m_warrior_no = 1;
 		for (int i = 0; i < WARRIOR_NUM; i++)
@@ -112,31 +125,42 @@ public:
 			m_warrior_lives[i] = lives[i];
 		}
 	}
-	int CanCreateSamurai();
-	Warrior*  CreateWarrior(WarriorType type, GroupType group);
+	int CanCreateWarrior();
+	Warrior* CreateWarrior(WarriorType type);
+	int GetWarriorCnt(WarriorType type);
+	friend void Warrior::Display();
+public:
+	HeadquarterType m_Color;
+	int m_warriorcnt[WARRIOR_NUM] = { 0, 0, 0, 0, 0 };
 protected:
 	int m_total_live;
 	int m_warrior_lives[WARRIOR_NUM];
-	int m_warrior_no;
-	int m_warriorcnt[WARRIOR_NUM] = { 0, 0, 0, 0, 0 };
+	int m_warrior_no;	
 };
 
-Warrior* Headquarter::CreateWarrior(WarriorType type, GroupType group)
+int Headquarter::GetWarriorCnt(WarriorType type)
+{
+	return m_warriorcnt[type];
+}
+
+
+Warrior* Headquarter::CreateWarrior(WarriorType type)
 {
 	Warrior *ptr = NULL;
+
 	if (m_total_live >= m_warrior_lives[type])
 	{
-		ptr = new Warrior(type, m_warrior_lives[type], group, m_warrior_no);
+		ptr = new Warrior(type, m_warrior_lives[type], m_warrior_no);
 		m_total_live -= m_warrior_lives[type];
 		m_warrior_no++;
 		m_warriorcnt[type]++;
 	}
-
+	ptr->m_pHeadquarter = this;
 	return ptr;
 }
 
 
-int Headquarter::CanCreateSamurai()
+int Headquarter::CanCreateWarrior()
 {
 	int i;
 	for (i = 0; i < WARRIOR_NUM; i++)
@@ -147,33 +171,30 @@ int Headquarter::CanCreateSamurai()
 	return 0;	
 }
 
+/////////////////////////////////////////////////////////////////////////////
+
 class RedHeadquarter : public Headquarter
 {
 public:
-	RedHeadquarter(int live, int lives[]) :Headquarter(live, lives)
+	RedHeadquarter(int live, int lives[]) 
+		:Headquarter(live, lives, RED)
 	{
-		m_nextwarrior = ICEMAN;//iceman、lion、wolf、ninja、dragon
+		m_nextwarrior = ICEMAN;//iceman、lion、wolf、ninja、dragon	
 	};
 
-	Warrior*  CreateWarrior();
+	//Warrior*  CreateWarrior();
 	void DispWarrior(Warrior* pWarrior);
+	Warrior* CreateWarrior();
 private:
 	WarriorType m_nextwarrior;
 };
 
-void RedHeadquarter::DispWarrior(Warrior* pWarrior)
-{
-	cout << " red " << pWarrior->GetName() << " " << pWarrior->GetNum() <<
-		" born with strength " << pWarrior->GetLive() << ","
-		<< m_warriorcnt[pWarrior->type] << " " << pWarrior->GetName()
-		<< " in red headquarter" << endl;
-}
-
-Warrior* RedHeadquarter::CreateWarrior()
+Warrior* RedHeadquarter::CreateWarrior(void)
 {
 	WarriorType type = m_nextwarrior;
 	Warrior *pWarrior = NULL;
-	pWarrior = Headquarter::CreateWarrior(type, RED);
+	pWarrior = Headquarter::CreateWarrior(type);
+
 	switch (type)
 	{
 	case DRAGON:
@@ -194,16 +215,28 @@ Warrior* RedHeadquarter::CreateWarrior()
 	default:
 		break;
 	}
+	
 	return pWarrior;
 }
+
+void RedHeadquarter::DispWarrior(Warrior* pWarrior)
+{
+	cout << " red " << pWarrior->GetName() << " " << pWarrior->GetNum() <<
+		" born with strength " << pWarrior->GetLive() << ","
+		<< m_warriorcnt[pWarrior->type] << " " << pWarrior->GetName()
+		<< " in red headquarter" << endl;
+}
+
+
 
 
 class BlueHeadquarter : public Headquarter
 {
 public:
-	BlueHeadquarter(int live, int lives[]) :Headquarter(live, lives)
+	BlueHeadquarter(int live, int lives[]) 
+		:Headquarter(live, lives, BLUE)
 	{
-		m_nextwarrior = LION; //lion、dragon、ninja、iceman、wolf
+		m_nextwarrior = LION; //lion、dragon、ninja、iceman、wolf		
 	};
 
 	Warrior*  CreateWarrior();
@@ -224,7 +257,7 @@ Warrior* BlueHeadquarter::CreateWarrior()
 {
 	WarriorType type = m_nextwarrior;
 	Warrior *pWarrior = NULL;
-	pWarrior = Headquarter::CreateWarrior(type, RED);
+	pWarrior = Headquarter::CreateWarrior(type);
 	switch (type)
 	{
 	case DRAGON:		
@@ -275,11 +308,10 @@ int main()
 		while (1)
 		{
 			printf("%03d", time_val);
-			if (pRed->CanCreateSamurai())
+			if (pRed->CanCreateWarrior())
 			{
 				while ((pWarrior = pRed->CreateWarrior()) == NULL){}
 				pWarrior->Display();
-				pRed->DispWarrior(pWarrior);
 				delete pWarrior;
 			}
 			else
@@ -289,10 +321,11 @@ int main()
 				break;
 			}
 			printf("%03d", time_val);
-			if (pBlue->CanCreateSamurai())
+			if (pBlue->CanCreateWarrior())
 			{
 				while ((pWarrior = pBlue->CreateWarrior()) == NULL) {}
-				pBlue->DispWarrior(pWarrior);
+				pWarrior->Display();
+				//pBlue->DispWarrior(pWarrior);
 				delete pWarrior;
 			}
 			else
@@ -306,11 +339,12 @@ int main()
 		}
 		if (branch) //blue
 		{
-			while (pRed->CanCreateSamurai())
+			while (pRed->CanCreateWarrior())
 			{
 				printf("%03d", time_val);
 				while ((pWarrior = pRed->CreateWarrior()) == NULL) {}
-				pRed->DispWarrior(pWarrior);
+				//pRed->DispWarrior(pWarrior);
+				pWarrior->Display();
 				delete pWarrior;
 				time_val++;
 			}
@@ -319,11 +353,12 @@ int main()
 		}
 		else
 		{
-			while (pBlue->CanCreateSamurai())
+			while (pBlue->CanCreateWarrior())
 			{
 				printf("%03d", time_val);
 				while ((pWarrior = pBlue->CreateWarrior()) == NULL) {}
-				pBlue->DispWarrior(pWarrior);
+				//pBlue->DispWarrior(pWarrior);
+				pWarrior->Display();
 				delete pWarrior;
 				time_val++;
 			}
