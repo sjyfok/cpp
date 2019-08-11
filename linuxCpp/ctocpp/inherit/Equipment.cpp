@@ -16,11 +16,64 @@ enum HeadquarterType
 	BLUE,
 };
 
+#define  WARRIOR_NUM		5
+
+class Headquarter;
 ///////////////////////////CWeapons//////////////////
 class CWeapons
 {
 public:
 	CWeapons();
+};
+
+class Warrior
+{
+public:
+	Headquarter * m_pHeadquarter;  //所属司令部
+	WarriorType type;
+public:
+	Warrior(WarriorType t, int l, int n)
+		:type(t), live(l), num(n)
+	{
+		m_pHeadquarter = NULL;
+	}
+	void Display();
+
+
+protected:
+	char *m_Name[WARRIOR_NUM] = { "dragon", "ninja","iceman","lion", "wolf" };
+
+	int num;
+	int live; //生命元	
+};
+
+///////////////////////////////////////////////////////////////////////
+class Headquarter
+{
+
+public:
+	static int time;
+
+	Headquarter(int live, int lives[], HeadquarterType color)
+		:m_total_live(live), m_Color(color)
+	{
+		m_warrior_no = 1;
+		for (int i = 0; i < WARRIOR_NUM; i++)
+		{
+			m_warrior_lives[i] = lives[i];
+		}
+	}
+	int CanCreateWarrior();
+	Warrior* CreateWarrior(WarriorType type);
+	int GetWarriorCnt(WarriorType type);
+	friend void Warrior::Display();
+public:
+	HeadquarterType m_Color;
+	int m_warriorcnt[WARRIOR_NUM] = { 0, 0, 0, 0, 0 };
+protected:
+	int m_total_live;
+	int m_warrior_lives[WARRIOR_NUM];
+	int m_warrior_no;
 };
 
 class CSword : public CWeapons
@@ -43,59 +96,29 @@ public:
 
 
 
-#define  WARRIOR_NUM		5
+
+
 class Headquarter;
-class Warrior
+class RedHeadquarter;
+
+void Warrior::Display()
 {
-public:
-	Warrior(WarriorType t, int l, int n)
-		:type(t), live(l), num(n)
-	{
-
-	}
-
-	char *GetName()
-	{
-		return m_Name[type];
-	}
-	int GetNum()
-	{
-		return num;
-	}
-	int GetLive()
-	{
-		return live;
-	}
-
-	void Display()
-	{
-		m_pHeadquarter;
 	//	if ( group == RED)
-		//if(m_pHeadquarter->m_Color == RED)
-		//{
-		//	cout << " red " << m_Name[type] << " " << num <<
-		//		" born with strength " << live << "," << 
-		//	//	m_pHeadquarter->GetWarriorCnt(type) << " " <<
-		//		 m_Name[type] << " in red headquarter" << endl;			
-		//}
-		//else
-		//{
-		//	cout << " blue " << m_Name[type] << " " << num <<
-		//		" born with strength " << live << "," << 
-		////		m_pHeadquarter->GetWarriorCnt(type) << " " <<
-		//		 m_Name[type] << " in blue headquarter" << endl;
-		//}
+	if(m_pHeadquarter->m_Color == RED)
+	{
+		cout << " red " << m_Name[type] << " " << num <<
+			" born with strength " << live << "," << 
+		//	m_pHeadquarter->GetWarriorCnt(type) << " " <<
+			 m_Name[type] << " in red headquarter" << endl;			
 	}
-public:
-	Headquarter *m_pHeadquarter;  //所属司令部
-	WarriorType type;
-
-protected:
-	char *m_Name[WARRIOR_NUM] = { "dragon", "ninja","iceman","lion", "wolf" };
-	
-	int num;
-	int live; //声明元	
-};
+	//else
+	//{
+	//	cout << " blue " << m_Name[type] << " " << num <<
+	//		" born with strength " << live << "," << 
+	////		m_pHeadquarter->GetWarriorCnt(type) << " " <<
+	//		 m_Name[type] << " in blue headquarter" << endl;
+	//}
+}
 
 class CDragon : public Warrior
 {
@@ -109,34 +132,7 @@ public:
 
 
 
-///////////////////////////////////////////////////////////////////////
-class Headquarter
-{
-	
-public:
-	static int time;
-	
-	Headquarter(int live, int lives[], HeadquarterType color) 
-		:m_total_live(live), m_Color(color)
-	{
-		m_warrior_no = 1;
-		for (int i = 0; i < WARRIOR_NUM; i++)
-		{
-			m_warrior_lives[i] = lives[i];
-		}
-	}
-	int CanCreateWarrior();
-	Warrior* CreateWarrior(WarriorType type);
-	int GetWarriorCnt(WarriorType type);
-	friend void Warrior::Display();
-public:
-	HeadquarterType m_Color;
-	int m_warriorcnt[WARRIOR_NUM] = { 0, 0, 0, 0, 0 };
-protected:
-	int m_total_live;
-	int m_warrior_lives[WARRIOR_NUM];
-	int m_warrior_no;	
-};
+
 
 int Headquarter::GetWarriorCnt(WarriorType type)
 {
@@ -146,7 +142,7 @@ int Headquarter::GetWarriorCnt(WarriorType type)
 
 Warrior* Headquarter::CreateWarrior(WarriorType type)
 {
-	Warrior *ptr = NULL;
+	Warrior *ptr = 0;
 
 	if (m_total_live >= m_warrior_lives[type])
 	{
@@ -154,8 +150,9 @@ Warrior* Headquarter::CreateWarrior(WarriorType type)
 		m_total_live -= m_warrior_lives[type];
 		m_warrior_no++;
 		m_warriorcnt[type]++;
+		ptr->m_pHeadquarter = this;
 	}
-	ptr->m_pHeadquarter = this;
+	
 	return ptr;
 }
 
@@ -182,9 +179,9 @@ public:
 		m_nextwarrior = ICEMAN;//iceman、lion、wolf、ninja、dragon	
 	};
 
-	//Warrior*  CreateWarrior();
-	void DispWarrior(Warrior* pWarrior);
 	Warrior* CreateWarrior();
+
+	friend void Warrior::Display();
 private:
 	WarriorType m_nextwarrior;
 };
@@ -192,7 +189,7 @@ private:
 Warrior* RedHeadquarter::CreateWarrior(void)
 {
 	WarriorType type = m_nextwarrior;
-	Warrior *pWarrior = NULL;
+	Warrior *pWarrior = 0;
 	pWarrior = Headquarter::CreateWarrior(type);
 
 	switch (type)
@@ -219,13 +216,7 @@ Warrior* RedHeadquarter::CreateWarrior(void)
 	return pWarrior;
 }
 
-void RedHeadquarter::DispWarrior(Warrior* pWarrior)
-{
-	cout << " red " << pWarrior->GetName() << " " << pWarrior->GetNum() <<
-		" born with strength " << pWarrior->GetLive() << ","
-		<< m_warriorcnt[pWarrior->type] << " " << pWarrior->GetName()
-		<< " in red headquarter" << endl;
-}
+
 
 
 
@@ -240,18 +231,11 @@ public:
 	};
 
 	Warrior*  CreateWarrior();
-	void DispWarrior(Warrior* pWarrior);
 private:
 	WarriorType m_nextwarrior;	
 };
 
-void BlueHeadquarter::DispWarrior(Warrior* pWarrior)
-{
-	cout << " blue " << pWarrior->GetName() << " " << pWarrior->GetNum() <<
-		" born with strength " << pWarrior->GetLive() << ","
-		<< m_warriorcnt[pWarrior->type] << " " << pWarrior->GetName()
-		<< " in blue headquarter" << endl;
-}
+
 
 Warrior* BlueHeadquarter::CreateWarrior()
 {
