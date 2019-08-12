@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 using namespace std;
 
 enum WarriorType
@@ -16,14 +17,27 @@ enum HeadquarterType
 	BLUE,
 };
 
+enum WeaponType
+{
+	SWORD = 0,
+	BOMB,
+	ARROW,
+};
+
 #define  WARRIOR_NUM		5
+#define  WEAPON_NUM			3
 
 class Headquarter;
+class CSword;
+class CBomb;
+class CArrow;
 ///////////////////////////CWeapons//////////////////
 class CWeapons
 {
 public:
-	CWeapons();
+	CWeapons() {};
+
+	string m_Name;
 };
 
 class Warrior
@@ -36,13 +50,14 @@ public:
 		:type(t), live(l), num(n)
 	{
 		m_pHeadquarter = NULL;
+		m_WCnt = 0;
 	}
-	void Display();
-
+	virtual void Display();	
 
 protected:
 	char *m_Name[WARRIOR_NUM] = { "dragon", "ninja","iceman","lion", "wolf" };
-
+	CWeapons *m_pWeapons[WEAPON_NUM];
+	int m_WCnt;
 	int num;
 	int live; //生命元	
 };
@@ -79,27 +94,165 @@ protected:
 class CSword : public CWeapons
 {
 public:
-	CSword();
+	CSword()
+	{
+		m_Name = "sword";
+	}
 };
 
 class CBomb : public CWeapons
 {
 public:
-	CBomb();
+	CBomb()
+	{
+		m_Name = "bomb";
+	}
 };
 
 class CArrow : public CWeapons
 {
 public:
-	CArrow();
+	CArrow()
+	{
+		m_Name = "arrow";
+	}
 };
 
 
+class CDragon : public Warrior
+{
+public:
+	CDragon(int l, int n, float m):Warrior(DRAGON, l, n)
+	{
+		int wtype = n % 3;
+		
+		CWeapons *pWeapon = NULL;
+		switch (wtype)
+		{
+		case SWORD:
+			pWeapon = new CSword();
+			break;
+		case BOMB:
+			pWeapon = new CBomb();
+			break;
+		case ARROW:
+			pWeapon = new CArrow();
+			break;	
+		}
+		m_pWeapons[m_WCnt++] = pWeapon;
 
+		m_Morale = m;
+	}
 
+	virtual void Display()
+	{
+		Warrior::Display();		
+		if (m_WCnt)
+		{
+			cout << "It has a " << m_pWeapons[0]->m_Name << ",and it's morale is "
+				<< setprecision(2)<<fixed<< m_Morale << endl;
+		}
+	}
+private:
+	float m_Morale;//士气
+};
 
-class Headquarter;
-class RedHeadquarter;
+class CNinja : public Warrior
+{
+public:
+	CNinja(int l, int n) : Warrior(NINJA, l, n)
+	{	
+		int wtype = n % 3;
+
+		int i = 0;
+		while (i < 2)
+		{
+			wtype = (n+i) % 3;
+			CWeapons *pWeapon = NULL;
+			switch (wtype)
+			{
+			case SWORD:
+				pWeapon = new CSword();
+				break;
+			case BOMB:
+				pWeapon = new CBomb();
+				break;
+			case ARROW:
+				pWeapon = new CArrow();
+				break;
+			}
+			m_pWeapons[m_WCnt++] = pWeapon;
+			i++;
+		}		
+	}
+	virtual void Display()
+	{
+		Warrior::Display();
+		cout << "It has a " << m_pWeapons[0]->m_Name << " and a "
+			<< m_pWeapons[1]->m_Name << endl;			
+	}
+};
+
+class CIceman : public Warrior
+{
+public:
+	CIceman(int l, int n) : Warrior(ICEMAN, l, n)
+	{
+		int wtype = n % 3;
+
+		CWeapons *pWeapon = NULL;
+		switch (wtype)
+		{
+		case SWORD:
+			pWeapon = new CSword();
+			break;
+		case BOMB:
+			pWeapon = new CBomb();
+			break;
+		case ARROW:
+			pWeapon = new CArrow();
+			break;
+		}
+		m_pWeapons[m_WCnt++] = pWeapon;
+	}
+	virtual void Display()
+	{
+		Warrior::Display();
+		cout << "It has a " << m_pWeapons[0]->m_Name << endl;
+	}
+};
+
+class CLion : public Warrior
+{
+public:
+	CLion(int l, int n, int loy) : Warrior(LION, l, n)
+	{
+		m_loyalty = loy;
+	}
+	virtual void Display()
+	{
+		Warrior::Display();
+		cout << "It's loyalty is " << m_loyalty << endl;
+	}
+
+private:
+	int m_loyalty;//忠诚度
+};
+
+class CWolf : public Warrior
+{
+public:
+	CWolf(int l, int n) : Warrior(WOLF, l, n)
+	{}
+	virtual void Display();
+	
+};
+
+void CWolf::Display()
+{
+	Warrior::Display();
+}
+
 
 void Warrior::Display()
 {
@@ -108,27 +261,19 @@ void Warrior::Display()
 	{
 		cout << " red " << m_Name[type] << " " << num <<
 			" born with strength " << live << "," << 
-		//	m_pHeadquarter->GetWarriorCnt(type) << " " <<
+			m_pHeadquarter->GetWarriorCnt(type) << " " <<
 			 m_Name[type] << " in red headquarter" << endl;			
 	}
-	//else
-	//{
-	//	cout << " blue " << m_Name[type] << " " << num <<
-	//		" born with strength " << live << "," << 
-	////		m_pHeadquarter->GetWarriorCnt(type) << " " <<
-	//		 m_Name[type] << " in blue headquarter" << endl;
-	//}
+	else
+	{
+		cout << " blue " << m_Name[type] << " " << num <<
+			" born with strength " << live << "," << 
+			m_pHeadquarter->GetWarriorCnt(type) << " " <<
+			 m_Name[type] << " in blue headquarter" << endl;
+	}
 }
 
-class CDragon : public Warrior
-{
-public:
-	virtual void Display()
-	{
-		Warrior::Display();
 
-	}
-};
 
 
 
@@ -146,7 +291,35 @@ Warrior* Headquarter::CreateWarrior(WarriorType type)
 
 	if (m_total_live >= m_warrior_lives[type])
 	{
-		ptr = new Warrior(type, m_warrior_lives[type], m_warrior_no);
+		
+
+		switch (type)
+		{
+		case DRAGON:
+			{
+				float morale = m_total_live - m_warrior_lives[type];
+				morale /= m_warrior_lives[type];
+				ptr = new CDragon(m_warrior_lives[type], m_warrior_no, morale);
+			}
+			break;
+		case NINJA:
+			ptr = new CNinja(m_warrior_lives[type], m_warrior_no);
+			break;
+		case ICEMAN:
+			ptr = new CIceman(m_warrior_lives[type], m_warrior_no);
+			break;
+		case LION:
+			ptr = new CLion(m_warrior_lives[type], m_warrior_no,
+				m_total_live - m_warrior_lives[type]);
+			break;
+		/*case WOLF:
+			ptr = new CWolf(m_warrior_lives[type], m_warrior_no);
+			break;*/
+		default:
+			ptr = new Warrior(type, m_warrior_lives[type], m_warrior_no);
+			break;
+		}
+	
 		m_total_live -= m_warrior_lives[type];
 		m_warrior_no++;
 		m_warriorcnt[type]++;
@@ -181,7 +354,7 @@ public:
 
 	Warrior* CreateWarrior();
 
-	friend void Warrior::Display();
+//	void Warrior::Display();
 private:
 	WarriorType m_nextwarrior;
 };
@@ -194,7 +367,7 @@ Warrior* RedHeadquarter::CreateWarrior(void)
 
 	switch (type)
 	{
-	case DRAGON:
+	case DRAGON:		
 		m_nextwarrior = ICEMAN;
 		break;
 	case NINJA:
@@ -309,7 +482,6 @@ int main()
 			{
 				while ((pWarrior = pBlue->CreateWarrior()) == NULL) {}
 				pWarrior->Display();
-				//pBlue->DispWarrior(pWarrior);
 				delete pWarrior;
 			}
 			else
@@ -326,8 +498,7 @@ int main()
 			while (pRed->CanCreateWarrior())
 			{
 				printf("%03d", time_val);
-				while ((pWarrior = pRed->CreateWarrior()) == NULL) {}
-				//pRed->DispWarrior(pWarrior);
+				while ((pWarrior = pRed->CreateWarrior()) == NULL) {}				
 				pWarrior->Display();
 				delete pWarrior;
 				time_val++;
