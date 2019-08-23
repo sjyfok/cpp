@@ -3,6 +3,17 @@
 using namespace std;
 
 // 在此处补充你的代码
+template <class T, class PF>
+void MyForeach(T *beg, T *end, PF op)
+{
+	T *s = beg;
+
+	while (s != end)
+	{
+		op(*s);
+		s++;
+	}
+}
 
 void Print(string s)
 {
