@@ -1,14 +1,33 @@
 #include <iostream>
 #include <string>
 
+
 using namespace std;
 template <class T>
 class CMyistream_iterator
 {
 
 	// 在此处补充你的代码
+public:
+	CMyistream_iterator(istream &is):m_is(is)
+	{
+		m_is >> m_Val;
+	}
+	T operator*()
+	{
+		return m_Val;
+	}
 
+	//后缀
+	void operator++(int)
+	{
+		m_is >> m_Val;
+	}
+private:
+	T m_Val;
+	istream & m_is;
 };
+
 
 
 
