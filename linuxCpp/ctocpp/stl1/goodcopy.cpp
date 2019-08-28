@@ -6,7 +6,26 @@ template <class T>
 struct GoodCopy {
 
 	// 在此处补充你的代码
+public:
+	void operator()(T *s, T *e, T *r)
+	{
+		T *ptr, *pi = s, *ptr_s;
+		int len = e - s;
+		ptr = new T[len];
+		ptr_s = ptr;
+		for (; pi < e; pi ++)
+		{
+			*ptr ++ = *pi;
+		}
 
+		pi = ptr_s;
+		for (int i = 0; i < len; i ++, pi ++)
+		{
+			*r++ = *pi;
+		}
+
+		delete[] ptr_s;
+	}	
 };
 
 int a[200];
