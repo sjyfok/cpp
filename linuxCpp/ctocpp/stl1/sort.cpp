@@ -8,7 +8,21 @@ struct Closer {
 
 	// 在此处补充你的代码
 
+	T1 v;
+	T2 dis;
+	Closer(T1 n, T2 d) :v(n), dis(d) { }
 
+	bool operator() (const T1 & v1, const T1 & v2) 
+	{
+		int d1 = dis(v1, v);
+		int d2 = dis(v2, v);
+		if (d1 < d2)
+			return true;
+		else if (d1 > d2)
+			return  false;
+		else
+			return v1 < v2;
+	}
 };
 
 int Distance1(int n1, int n2) {
