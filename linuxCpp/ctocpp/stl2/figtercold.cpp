@@ -1,27 +1,68 @@
 #include <cstdio>
 #include <iostream>
 #include <map>
+#include <set>
+
 using namespace std;
 
 
-typedef multimap<int, int> MAP_MEMBER;
+typedef multimap<int, set<int>> MAP_MEMBER;
 
 int main()
 {
 	MAP_MEMBER map_member;	
+	set<int> setid;
+
 	int nCount, id, force, diff;
 	MAP_MEMBER::iterator hit_p, rec_p;
-
-	map_member.insert(make_pair(1000000000, 1));
+	setid.insert(1);
+	map_member.insert(make_pair(1000000000, setid));
 	cin >> nCount;
 
 
 
 	for (int i = 0; i < nCount; i++)
 	{
-		
 		cin >> id >> force;
-		map_member.insert(make_pair(force, id));
+		MAP_MEMBER::iterator p = map_member.find(force);
+		if (p == map_member.end())
+		{
+			set<int> sid;
+			sid.insert(id);
+			map_member.insert(make_pair(force, sid));
+		}
+		else
+		{
+			p->second.insert(id);
+		}
+		rec_p = map_member.lower_bound(force);
+		p = rec_p;
+		if (p != map_member.begin())
+		{
+			p--;
+			diff = abs(p->first - force);
+			hit_p = p;
+			p = rec_p;
+			p++;
+			if (diff > abs(p->first-force))
+			{
+				hit_p = p;
+			}
+			else if (diff == abs(p->first - force))
+			{
+				if (true)
+				{
+
+				}
+			}
+		}
+		else
+		{
+			p++;
+			hit_p = p;
+		}
+		cout << id << " " << *hit_p->second.begin() << endl;
+		/*map_member.insert(make_pair(force, id));
 		rec_p = map_member.lower_bound(force);
 		MAP_MEMBER::iterator p = rec_p;
 		if (p != map_member.begin())
@@ -85,7 +126,7 @@ int main()
 		}
 
 
-		cout << id << " " << hit_p->second << endl;		
+		cout << id << " " << hit_p->second << endl;		*/
 	}
 
 	return 0;
