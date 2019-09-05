@@ -3,37 +3,37 @@
 #include <map>
 #include <set>
 ///////////////////////////////
-#include <fstream>
-#include <iomanip>
+//#include <fstream>
+//#include <iomanip>
 ///////////////////////////////
 using namespace std;
 
 
 typedef multimap<int, set<int>> MAP_MEMBER;
 
-void PrintMap(MAP_MEMBER &mp, ofstream &fout);
+//void PrintMap(MAP_MEMBER &mp, ofstream &fout);
 int main()
 {
 	MAP_MEMBER map_member;	
 	set<int> setid;
 
 	///////////////////////////////////
-	ofstream fout("out.txt");
-	ifstream fin("in.txt");
+	//ofstream fout("out.txt");
+	//ifstream fin("in.txt");
 	///////////////////////////////////
 	int nCount, id, force, diff;
 	MAP_MEMBER::iterator hit_p, rec_p;
 	setid.insert(1);
 	map_member.insert(make_pair(1000000000, setid));
-	//cin >> nCount;
-	fin >> nCount;
+	cin >> nCount;
+	/*fin >> nCount;*/
 
 
 
 	for (int i = 0; i < nCount; i++)
 	{
-		//cin >> id >> force;
-		fin >> id >> force;
+		cin >> id >> force;
+		/*fin >> id >> force;*/
 //        fout << "/*" << id << " " << force << "*/" << endl;
 		MAP_MEMBER::iterator p = map_member.find(force);
 		if (p == map_member.end())
@@ -52,15 +52,15 @@ int main()
 		{
 			if (*rec_p->second.begin() != id)
 			{
-				//cout << id << " " << *hit_p->second.begin() << endl;
-				fout << id << " " << *rec_p->second.begin() << endl;
+				cout << id << " " << *rec_p->second.begin() << endl;
+				/*fout << id << " " << *rec_p->second.begin() << endl;*/
 			}
 			else
 			{
 				set<int>::iterator sp = rec_p->second.begin();
 				sp++;
-				//cout << id << " " << *hit_p->second.begin() << endl;
-				fout << id << " " << *sp << endl;
+				cout << id << " " << *sp << endl;
+				//fout << id << " " << *sp << endl;
 			}
 		}
 		else
@@ -90,8 +90,8 @@ int main()
 				p++;
 				hit_p = p;
 			}
-			//cout << id << " " << *hit_p->second.begin() << endl;
-			fout << id << " " << *hit_p->second.begin() << endl;
+			cout << id << " " << *hit_p->second.begin() << endl;
+			//fout << id << " " << *hit_p->second.begin() << endl;
 		}      
     }
 
@@ -99,26 +99,26 @@ int main()
 }
 
 
-void PrintMap(MAP_MEMBER &mp, ofstream &fout)
-{
-	MAP_MEMBER::iterator p = mp.begin();
-
-    fout << "//////////////////////////////////////////////" << endl;
-	while (p != mp.end())
-	{
-		//cout << "force: " << p->first << " " << "set id: ";
-		fout << "force: " << setw(13) <<  p->first << " set id: ";
-
-		set<int>::iterator sp = p->second.begin();
-		while (sp != p->second.end())
-		{
-			//cout << *sp << " ";
-			fout << *sp << " ";
-			sp++;
-		}
-		//cout << endl;
-		fout << endl;
-		p++;
-	}
-    fout << "//////////////////////////////////////////////" << endl;
-}
+//void PrintMap(MAP_MEMBER &mp, ofstream &fout)
+//{
+//	MAP_MEMBER::iterator p = mp.begin();
+//
+//    fout << "//////////////////////////////////////////////" << endl;
+//	while (p != mp.end())
+//	{
+//		//cout << "force: " << p->first << " " << "set id: ";
+//		fout << "force: " << setw(13) <<  p->first << " set id: ";
+//
+//		set<int>::iterator sp = p->second.begin();
+//		while (sp != p->second.end())
+//		{
+//			//cout << *sp << " ";
+//			fout << *sp << " ";
+//			sp++;
+//		}
+//		//cout << endl;
+//		fout << endl;
+//		p++;
+//	}
+//    fout << "//////////////////////////////////////////////" << endl;
+//}
