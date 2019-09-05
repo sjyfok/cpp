@@ -53,11 +53,11 @@ int main()
 			if (*rec_p->second.begin() != id)
 			{
 				//cout << id << " " << *hit_p->second.begin() << endl;
-				fout << id << " " << *hit_p->second.begin() << endl;
+				fout << id << " " << *rec_p->second.begin() << endl;
 			}
 			else
 			{
-				set<int>::iterator sp = p->second.begin();
+				set<int>::iterator sp = rec_p->second.begin();
 				sp++;
 				//cout << id << " " << *hit_p->second.begin() << endl;
 				fout << id << " " << *sp << endl;
