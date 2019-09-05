@@ -2,8 +2,10 @@
 #include <iostream>
 #include <map>
 #include <set>
+///////////////////////////////
 #include <fstream>
-
+#include <iomanip>
+///////////////////////////////
 using namespace std;
 
 
@@ -32,6 +34,7 @@ int main()
 	{
 		//cin >> id >> force;
 		fin >> id >> force;
+//        fout << "/*" << id << " " << force << "*/" << endl;
 		MAP_MEMBER::iterator p = map_member.find(force);
 		if (p == map_member.end())
 		{
@@ -43,7 +46,7 @@ int main()
 		{
 			p->second.insert(id);
 		}
-		PrintMap(map_member, fout);
+//		PrintMap(map_member, fout);
 		rec_p = map_member.lower_bound(force);
 		p = rec_p;
 		if (p != map_member.begin())
@@ -72,7 +75,10 @@ int main()
 		}
 		//cout << id << " " << *hit_p->second.begin() << endl;
 		fout << id << " " << *hit_p->second.begin() << endl;
-	}
+
+	
+        }
+    }
 
 	return 0;
 }
@@ -82,10 +88,11 @@ void PrintMap(MAP_MEMBER &mp, ofstream &fout)
 {
 	MAP_MEMBER::iterator p = mp.begin();
 
+    fout << "//////////////////////////////////////////////" << endl;
 	while (p != mp.end())
 	{
 		//cout << "force: " << p->first << " " << "set id: ";
-		fout << "force: " << p->first << " " << "set id: ";
+		fout << "force: " << setw(13) <<  p->first << " set id: ";
 
 		set<int>::iterator sp = p->second.begin();
 		while (sp != p->second.end())
@@ -98,4 +105,5 @@ void PrintMap(MAP_MEMBER &mp, ofstream &fout)
 		fout << endl;
 		p++;
 	}
+    fout << "//////////////////////////////////////////////" << endl;
 }
