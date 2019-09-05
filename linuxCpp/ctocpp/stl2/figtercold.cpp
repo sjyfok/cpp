@@ -48,36 +48,51 @@ int main()
 		}
 //		PrintMap(map_member, fout);
 		rec_p = map_member.lower_bound(force);
-		p = rec_p;
-		if (p != map_member.begin())
+		if (rec_p->second.size() > 1)
 		{
-			p--;
-			diff = abs(p->first - force);
-			hit_p = p;
-			p = rec_p;
-			p++;
-			if (diff > abs(p->first-force))
+			if (*rec_p->second.begin() != id)
 			{
-				hit_p = p;
+				//cout << id << " " << *hit_p->second.begin() << endl;
+				fout << id << " " << *hit_p->second.begin() << endl;
 			}
-			else if (diff == abs(p->first - force))
+			else
 			{
-				if (*p->second.begin() < *hit_p->second.begin())
-				{
-					hit_p = p;
-				}				
+				set<int>::iterator sp = p->second.begin();
+				sp++;
+				//cout << id << " " << *hit_p->second.begin() << endl;
+				fout << id << " " << *sp << endl;
 			}
 		}
 		else
 		{
-			p++;
-			hit_p = p;
-		}
-		//cout << id << " " << *hit_p->second.begin() << endl;
-		fout << id << " " << *hit_p->second.begin() << endl;
-
-	
-        }
+			p = rec_p;
+			if (p != map_member.begin())
+			{
+				p--;
+				diff = abs(p->first - force);
+				hit_p = p;
+				p = rec_p;
+				p++;
+				if (diff > abs(p->first - force))
+				{
+					hit_p = p;
+				}
+				else if (diff == abs(p->first - force))
+				{
+					if (*p->second.begin() < *hit_p->second.begin())
+					{
+						hit_p = p;
+					}
+				}
+			}
+			else
+			{
+				p++;
+				hit_p = p;
+			}
+			//cout << id << " " << *hit_p->second.begin() << endl;
+			fout << id << " " << *hit_p->second.begin() << endl;
+		}      
     }
 
 	return 0;
