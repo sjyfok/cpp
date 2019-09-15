@@ -439,86 +439,173 @@ Warrior* BlueHeadquarter::CreateWarrior()
 }
 
 
+class SystemOp
+{
+public:
+	RedHeadquarter * m_pRedHeader;
+	BlueHeadquarter *m_pBlueHeader;
+	int *m_pLiveWarrior;
+	int *m_pAttack;
+	int m_CurHour;   //当前时间
+	int m_CurMinute;
+	int m_SysMinutes;  //系统总时间
+	int m_nCity;	//系统中城市总数
+	int m_nLoyalty; //忠诚度
+
+public:
+	SystemOp();
+	~SystemOp();
+	void CreateWarriorMonment();  //创建武士时刻
+	void DispCurSysTime();
+};
+
+SystemOp::~SystemOp()
+{
+	delete m_pRedHeader;
+	delete m_pBlueHeader;
+}
+
+SystemOp::SystemOp()
+{
+	RedHeadquarter *pRed = new RedHeadquarter(live, live_warrior);
+	BlueHeadquarter *pBlue = new BlueHeadquarter(live, live_warrior);
+}
+
+void SystemOp::CreateWarriorMonment()
+{
+
+}
+
+void SystemOp::DispCurSysTime()
+{
+	cout << fixed << setw(3) << setfill('0') << m_CurHour
+		<< ":" << setw(2) << m_CurMinute << " ";
+	cout.flush();
+}
+
+int GetCurMinutes(int hour, int minutes)
+{
+	return hour * 60 + minutes;
+}
+
+
 
 
 int main()
 {
 	int cnt;
-	int live;
-	int time_val = 0;
+	int live, nCity, nLoyalty, tol_minutes, cur_minutes;
+	int hour = 0, minute = 0;  //时间
 	int branch = 0;
 	int live_warrior[WARRIOR_NUM];
+	int attack_live[WARRIOR_NUM]; //攻击力
+
 	Warrior *pWarrior;
 	cin >> cnt;
 	for (int i = 0; i < cnt; i++)
 	{
-		cin >> live;
+		cin >> live >> nCity >> nLoyalty >> tol_minutes;
 		for (int j = 0; j < WARRIOR_NUM; j++)
 		{
 			cin >> live_warrior[j];
 		}
+		for (int j = 0; j < WARRIOR_NUM; j++)
+		{
+			cin >> attack_live[j];
+		}
+
+		SystemOp op = new SystemOp()
+
 		RedHeadquarter *pRed = new RedHeadquarter(live, live_warrior);
 		BlueHeadquarter *pBlue = new BlueHeadquarter(live, live_warrior);
 		
 		cout << "Case:" << i + 1 << endl;
-		time_val = 0;
-		while (1)
+		cur_minutes = 0;
+		while (cur_minutes < tol_minutes)
 		{
-			printf("%03d", time_val);
-			if (pRed->CanCreateWarrior())
+			cur_minutes = GetCurMinutes(hour, minute);
+			switch (minute)
 			{
-				while ((pWarrior = pRed->CreateWarrior()) == NULL){}
-				pWarrior->Display();
-				delete pWarrior;
-			}
-			else
-			{
-				cout << " red headquarter stops making warriors" << endl;
-				branch = 0;
+			default:
+				break;
+			case 0:  //创建武士
+				minute = 5;
+				
+				break;
+			case 5:  //lion 逃跑时刻
+				minute = 10;
+				break;
+			case 10: //武士前进一步
+				minute = 35;
+				break; 
+			case 35: //wolf抢夺敌人武器
+				minute = 40;				
+				break;
+			case 40: //双方武士发生战斗
+				minute = 50;
+				break;
+			case 50: //报告司令部的生命元
+				minute = 55;				
+				break;
+			case 55: //每个武士报告拥有的武器
+				minute = 0;
+				hour++;			
 				break;
 			}
-			printf("%03d", time_val);
-			if (pBlue->CanCreateWarrior())
-			{
-				while ((pWarrior = pBlue->CreateWarrior()) == NULL) {}
-				pWarrior->Display();
-				delete pWarrior;
-			}
-			else
-			{
-				cout << " blue headquarter stops making warriors" << endl;
-				branch = 1;
-				time_val++;
-				break;
-			}	
-			time_val++;
-		}
-		if (branch) //blue
-		{
-			while (pRed->CanCreateWarrior())
-			{
-				printf("%03d", time_val);
-				while ((pWarrior = pRed->CreateWarrior()) == NULL) {}				
-				pWarrior->Display();
-				delete pWarrior;
-				time_val++;
-			}
-			printf("%03d", time_val);
-			cout << " red headquarter stops making warriors" << endl;		
-		}
-		else
-		{
-			while (pBlue->CanCreateWarrior())
-			{
-				printf("%03d", time_val);
-				while ((pWarrior = pBlue->CreateWarrior()) == NULL) {}
-				//pBlue->DispWarrior(pWarrior);
-				pWarrior->Display();
-				delete pWarrior;
-				time_val++;
-			}
-			printf("%03d", time_val);
-			cout << " blue headquarter stops making warriors" << endl;
+		//	if (pRed->CanCreateWarrior())
+		//	{
+		//		while ((pWarrior = pRed->CreateWarrior()) == NULL){}
+		//		pWarrior->Display();
+		//		delete pWarrior;
+		//	}
+		//	else
+		//	{
+		//		cout << " red headquarter stops making warriors" << endl;
+		//		branch = 0;
+		//		break;
+		//	}
+		//	DispTime(hour, minute);
+		//	if (pBlue->CanCreateWarrior())
+		//	{
+		//		while ((pWarrior = pBlue->CreateWarrior()) == NULL) {}
+		//		pWarrior->Display();
+		//		delete pWarrior;
+		//	}
+		//	else
+		//	{
+		//		cout << " blue headquarter stops making warriors" << endl;
+		//		branch = 1;
+		//		time_val++;
+		//		break;
+		//	}	
+		//	time_val++;
+		//}
+		//if (branch) //blue
+		//{
+		//	while (pRed->CanCreateWarrior())
+		//	{
+		//		DispTime(hour, minute);
+		//		while ((pWarrior = pRed->CreateWarrior()) == NULL) {}				
+		//		pWarrior->Display();
+		//		delete pWarrior;
+		//		time_val++;
+		//	}
+		//	DispTime(hour, minute);
+		//	cout << " red headquarter stops making warriors" << endl;		
+		//}
+		//else
+		//{
+		//	while (pBlue->CanCreateWarrior())
+		//	{
+		//		DispTime(hour, minute);
+		//		while ((pWarrior = pBlue->CreateWarrior()) == NULL) {}
+		//		//pBlue->DispWarrior(pWarrior);
+		//		pWarrior->Display();
+		//		delete pWarrior;
+		//		time_val++;
+		//	}
+		//	DispTime(hour, minute);
+		//	cout << " blue headquarter stops making warriors" << endl;
 		}	
 		delete pRed;
 		delete pBlue;		
