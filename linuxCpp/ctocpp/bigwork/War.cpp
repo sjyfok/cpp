@@ -48,8 +48,8 @@ public:
 	Headquarter * m_pHeadquarter;  //所属司令部
 	WarriorType type;
 public:
-	Warrior(WarriorType t, int l, int n)
-		:type(t), live(l), num(n)
+	Warrior(WarriorType t, int l, int f, int n)
+		:type(t), live(l), m_force(f), num(n)
 	{
 		m_pHeadquarter = NULL;
 		m_WCnt = 0;
@@ -59,6 +59,7 @@ public:
 	{
 		m_pos = pos;
 	}
+	void Move(void *data);
 	//friend bool operator<(const Warrior w1, const Warrior w2);
 	/*{
 	if (num < w.num)
@@ -72,7 +73,10 @@ protected:
 	int num;
 	int live; //生命元	
 	int m_pos;	//武士所在位置
+	int m_force;
 };
+
+
 
 //bool operator<(const Warrior w1, const Warrior w2)
 //{
@@ -99,14 +103,16 @@ public:
 		m_used = 0;
 	}
 	void Insert(Warrior *pWarrior);
-	Warrior* Begin();
-	Warrior* End();
-	void Remove(Warrior *pWarrior);
+	Warrior** Begin();
+	Warrior** End();
+	void Remove(Warrior *pWarrior);	
 public:
 	int m_size;
 	int m_used;
 	Warrior ** m_pWarriorset;
 };
+
+
 
 void CWarriorSet::Remove(Warrior *pWarrior)
 {
@@ -119,18 +125,20 @@ void CWarriorSet::Remove(Warrior *pWarrior)
 				m_pWarriorset[j] = m_pWarriorset[j + 1];
 			}
 			delete pWarrior;
+			m_used--;
+			break;
 		}
 	}
 }
 
-Warrior* CWarriorSet::Begin()
+Warrior** CWarriorSet::Begin()
 {
-	return m_pWarriorset[0];
+	return &m_pWarriorset[0];
 }
 
-Warrior* CWarriorSet::End()
+Warrior** CWarriorSet::End()
 {
-	return m_pWarriorset[m_used];
+	return &m_pWarriorset[m_used];
 }
 
 void CWarriorSet::Insert(Warrior *pWarrior)
@@ -165,13 +173,14 @@ class Headquarter
 public:
 	static int time;
 
-	Headquarter(int live, int lives[], HeadquarterType color, int pos)
+	Headquarter(int live, int lives[], int force[], HeadquarterType color, int pos)
 		:m_total_live(live), m_Color(color), m_pos(pos)
 	{
 		m_warrior_no = 1;
 		for (int i = 0; i < WARRIOR_NUM; i++)
 		{
 			m_warrior_lives[i] = lives[i];
+			m_warrior_force[i] = force[i];
 		}
 	}
 	int CanCreateWarrior();
@@ -186,6 +195,7 @@ public:
 protected:
 	int m_total_live;
 	int m_warrior_lives[WARRIOR_NUM];
+	int m_warrior_force[WARRIOR_NUM];
 	int m_warrior_no;	
 	int m_pos; //司令部位置
 };
@@ -221,7 +231,7 @@ public:
 class CDragon : public Warrior
 {
 public:
-	CDragon(int l, int n, float m):Warrior(DRAGON, l, n)
+	CDragon(int l, int f, int n, float m):Warrior(DRAGON, l, f, n)
 	{
 		int wtype = n % 3;
 		
@@ -259,7 +269,7 @@ private:
 class CNinja : public Warrior
 {
 public:
-	CNinja(int l, int n) : Warrior(NINJA, l, n)
+	CNinja(int l, int f, int n) : Warrior(NINJA, l, f, n)
 	{	
 		int wtype = n % 3;
 
@@ -295,7 +305,7 @@ public:
 class CIceman : public Warrior
 {
 public:
-	CIceman(int l, int n) : Warrior(ICEMAN, l, n)
+	CIceman(int l, int f, int n) : Warrior(ICEMAN, l, f, n)
 	{
 		int wtype = n % 3;
 
@@ -324,7 +334,7 @@ public:
 class CLion : public Warrior
 {
 public:
-	CLion(int l, int n, int loy) : Warrior(LION, l, n)
+	CLion(int l, int f, int n, int loy) : Warrior(LION, l, f, n)
 	{
 		m_loyalty = loy;
 	}
@@ -358,7 +368,7 @@ private:
 class CWolf : public Warrior
 {
 public:
-	CWolf(int l, int n) : Warrior(WOLF, l, n)
+	CWolf(int l, int f, int n) : Warrior(WOLF, l, f, n)
 	{}
 	virtual void Display();
 	
@@ -369,6 +379,23 @@ void CWolf::Display()
 	Warrior::Display();
 }
 
+void Warrior::Move(void *pdata)
+{
+	if (m_pHeadquarter->m_Color == RED)
+		cout << " red " << m_Name[type] << " " << num
+		<< " marched to city " << ++m_pos << " with " << live
+		<< " elements and force " << m_force << endl;
+	else
+		cout << " blue " << m_Name[type] << " " << num
+		<< " marched to city " << --m_pos << " with " << live
+		<< " elements and force " << m_force << endl;
+	if (this->type == LION)
+	{
+		int loy = *(int*)pdata;
+		CLion *pLion = (CLion*)this;
+		pLion->SubLoyalty(loy);
+	}
+}
 
 void Warrior::Display()
 {
@@ -417,24 +444,24 @@ Warrior* Headquarter::CreateWarrior(WarriorType type)
 			{
 				float morale = m_total_live - m_warrior_lives[type];
 				morale /= m_warrior_lives[type];
-				ptr = new CDragon(m_warrior_lives[type], m_warrior_no, morale);
+				ptr = new CDragon(m_warrior_lives[type], m_warrior_force[type], m_warrior_no, morale);
 			}
 			break;
 		case NINJA:
-			ptr = new CNinja(m_warrior_lives[type], m_warrior_no);
+			ptr = new CNinja(m_warrior_lives[type], m_warrior_force[type], m_warrior_no);
 			break;
 		case ICEMAN:
-			ptr = new CIceman(m_warrior_lives[type], m_warrior_no);
+			ptr = new CIceman(m_warrior_lives[type], m_warrior_force[type], m_warrior_no);
 			break;
 		case LION:
-			ptr = new CLion(m_warrior_lives[type], m_warrior_no,
+			ptr = new CLion(m_warrior_lives[type], m_warrior_force[type], m_warrior_no,
 				m_total_live - m_warrior_lives[type]);
 			break;
 		/*case WOLF:
-			ptr = new CWolf(m_warrior_lives[type], m_warrior_no);
+			ptr = new CWolf(m_warrior_lives[type], m_warrior_force[type],m_warrior_no);
 			break;*/
 		default:
-			ptr = new Warrior(type, m_warrior_lives[type], m_warrior_no);
+			ptr = new Warrior(type, m_warrior_lives[type], m_warrior_force[type], m_warrior_no);
 			break;
 		}
 	
@@ -466,8 +493,8 @@ int Headquarter::CanCreateWarrior()
 class RedHeadquarter : public Headquarter
 {
 public:
-	RedHeadquarter(int live, int lives[], int pos) 
-		:Headquarter(live, lives, RED, pos)
+	RedHeadquarter(int live, int lives[], int forces[], int pos) 
+		:Headquarter(live, lives, forces, RED, pos)
 	{
 		m_nextwarrior = ICEMAN;//iceman、lion、wolf、ninja、dragon	
 	};
@@ -515,8 +542,8 @@ Warrior* RedHeadquarter::CreateWarrior(void)
 class BlueHeadquarter : public Headquarter
 {
 public:
-	BlueHeadquarter(int live, int lives[], int pos) 
-		:Headquarter(live, lives, BLUE, pos)
+	BlueHeadquarter(int live, int lives[], int forces[], int pos) 
+		:Headquarter(live, lives, forces, BLUE, pos)
 	{
 		m_nextwarrior = LION; //lion、dragon、ninja、iceman、wolf		
 	};
@@ -580,6 +607,8 @@ public:
 	void SysRun();
 	void SysCreateWarrior();
 	void SysCheckLion();
+	void SysWarriorMove();
+	void SysWolfRobWappon();
 };
 
 void SystemOP::Init(int nCity, int nLoy, int nSyslive, int nMinutes, int *pLive,
@@ -593,8 +622,8 @@ void SystemOP::Init(int nCity, int nLoy, int nSyslive, int nMinutes, int *pLive,
 	m_SysMinutes = nMinutes;
 	m_pLiveWarrior = pLive;
 	m_pAttack = pAttack;
-	m_pRedHead = new RedHeadquarter(m_nSysLive, m_pLiveWarrior, 0);
-	m_pBlueHead = new BlueHeadquarter(m_nSysLive, m_pLiveWarrior, m_nCity+1);
+	m_pRedHead = new RedHeadquarter(m_nSysLive, m_pLiveWarrior, m_pAttack, 0);
+	m_pBlueHead = new BlueHeadquarter(m_nSysLive, m_pLiveWarrior, m_pAttack, m_nCity+1);
 }
 
 void SystemOP::DispTime()
@@ -622,13 +651,13 @@ void SystemOP::SysCreateWarrior(void)
 
 void SystemOP::SysCheckLion()
 {
-	Warrior *p = m_pRedHead->m_Warriorset.Begin();// .m_pWarriorset[0];
+	Warrior **p = m_pRedHead->m_Warriorset.Begin();// .m_pWarriorset[0];
 	
-	while (p != 0 && p != m_pRedHead->m_Warriorset.End())
+	while (*p != 0 && p != m_pRedHead->m_Warriorset.End())
 	{
-		if (p->type == LION)
+		if ((*p)->type == LION)
 		{
-			CLion *pLion = (CLion*)p;
+			CLion *pLion = (CLion*)(*p);
 			if (pLion->GetLoyalty() == 0)
 			{
 				DispTime();
@@ -639,11 +668,11 @@ void SystemOP::SysCheckLion()
 		p++;
 	}
 	p = m_pBlueHead->m_Warriorset.Begin();
-	while (p != 0 && p != m_pBlueHead->m_Warriorset.End())
+	while (*p != 0 && p != m_pBlueHead->m_Warriorset.End())
 	{
-		if (p->type == LION)
+		if ((*p)->type == LION)
 		{
-			CLion *pLion = (CLion*)p;
+			CLion *pLion = (CLion*)(*p);
 			if (pLion->GetLoyalty() == 0)
 			{
 				DispTime();
@@ -655,12 +684,29 @@ void SystemOP::SysCheckLion()
 	}
 }
 
-void SysWarriorMove()
+void SystemOP::SysWarriorMove()
+{
+	Warrior **p = m_pRedHead->m_Warriorset.Begin();// .m_pWarriorset[0];
+
+	while (*p != 0 && p != m_pRedHead->m_Warriorset.End())
+	{
+		DispTime();
+		(*p)->Move((void*)&m_nLoyalty);
+		p++;
+	}
+	p = m_pBlueHead->m_Warriorset.Begin();
+	while (*p != 0 && p != m_pBlueHead->m_Warriorset.End())
+	{
+		DispTime();
+		(*p)->Move((void*)&m_nLoyalty);
+		p++;
+	}
+}
+
+void SystemOP::SysWolfRobWappon()
 {
 
 }
-
-
 
 
 
@@ -682,6 +728,21 @@ void SystemOP::SysRun()
 			break;
 		case 10:  //武士前进
 			SysWarriorMove();
+			m_CurMinute = 35;
+			break;
+		case 35: //WOLF 抢夺武器
+			SysWolfRobWappon();
+			m_CurMinute = 40;
+			break;
+		case 40: //发生战斗
+			m_CurMinute = 50;
+			break;
+		case 50: //司令部报告声明元
+			m_CurMinute = 55;
+			break;
+		case 55: //武士报告武器状况
+			m_CurMinute = 0;
+			m_CurHour++;
 			break;
 		}
 	}
@@ -692,8 +753,6 @@ int main()
 	int cnt;
 
 	int live, nCity, nLoyalty, tEnd;
-	int hour_val = 0, minute_val =0;
-	int branch = 0;
 	int live_warrior[WARRIOR_NUM];
 	int attack_live[WARRIOR_NUM];
 
