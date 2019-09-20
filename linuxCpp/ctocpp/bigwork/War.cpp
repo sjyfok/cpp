@@ -39,19 +39,19 @@ class CWeapons
 {
 public:
 	CWeapons(string s, WeaponType wType) : m_Name(s),m_wType(wType){};
-	virtual int GetForce(int force = 0);
-	virtual int GetSelfInjury(int force = 0);
-	virtual int CheckWeapon();  //检查武器
+	virtual int GetInjury(int force = 0);
+	virtual int GetBackInjury(int force = 0);
+	virtual int CheckWeapon();  //检查武器是否可用
 	string m_Name;
 	WeaponType m_wType;
 };
 
-int CWeapons::GetForce(int force)
+int CWeapons::GetInjury(int force)
 {
 	return 0;
 }
 
-int CWeapons::GetSelfInjury(int force)
+int CWeapons::GetBackInjury(int force)
 {
 	return 0;
 }
@@ -77,6 +77,22 @@ public:
 		m_usedWeapon = 0;
 	}
 	virtual void Display();	
+	virtual void Yell()
+	{}
+	//缴获对方武器
+	void SwitchWeapon()
+	{
+		if (m_WCnt)
+		{
+			m_usedWeapon++;
+			if (m_usedWeapon >= m_WCnt)
+			{
+				m_usedWeapon = 0;
+			}
+		}
+	}
+
+	void SeizedWeapons(Warrior *pw);
 	void SetPos(int pos)
 	{
 		m_pos = pos;
@@ -90,51 +106,29 @@ public:
 	{
 		return m_WCnt;
 	}
-	void Move(void *data);
-
+	virtual void Move();
+	void DispPos();
 	void AddWeapon(CWeapons *pWeapon);
 	int CanRobWeaponsCnt();
+	int GetWeaponsCnt() //获得武器数量
+	{
+		return m_WCnt;
+	}
 	CWeapons* RemoveWeapon(int idx);
 	int Fight(Warrior *pWarrior);
 	//void AttackWith(CWeapons *pWeapon, Warrior *pWarrior);
-	void SubLive(int dlive);
+	void Injury(int dlive);
 	int GetLive()
 	{
 		return live;
 	}
 	
 	void Report();
-	void InitTerrer()
-	{
-		for (int i = 0; i < m_WCnt; i++)
-		{
-			m_terrer[i] = -1;
-		}
-	}
 
-	void SetTerrer(int f)
+	int GetForce()
 	{
-		m_terrer[m_usedWeapon] = f;
+		return m_force;
 	}
-
-	void EraseTerrer(int idx)
-	{
-		if (idx < m_WCnt)
-		{
-			int i;
-			for (i = idx; i < m_WCnt - 1; i++)
-			{
-				m_terrer[i] = m_terrer[i + 1];
-			}
-			m_terrer[i] = -1;
-		}
-	}
-	//friend bool operator<(const Warrior w1, const Warrior w2);
-	/*{
-	if (num < w.num)
-	return true;
-	return false;
-	}*/
 protected:
 	CWeapons *m_pWeapons[WEAPON_NUM];
 	int m_terrer[WEAPON_NUM];
@@ -174,6 +168,7 @@ public:
 	void Insert(Warrior *pWarrior);
 	Warrior** Begin();
 	Warrior** End();
+	Warrior** REnd();//返回最后一个有效记录 集合为空返回 NULL
 	void Remove(Warrior *pWarrior);	
 public:
 	int m_size;
@@ -193,7 +188,7 @@ void CWarriorSet::Remove(Warrior *pWarrior)
 			{
 				m_pWarriorset[j] = m_pWarriorset[j + 1];
 			}
-			delete pWarrior;
+		//	delete pWarrior;
 			m_used--;
 			break;
 		}
@@ -207,7 +202,16 @@ Warrior** CWarriorSet::Begin()
 
 Warrior** CWarriorSet::End()
 {
-	return &m_pWarriorset[m_used];
+	return &m_pWarriorset[m_used];	
+}
+
+Warrior** CWarriorSet::REnd()
+{
+	if (m_used)
+	{
+		return &m_pWarriorset[m_used - 1];
+	}
+	return NULL;
 }
 
 void CWarriorSet::Insert(Warrior *pWarrior)
@@ -293,22 +297,31 @@ class CBomb : public CWeapons
 public:
 	CBomb():CWeapons("bomb", BOMB)
 	{
+		m_nUsed = 1;  //bomb 只能用一次
 	}
-	virtual int GetForce(int f = 0);
-	virtual int GetSelfInjury(int force = 0);
+	virtual int GetInjury(int f = 0);
+	virtual int GetBackInjury(int force = 0);
+	virtual int CheckWeapon();  //检查武器
+	int m_nUsed;
 };
 
-int CBomb::GetSelfInjury(int f)
+int CBomb::CheckWeapon()
+{
+	return m_nUsed;
+}
+
+int CBomb::GetBackInjury(int f)
 {
 	float tmp = f;
 	tmp *= 0.5;
 	return (int)tmp;
 }
 
-int CBomb::GetForce(int f)
+int CBomb::GetInjury(int f)
 {
 	float tmp = f;
 	tmp *= 0.4;
+	m_nUsed--;
 	return (int)tmp;
 }
 
@@ -321,7 +334,7 @@ public:
 		m_nUsed = ARROW_USED_TOL;
 	}
 
-	virtual int GetForce(int f = 0);
+	virtual int GetInjury(int f = 0);
 	virtual int CheckWeapon();  //检查武器
 	int m_nUsed;  //使用次数  新武器可使用3次，用过3次后消亡
 };
@@ -331,7 +344,7 @@ int CArrow::CheckWeapon()
 	return m_nUsed;
 }
 
-int CArrow::GetForce(int f)
+int CArrow::GetInjury(int f)
 {
 	float tmp = f;
 	tmp *= 0.3;
@@ -367,10 +380,21 @@ public:
 	virtual void Display()
 	{
 		Warrior::Display();		
-		if (m_WCnt)
+	/*	if (m_WCnt)
 		{
 			cout << "It has a " << m_pWeapons[0]->m_Name << ",and it's morale is "
 				<< setprecision(2)<<fixed<< m_Morale << endl;
+		}*/
+	}
+	virtual void Yell()
+	{
+		if (m_pHeadquarter->m_Color == RED)
+		{
+			cout << " red dragon " << num << " yelled in city " << m_pos << endl;
+		}
+		else
+		{
+			cout << " blue dragon " << num << " yelled in city " << m_pos << endl;
 		}
 	}
 private:
@@ -409,8 +433,8 @@ public:
 	virtual void Display()
 	{
 		Warrior::Display();
-		cout << "It has a " << m_pWeapons[0]->m_Name << " and a "
-			<< m_pWeapons[1]->m_Name << endl;			
+		/*cout << "It has a " << m_pWeapons[0]->m_Name << " and a "
+			<< m_pWeapons[1]->m_Name << endl;	*/		
 	}
 };
 
@@ -440,10 +464,20 @@ public:
 	virtual void Display()
 	{
 		Warrior::Display();
-		cout << "It has a " << m_pWeapons[0]->m_Name << endl;
+		//cout << "It has a " << m_pWeapons[0]->m_Name << endl;
+	}
+	//iceman 每前进一步 消耗掉0.1的生命
+	virtual void Move()  
+	{
+		float flive = live;
+		flive *= 0.1;
+		live -= (int)flive;		
+		Warrior::Move();
 	}
 };
 
+//LION没前几一步 需要消耗的忠诚度
+int g_loy_use = 0;
 class CLion : public Warrior
 {
 public:
@@ -472,6 +506,12 @@ public:
 		Warrior::Display();
 		cout << "Its loyalty is " << m_loyalty << endl;
 	}
+	virtual void Move()
+	{
+		SubLoyalty(g_loy_use);
+		Warrior::Move();
+	}
+
 	int GetLoyalty()
 	{
 		return m_loyalty;
@@ -501,11 +541,27 @@ public:
 	{}
 	virtual void Display();
 	void RobWeapons(Warrior *pWarrior);
+	bool CanRobWeapons(Warrior *pWarrior); //判断是否可以抢夺
 };
 
 void CWolf::Display()
 {
 	Warrior::Display();
+}
+
+bool CWolf::CanRobWeapons(Warrior *pWarrior)
+{
+	//武器太多 
+	if (m_WCnt >= WARRIOR_NUM)
+	{
+		return false;
+	}
+	//对方没有武器
+	if (pWarrior->CanRobWeaponsCnt() <= 0)
+	{
+		return false;
+	}
+	return true;
 }
 
 void CWolf::RobWeapons(Warrior *pWarrior)
@@ -546,28 +602,24 @@ void CWolf::RobWeapons(Warrior *pWarrior)
 	}
 }
 
-void Warrior::Move(void *pdata)
+void Warrior::Move()
+{
+	if (m_pHeadquarter->m_Color == RED)
+		++m_pos;
+	else		
+		--m_pos;
+}
+
+void Warrior::DispPos()
 {
 	if (m_pHeadquarter->m_Color == RED)
 		cout << " red " << m_Name[type] << " " << num
-		<< " marched to city " << ++m_pos << " with " << live
+		<< " marched to city " << m_pos << " with " << live
 		<< " elements and force " << m_force << endl;
 	else
 		cout << " blue " << m_Name[type] << " " << num
-		<< " marched to city " << --m_pos << " with " << live
+		<< " marched to city " << m_pos << " with " << live
 		<< " elements and force " << m_force << endl;
-	if (this->type == LION)
-	{
-		int loy = *(int*)pdata;
-		CLion *pLion = (CLion*)this;
-		pLion->SubLoyalty(loy);
-	}
-	if (this->type == ICEMAN)  //没前进一步 减少10%的生命
-	{
-		float flive = live;
-		flive *= 0.1;
-		live -= (int)flive;
-	}
 }
 
 int Warrior::CanRobWeaponsCnt()
@@ -653,6 +705,45 @@ void Warrior::AddWeapon(CWeapons *pWeapon)
 	}
 }
 
+//缴获武器
+void Warrior::SeizedWeapons(Warrior *pw)
+{
+	if (m_WCnt < WARRIOR_NUM)
+	{
+		CWeapons *pWeapon;
+		int fnRob = 0;//实际被抢走的武器数量
+		int nWeapon = pw->GetWeaponsCnt();
+		while (nRob)
+		{
+			fnRob++;
+			--nRob;
+			pWeapon = pw->RemoveWeapon(nRob);
+			AddWeapon(pWeapon);
+			if (m_WCnt >= WARRIOR_NUM)
+			{
+				break;
+			}
+		}
+		if (fnRob)
+		{
+			if (m_pHeadquarter->m_Color == RED)
+			{
+				cout << " red wolf " << num << " took " << fnRob
+					<< " " << pWeapon->m_Name <<
+					" from red " << pWarrior->m_Name[pWarrior->type]
+					<< " " << pWarrior->num << " in city " << m_pos << endl;
+			}
+			else
+			{
+				cout << " blue wolf " << num << " took " << fnRob
+					<< " " << pWeapon->m_Name <<
+					" from red " << pWarrior->m_Name[pWarrior->type]
+					<< " " << pWarrior->num << " in city " << m_pos << endl;
+			}
+		}
+	}
+}
+
 void Warrior::Display()
 {
 	//	if ( group == RED)
@@ -674,7 +765,10 @@ void Warrior::Display()
 	}
 }
 
-void Warrior::SubLive(int dlive)
+
+
+
+void Warrior::Injury(int dlive)
 {
 	live -= dlive;
 }
@@ -687,48 +781,66 @@ void Warrior::SubLive(int dlive)
 //返回0表示失败 返回1 表示平局 返回2 表示胜利 返回3表示需要继续战斗
 int Warrior::Fight(Warrior *pWarrior)
 {
-	int rsl = 3;
-	//双方都没有武器 算平局
-	if (GetWeaponCnt() == 0 && pWarrior->GetWeaponCnt() == 0)
+	//
+	if (GetWeaponCnt())
 	{
-		rsl = 1;  //平局
+		CWeapons *pWeapon = m_pWeapons[m_usedWeapon];
+		int hurt = pWeapon->GetInjury(m_force);
+		pWarrior->Injury(hurt);
+		hurt = pWeapon->GetBackInjury(hurt);
+		Injury(hurt);
+		if (!pWeapon->CheckWeapon())
+		{
+			RemoveWeapon(m_usedWeapon);
+		}
+		SwitchWeapon();
 	}
-	else
-	{
-		CWeapons *pWeapon;
-		pWeapon = m_pWeapons[m_usedWeapon];
-		int force = pWeapon->GetForce(m_force);
+	
 
-		pWarrior->SubLive(force);
-		if (pWeapon->m_wType == BOMB)
-		{
-			force = pWeapon->GetSelfInjury(force);  //参考对敌的伤害
-			SubLive(force);
-		}
-		if (pWeapon->m_wType == ARROW)
-		{
-			if (!pWeapon->CheckWeapon())
-			{
-				EraseTerrer(m_usedWeapon);
-				RemoveWeapon(m_usedWeapon);
-			}
-		}
 
-		//检查胜败
-		if (GetLive() <= 0)
-		{
-			//双方都死了
-			if (pWarrior->GetLive() <= 0)
-				rsl = 1;		 //平局
-			else rsl = 0; //失败 //自己死了对方还活着
-		}
-		else if (pWarrior->GetLive() <= 0)
-		{
-			rsl = 2; //对方死了 胜利
-		}		
-	}
 
-	return rsl;
+	//int rsl = 3;
+	////双方都没有武器 算平局
+	//if (GetWeaponCnt() == 0 && pWarrior->GetWeaponCnt() == 0)
+	//{
+	//	rsl = 1;  //平局
+	//}
+	//else
+	//{
+	//	CWeapons *pWeapon;
+	//	pWeapon = m_pWeapons[m_usedWeapon];
+	//	int force = pWeapon->GetForce(m_force);
+
+	//	pWarrior->SubLive(force);
+	//	if (pWeapon->m_wType == BOMB)
+	//	{
+	//		force = pWeapon->GetSelfInjury(force);  //参考对敌的伤害
+	//		SubLive(force);
+	//	}
+	//	if (pWeapon->m_wType == ARROW)
+	//	{
+	//		if (!pWeapon->CheckWeapon())
+	//		{
+	//			EraseTerrer(m_usedWeapon);
+	//			RemoveWeapon(m_usedWeapon);
+	//		}
+	//	}
+
+	//	//检查胜败
+	//	if (GetLive() <= 0)
+	//	{
+	//		//双方都死了
+	//		if (pWarrior->GetLive() <= 0)
+	//			rsl = 1;		 //平局
+	//		else rsl = 0; //失败 //自己死了对方还活着
+	//	}
+	//	else if (pWarrior->GetLive() <= 0)
+	//	{
+	//		rsl = 2; //对方死了 胜利
+	//	}		
+	//}
+
+	//return rsl;
 }
 
 void Warrior::Report()
@@ -943,6 +1055,8 @@ public:
 	int *m_pAttack;
 	RedHeadquarter *m_pRedHead;
 	BlueHeadquarter *m_pBlueHead;
+	CWarriorSet *m_pCity;
+	
 
 
 	void Init(int nCity, int nLoy, int nSysLive, int nMinutes, int *pLive,
@@ -957,6 +1071,8 @@ public:
 	void SysFight();
 	void SysReportHeader();
 	void SysReportWarrior();
+private:
+	bool SysFightIsOver(Warrior *pw1, Warrior *pw2);
 };
 
 void SystemOP::Init(int nCity, int nLoy, int nSyslive, int nMinutes, int *pLive,
@@ -970,6 +1086,8 @@ void SystemOP::Init(int nCity, int nLoy, int nSyslive, int nMinutes, int *pLive,
 	m_SysMinutes = nMinutes;
 	m_pLiveWarrior = pLive;
 	m_pAttack = pAttack;
+	g_loy_use = m_nLoyalty;
+	m_pCity = new CWarriorSet[nCity];
 	m_pRedHead = new RedHeadquarter(m_nSysLive, m_pLiveWarrior, m_pAttack, 0);
 	m_pBlueHead = new BlueHeadquarter(m_nSysLive, m_pLiveWarrior, m_pAttack, m_nCity+1);
 }
@@ -1023,7 +1141,9 @@ void SystemOP::SysCheckLion()
 			{
 				DispTime();
 				pLion->Runaway();
+				m_pCity[pLion->GetPos() - 1].Remove(pLion);
 				m_pRedHead->m_Warriorset.Remove(pLion);
+				delete pLion;
 			}
 		}
 		p++;
@@ -1038,7 +1158,9 @@ void SystemOP::SysCheckLion()
 			{
 				DispTime();
 				pLion->Runaway();
+				m_pCity[pLion->GetPos() - 1].Remove(pLion);
 				m_pBlueHead->m_Warriorset.Remove(pLion);
+				delete pLion;
 			}
 		}
 		p++;
@@ -1051,206 +1173,380 @@ void SystemOP::SysWarriorMove()
 
 	while (*p != 0 && p != m_pRedHead->m_Warriorset.End())
 	{
-		DispTime();
-		(*p)->Move((void*)&m_nLoyalty);
+		if ((*p)->GetPos() != 0)
+		{
+			m_pCity[(*p)->GetPos()-1].Remove(*p);
+		}		
+		(*p)->Move();
+		m_pCity[(*p)->GetPos()-1].Insert(*p);
+
 		p++;
 	}
 	p = m_pBlueHead->m_Warriorset.Begin();
 	while (*p != 0 && p != m_pBlueHead->m_Warriorset.End())
 	{
-		DispTime();
-		(*p)->Move((void*)&m_nLoyalty);
+		if ((*p)->GetPos() != m_nCity+1)
+		{
+			m_pCity[(*p)->GetPos()-1].Remove(*p);
+		}
+		(*p)->Move();
+		m_pCity[(*p)->GetPos()-1].Insert(*p);
 		p++;
+	}
+
+	for (int i = 0; i < m_nCity; i++)
+	{
+		Warrior **pw1, **pw2;
+		switch (m_pCity[i].m_used)
+		{
+		default:
+			break;
+		case 1:
+			pw1 = m_pCity[i].Begin();
+			DispTime();
+			(*pw1)->DispPos();
+			break;
+		case 2:
+			pw1 = m_pCity[i].Begin();
+			pw2 = pw1 + 1;
+			if ((*pw1)->m_pHeadquarter->m_Color == RED)
+			{
+				DispTime();
+				(*pw1)->DispPos();
+				DispTime();
+				(*pw2)->DispPos();
+			}
+			else
+			{
+				DispTime();
+				(*pw2)->DispPos();
+				DispTime();
+				(*pw1)->DispPos();
+			}
+		}		
 	}
 }
 
 void SystemOP::SysWolfRobWappon()
 {
-	//先找到RED的WOLF 然后去变量BLUE的武士 找到在同一城市的武士,抢夺武器
-	//
-	Warrior **p = m_pRedHead->m_Warriorset.Begin();// .m_pWarriorset[0];
-
-	while (*p != 0 && p != m_pRedHead->m_Warriorset.End())
+	//按城市遍历
+	int i = 0;
+	for (i = 0; i < m_nCity; i++)
 	{
-		if ((*p)->type == WOLF)
+		if (m_pCity[i].m_used >= 2)
 		{
-			int nCity = (*p)->GetPos();
-			Warrior **pT = m_pBlueHead->m_Warriorset.Begin();
-			while (*pT != 0 && pT != m_pBlueHead->m_Warriorset.End())
+			Warrior **p1, **p2;
+			CWolf *pWolf;
+			p1 = m_pCity[i].Begin();
+			p2 = p1 + 1;
+			//两个武士当中有一个WOLF，WOLF将抢夺对方的武器
+			if ((*p1)->type == WOLF && (*p2)->type != WOLF)
 			{
-				if ((*pT)->GetPos() == nCity && (*pT)->type != WOLF)
+				pWolf = (CWolf*)(*p1);
+				if (pWolf->CanRobWeapons(*p2))
 				{
-					//抢夺武器
-					CWolf *pWolf = (CWolf*)(*p);
 					DispTime();
-					pWolf->RobWeapons(*pT);
+					pWolf->RobWeapons(*p2);
 				}
-				pT++;
 			}
-		}		
-		p++;
-	}
-	p = m_pBlueHead->m_Warriorset.Begin();
-	while (*p != 0 && p != m_pBlueHead->m_Warriorset.End())
-	{
-		if ((*p)->type == WOLF)
-		{
-			int nCity = (*p)->GetPos();
-			Warrior **pT = m_pRedHead->m_Warriorset.Begin();
-			while (*pT != 0 && pT != m_pRedHead->m_Warriorset.End())
+			if ((*p1)->type != WOLF && (*p2)->type == WOLF)
 			{
-				if ((*pT)->GetPos() == nCity && (*pT)->type != WOLF)
+				pWolf = (CWolf*)(*p2);
+				if (pWolf->CanRobWeapons(*p1))
 				{
-					//抢夺武器
-					CWolf *pWolf = (CWolf*)(*p);
-					pWolf->RobWeapons(*pT);
+					DispTime();
+					pWolf->RobWeapons(*p1);
 				}
-				pT++;
-			}
-		}		
-		p++;
+			}			
+		}
 	}
+	////先找到RED的WOLF 然后去变量BLUE的武士 找到在同一城市的武士,抢夺武器
+	////
+	//Warrior **p = m_pRedHead->m_Warriorset.Begin();// .m_pWarriorset[0];
+
+	//while (*p != 0 && p != m_pRedHead->m_Warriorset.End())
+	//{
+	//	if ((*p)->type == WOLF)
+	//	{
+	//		int nCity = (*p)->GetPos();
+	//		Warrior **pT = m_pBlueHead->m_Warriorset.Begin();
+	//		while (*pT != 0 && pT != m_pBlueHead->m_Warriorset.End())
+	//		{
+	//			if ((*pT)->GetPos() == nCity && (*pT)->type != WOLF)
+	//			{
+	//				//抢夺武器
+	//				CWolf *pWolf = (CWolf*)(*p);
+	//				DispTime();
+	//				pWolf->RobWeapons(*pT);
+	//			}
+	//			pT++;
+	//		}
+	//	}		
+	//	p++;
+	//}
+	//p = m_pBlueHead->m_Warriorset.Begin();
+	//while (*p != 0 && p != m_pBlueHead->m_Warriorset.End())
+	//{
+	//	if ((*p)->type == WOLF)
+	//	{
+	//		int nCity = (*p)->GetPos();
+	//		Warrior **pT = m_pRedHead->m_Warriorset.Begin();
+	//		while (*pT != 0 && pT != m_pRedHead->m_Warriorset.End())
+	//		{
+	//			if ((*pT)->GetPos() == nCity && (*pT)->type != WOLF)
+	//			{
+	//				//抢夺武器
+	//				CWolf *pWolf = (CWolf*)(*p);
+	//				pWolf->RobWeapons(*pT);
+	//			}
+	//			pT++;
+	//		}
+	//	}		
+	//	p++;
+	//}
+}
+
+
+bool SystemOP::SysFightIsOver(Warrior *pw1, Warrior *pw2)
+{
+	//1一方已经死掉
+	if (pw1->GetLive() > 0 && pw2->GetLive() <= 0)
+	{
+		DispTime();
+		if (pw1->m_pHeadquarter->m_Color == RED)
+		{
+			cout << " red " << pw1->m_Name[pw1->type] << " " << pw1->num
+				<< " killed blue " << pw2->m_Name[pw2->type]
+				<< " " << pw2->num << " in city " << pw1->GetPos()
+				<< " remaining " << pw1->GetLive() << " elements" << endl;
+		}
+		else
+		{
+			cout << " blue " << pw1->m_Name[pw1->type] << " " << pw1->num
+				<< " killed red " << pw2->m_Name[pw2->type]
+				<< " " << pw2->num << " in city " << pw1->GetPos()
+				<< " remaining " << pw1->GetLive() << " elements" << endl;
+		}
+		return true;
+	}
+	else if (pw1->GetLive() <= 0 && pw2->GetLive() > 0)
+	{
+		DispTime();
+		if (pw2->m_pHeadquarter->m_Color == RED)
+		{
+			cout << " red " << pw2->m_Name[pw2->type] << " " << pw2->num
+				<< " killed blue " << pw1->m_Name[pw1->type]
+				<< " " << pw1->num << " in city " << pw2->GetPos()
+				<< " remaining " << pw2->GetLive() << " elements" << endl;
+		}
+		else
+		{
+			cout << " blue " << pw2->m_Name[pw2->type] << " " << pw2->num
+				<< " killed red " << pw1->m_Name[pw1->type]
+				<< " " << pw1->num << " in city " << pw2->GetPos()
+				<< " remaining " << pw2->GetLive() << " elements" << endl;
+		}
+		return true;
+	}
+	//2 上方都死掉
+	if (pw1->GetLive() <= 0 && pw2->GetLive() <= 0)
+	{
+		DispTime();
+		if (pw1->m_pHeadquarter->m_Color == RED)
+		{
+			cout << " both red " << pw1->m_Name[pw1->type] << " " << pw1->num
+				<< " and blue " << pw2->m_Name[pw2->type] << " " << pw2->num
+				<< " died in city " << pw1->GetPos() << endl;
+		}
+		else
+		{
+			cout << " both red " << pw2->m_Name[pw2->type] << " " << pw2->num
+				<< " and blue " << pw1->m_Name[pw1->type] << " " << pw1->num
+				<< " died in city " << pw2->GetPos() << endl;
+		}
+		return true;
+	}
+	//3双方都没有武器 结束战斗
+	if (pw1->GetWeaponCnt() == 0 &&
+		pw2->GetWeaponCnt() == 0)
+	{
+		DispTime();
+		if (pw1->m_pHeadquarter->m_Color == RED)
+		{
+			cout << " both red " << pw1->m_Name[pw1->type]
+				<< " " << pw1->num << " and blue " <<
+				pw2->m_Name[pw2->type] << " " << pw2->num
+				<< " were alive in " << "city " << pw1->GetPos()
+				<< endl;
+		}
+		else
+		{
+			cout << " both red " << pw2->m_Name[pw2->type]
+				<< " " << pw2->num << " and blue " <<
+				pw1->m_Name[pw1->type] << " " << pw1->num
+				<< " were alive in " << "city " << pw1->GetPos()
+				<< endl;
+		}
+		return true;
+	}	
+	//4双方的攻击力太弱 不能对对方造成伤害
+	if (pw1->GetForce() <= 1 && pw2->GetForce() <= 1)
+	{
+		DispTime();
+		if (pw1->m_pHeadquarter->m_Color == RED)
+		{
+			cout << " both red " << pw1->m_Name[pw1->type]
+				<< " " << pw1->num << " and blue " <<
+				pw2->m_Name[pw2->type] << " " << pw2->num
+				<< " were alive in " << "city " << pw1->GetPos()
+				<< endl;
+		}
+		else
+		{
+			cout << " both red " << pw2->m_Name[pw2->type]
+				<< " " << pw2->num << " and blue " <<
+				pw1->m_Name[pw1->type] << " " << pw1->num
+				<< " were alive in " << "city " << pw1->GetPos()
+				<< endl;
+		}
+		return true;
+	}
+	return false;  //没有分出胜负
 }
 
 void SystemOP::SysFight()  
 {
-	//发生战斗必须决出生死 除非双方都无法杀死对方 才停止战斗
-	//遍历武士集合 找到对决得武士，然后开始战斗
-	Warrior **p = m_pRedHead->m_Warriorset.Begin();// .m_pWarriorset[0];
-
-	while (*p != 0 && p != m_pRedHead->m_Warriorset.End())
+	//变量城市 找到有两个武士的开始战斗
+	int i = 0;
+	for (i = 0; i < m_nCity; i++)
 	{
-		int nCity = (*p)->GetPos();
-		Warrior **pT = m_pBlueHead->m_Warriorset.Begin();
-		while (*pT != 0 && pT != m_pBlueHead->m_Warriorset.End())
+		if (m_pCity[i].m_used >= 2)
 		{
-			if ((*pT)->GetPos() == nCity) //找到了对决的武士
+			Warrior **p1, **p2;
+			p1 = m_pCity[i].Begin();
+			p2 = p1 + 1;
+			if ((i+1)%2) //奇数
 			{
-				(*p)->InitTerrer();  //初始化统计结构 当双方的攻击力都退化成0时 做出平局的判断
-				(*pT)->InitTerrer();
-				if (nCity % 2) //奇数  红先攻击
+				while (!SysFightIsOver(*p1, *p2))  //部分胜负
 				{
-					int ret = (*p)->Fight(*pT);
-					if (ret == 0)
+					//红方先进攻
+					if ((*p1)->m_pHeadquarter->m_Color == RED
+						&& (*p2)->m_pHeadquarter->m_Color == BLUE)
 					{
-						DispTime();
-						cout << " red " << endl;
+						(*p1)->Fight(*p2);
+						if (SysFightIsOver(*p1, *p2))
+							break;
+						//还击
+						(*p2)->Fight(*p1);
+						if (SysFightIsOver(*p1, *p2))
+							break;
 					}
-					else if (ret == 1)
+					else if ((*p1)->m_pHeadquarter->m_Color == BLUE
+						&& (*p2)->m_pHeadquarter->m_Color == RED)
 					{
-						DispTime();
-						cout << " == " << endl;
+						(*p2)->Fight(*p1);
+						if (SysFightIsOver(*p1, *p2))
+							break;
+						//还击
+						(*p1)->Fight(*p2);
+						if (SysFightIsOver(*p1, *p2))
+							break;						
 					}
-					else  if (ret == 2)
-					{
-						DispTime();
-						cout << " blue " << endl;
-					}
-					else {
-						while (ret >= 3) //继续战斗
-						{
-							ret = (*pT)->Fight(*p);
-							if (ret == 0)
-							{
-								DispTime();
-								cout << " blue " << endl;
-							}
-							else if (ret == 1)
-							{
-								DispTime();
-								cout << " == " << endl;
-							}
-							else  if (ret == 2)
-							{
-								DispTime();
-								cout << " red " << endl;
-							}
-							else
-							{
-								ret = (*p)->Fight(*pT);
-								if (ret == 0)
-								{
-									DispTime();
-									cout << " red " << endl;
-								}
-								else if (ret == 1)
-								{
-									DispTime();
-									cout << " == " << endl;
-								}
-								else  if (ret == 2)
-								{
-									DispTime();
-									cout << " blue " << endl;
-								}
-							}
-						}
-					}
+				}
+				//战斗结束  将牺牲的武士清除
+				Headquarter *pHeadquarter;
+				if ((*p1)->GetLive() <= 0)
+				{
+					pHeadquarter = (*p1)->m_pHeadquarter;
+					m_pCity[i].Remove(*p1);
+					pHeadquarter->m_Warriorset.Remove(*p1);
+					delete *p1;
 				}
 				else
 				{
-					int ret = (*pT)->Fight(*p); 
-					if (ret == 0)
+					if ((*p1)->type == DRAGON)
 					{
 						DispTime();
-						cout << " blue " << endl;
+						(*p1)->Yell();
 					}
-					else if (ret == 1)
+				}
+				if ((*p2)->GetLive() <= 0)
+				{
+					pHeadquarter = (*p2)->m_pHeadquarter;
+					m_pCity[i].Remove(*p2);
+					pHeadquarter->m_Warriorset.Remove(*p2);
+					delete *p2;
+				}
+				else
+				{
+					if ((*p2)->type == DRAGON)
 					{
 						DispTime();
-						cout << " == " << endl;
+						(*p2)->Yell();
 					}
-					else  if (ret == 2)
-					{
-						DispTime();
-						cout << " red " << endl;
-					}
-					else {
-						while (ret >= 3) //继续战斗
-						{
-							ret = (*p)->Fight(*pT); 
-							if (ret == 0)
-							{
-								DispTime();
-								cout << " red " << endl;
-							}
-							else if (ret == 1)
-							{
-								DispTime();
-								cout << " == " << endl;
-							}
-							else  if (ret == 2)
-							{
-								DispTime();
-								cout << " blue " << endl;
-							}
-							else
-							{
-								ret = (*pT)->Fight(*p); //(*p)->Fight(*pT);
-								if (ret == 0)
-								{
-									DispTime();
-									cout << " blue " << endl;
-								}
-								else if (ret == 1)
-								{
-									DispTime();
-									cout << " == " << endl;
-								}
-								else  if (ret == 2)
-								{
-									DispTime();
-									cout << " red " << endl;
-								}
-							}
-						}
-					}					
-				}				
+				}
 			}
-			pT++;
-		}
-		p++;
-	}
+			else
+			{
+				while (!SysFightIsOver(*p1, *p2))
+				{
+					//蓝方先攻击
+					if ((*p1)->m_pHeadquarter->m_Color == BLUE
+						&& (*p2)->m_pHeadquarter->m_Color == RED)
+					{
+						(*p1)->Fight(*p2);
+						if (SysFightIsOver(*p1, *p2))
+							break;
+						(*p2)->Fight(*p1);
+						if (SysFightIsOver(*p1, *p2))
+							break;						
+					}
+					else if ((*p1)->m_pHeadquarter->m_Color == RED
+						&& (*p2)->m_pHeadquarter->m_Color == BLUE)
+					{
+						(*p2)->Fight(*p1);
+						if (SysFightIsOver(*p1, *p2))
+							break;
+						(*p1)->Fight(*p2);
+						if (SysFightIsOver(*p1, *p2))
+							break;
+					}
+				}
+				//战斗结束  将牺牲的武士清除
+				Headquarter *pHeadquarter;
+				if ((*p1)->GetLive() <= 0)
+				{
+					pHeadquarter = (*p1)->m_pHeadquarter;
+					m_pCity[i].Remove(*p1);
+					pHeadquarter->m_Warriorset.Remove(*p1);
+					delete *p1;
+				}
+				else
+				{
+					if ((*p1)->type == DRAGON)
+					{
+						DispTime();
+						(*p1)->Yell();
+					}
+				}
+				if ((*p2)->GetLive() <= 0)
+				{
+					pHeadquarter = (*p2)->m_pHeadquarter;
+					m_pCity[i].Remove(*p2);
+					pHeadquarter->m_Warriorset.Remove(*p2);
+					delete *p2;
+				}
+				else
+				{
+					if ((*p2)->type == DRAGON)
+					{
+						DispTime();
+						(*p2)->Yell();
+					}
+				}
+			}
+		}		
+	}	
 }
 
 
@@ -1265,21 +1561,71 @@ void SystemOP::SysReportHeader()
 
 void SystemOP::SysReportWarrior()
 {
-	Warrior **p = m_pRedHead->m_Warriorset.Begin();// .m_pWarriorset[0];
+	//从城市编号由小到大 先显示RED 后显示BLUE
+	int i = 0;
+	for (i = 0; i < m_nCity; i++)
+	{
+		Warrior **p;
+		p = m_pCity[i].Begin();
+		while (*p != 0 && p != m_pCity[i].End())
+		{
+			if ((*p)->m_pHeadquarter->m_Color == RED)
+			{
+				DispTime();				
+				(*p)->Report();
+			}
+			p++;
+		}		
+	}
 
-	while (*p != 0 && p != m_pRedHead->m_Warriorset.End())
+	for (i = 0; i < m_nCity; i++)
 	{
-		DispTime();
-		(*p)->Report();
-		p++;
+		Warrior **p;
+		p = m_pCity[i].Begin();
+		while (*p != 0 && p != m_pCity[i].End())
+		{
+			if ((*p)->m_pHeadquarter->m_Color == BLUE)
+			{
+				DispTime();
+				(*p)->Report();
+			}
+			p++;
+		}
 	}
-	p = m_pBlueHead->m_Warriorset.Begin();
-	while (*p != 0 && p != m_pBlueHead->m_Warriorset.End())
-	{
-		DispTime();
-		(*p)->Report();
-		p++;
-	}
+
+	//Warrior **p = m_pRedHead->m_Warriorset.REnd();// .m_pWarriorset[0];
+
+	//if (p != NULL)
+	//{
+	//	while (p != m_pRedHead->m_Warriorset.Begin())
+	//	{
+	//		DispTime();
+	//		(*p)->Report();
+	//		p--;
+	//	}
+	//	if (p == m_pRedHead->m_Warriorset.Begin())
+	//	{
+	//		DispTime();
+	//		(*p)->Report();
+	//	}
+	//}
+	//
+	//p = m_pBlueHead->m_Warriorset.REnd();
+	//if (p != NULL)
+	//{
+	//	while (p != m_pBlueHead->m_Warriorset.Begin())
+	//	{
+	//		DispTime();
+	//		(*p)->Report();
+	//		p--;
+	//	}
+	//	if (p == m_pBlueHead->m_Warriorset.Begin())
+	//	{
+	//		DispTime();
+	//		(*p)->Report();
+	//	}
+	//}
+	
 }
 
 void SystemOP::SysRun()
