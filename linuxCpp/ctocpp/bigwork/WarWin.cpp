@@ -1,16 +1,11 @@
 #include <iostream>
 #include <iomanip>
-///////////////////////////////
-#include <fstream>
-///////////////////////////////
+
 
 using namespace std;
 
 
-///////////////////////////////////
-ofstream fout("datapub.tout");
-ifstream fin("datapub.in");
-///////////////////////////////////
+
 
 enum WarriorType
 {
@@ -431,7 +426,7 @@ public:
 		Warrior::Display();		
 	/*	if (m_WCnt)
 		{
-			fout << "It has a " << m_pWeapons[0]->m_Name << ",and it's morale is "
+			cout << "It has a " << m_pWeapons[0]->m_Name << ",and it's morale is "
 				<< setprecision(2)<<fixed<< m_Morale << endl;
 		}*/
 	}
@@ -439,11 +434,11 @@ public:
 	{
 		if (m_pHeadquarter->m_Color == RED)
 		{
-			fout << " red dragon " << num << " yelled in city " << m_pos << endl;
+			cout << " red dragon " << num << " yelled in city " << m_pos << endl;
 		}
 		else
 		{
-			fout << " blue dragon " << num << " yelled in city " << m_pos << endl;
+			cout << " blue dragon " << num << " yelled in city " << m_pos << endl;
 		}
 	}
 private:
@@ -482,7 +477,7 @@ public:
 	virtual void Display()
 	{
 		Warrior::Display();
-		/*fout << "It has a " << m_pWeapons[0]->m_Name << " and a "
+		/*cout << "It has a " << m_pWeapons[0]->m_Name << " and a "
 			<< m_pWeapons[1]->m_Name << endl;	*/		
 	}
 };
@@ -513,7 +508,7 @@ public:
 	virtual void Display()
 	{
 		Warrior::Display();
-		//fout << "It has a " << m_pWeapons[0]->m_Name << endl;
+		//cout << "It has a " << m_pWeapons[0]->m_Name << endl;
 	}
 	//iceman 每前进一步 消耗掉0.1的生命
 	virtual void Move()  
@@ -553,7 +548,7 @@ public:
 	virtual void Display()
 	{
 		Warrior::Display();
-		fout << "Its loyalty is " << m_loyalty << endl;
+		cout << "Its loyalty is " << m_loyalty << endl;
 	}
 	virtual void Move()
 	{
@@ -577,10 +572,10 @@ public:
 	void Runaway(void)
 	{
 		if (m_pHeadquarter->m_Color == RED)
-			fout << " red " << m_Name[type] << " " << num
+			cout << " red " << m_Name[type] << " " << num
 			<< " ran away" << endl;
 		else
-			fout << " blue " << m_Name[type] << " " << num
+			cout << " blue " << m_Name[type] << " " << num
 				<< " ran away" << endl;		
 	}
 private:
@@ -640,14 +635,14 @@ void CWolf::RobWeapons(Warrior *pWarrior)
 			pWarrior->RemoveWeapon();
 			if (m_pHeadquarter->m_Color == RED)
 			{
-				fout << " red wolf " << num << " took " << fnRob
+				cout << " red wolf " << num << " took " << fnRob
 					<< " " << pWeapon->m_Name <<
 					" from blue " << pWarrior->m_Name[pWarrior->type]
 					<< " " << pWarrior->num << " in city " << m_pos << endl;					
 			}
 			else
 			{
-				fout << " blue wolf " << num << " took " << fnRob
+				cout << " blue wolf " << num << " took " << fnRob
 					<< " " << pWeapon->m_Name <<
 					" from red " << pWarrior->m_Name[pWarrior->type]
 					<< " " << pWarrior->num << " in city " << m_pos << endl;
@@ -671,22 +666,22 @@ void Warrior::DispPos()
 	if (m_pos == m_aim_pos)
 	{
 		if (m_pHeadquarter->m_Color == RED)
-			fout << " red " << m_Name[type] << " " << num
+			cout << " red " << m_Name[type] << " " << num
 			<< " reached blue headquarter with " << live
 			<< " elements and force " << m_force << endl;
 		else
-			fout << " blue " << m_Name[type] << " " << num
+			cout << " blue " << m_Name[type] << " " << num
 			<< " reached red headquarter witch " << live
 			<< " elements and force " << m_force << endl;
 	}
 	else
 	{
 		if (m_pHeadquarter->m_Color == RED)
-			fout << " red " << m_Name[type] << " " << num
+			cout << " red " << m_Name[type] << " " << num
 			<< " marched to city " << m_pos << " with " << live
 			<< " elements and force " << m_force << endl;
 		else
-			fout << " blue " << m_Name[type] << " " << num
+			cout << " blue " << m_Name[type] << " " << num
 			<< " marched to city " << m_pos << " with " << live
 			<< " elements and force " << m_force << endl;
 	}
@@ -746,7 +741,7 @@ void Warrior::RemoveWeapon()
 		{
 			int j = i+1;
 			int k = i;
-			for (; j < m_WCnt; j ++, k ++)
+			for (; j < m_WCnt; j ++, k++)
 			{
 				m_pWeapons[k] = m_pWeapons[j];
 				m_owned[k] = m_owned[j];
@@ -882,7 +877,7 @@ void Warrior::Display()
 	//	if ( group == RED)
 	if(m_pHeadquarter->m_Color == RED)
 	{
-		fout << " red " << m_Name[type] << " " << num <<
+		cout << " red " << m_Name[type] << " " << num <<
 			" born" << endl;
 		/*with strength " << live << ", " << 
 			m_pHeadquarter->GetWarriorCnt(type) << " " <<
@@ -890,7 +885,7 @@ void Warrior::Display()
 	}
 	else
 	{
-		fout << " blue " << m_Name[type] << " " << num <<
+		cout << " blue " << m_Name[type] << " " << num <<
 			" born" << endl;
 			/*with strength " << live << "," << 
 			m_pHeadquarter->GetWarriorCnt(type) << " " <<
@@ -946,14 +941,14 @@ void Warrior::Report()
 	}
 	if (m_pHeadquarter->m_Color == RED)
 	{
-		fout << " red " << m_Name[type] << " " << num
+		cout << " red " << m_Name[type] << " " << num
 			<< " has " << weapon[SWORD] << " sword "
 			<< weapon[BOMB] << " bomb " << weapon[ARROW]
 			<< " arrow and " << live << " elements" << endl;
 	}
 	else
 	{
-		fout << " blue " << m_Name[type] << " " << num
+		cout << " blue " << m_Name[type] << " " << num
 			<< " has " << weapon[SWORD] << " sword "
 			<< weapon[BOMB] << " bomb " << weapon[ARROW]
 			<< " arrow and " << live << " elements" << endl;
@@ -1040,7 +1035,7 @@ public:
 	Warrior* CreateWarrior();
 	void DispLive()
 	{
-		fout << " " << m_total_live << " elements in red headquarter" << endl;
+		cout << " " << m_total_live << " elements in red headquarter" << endl;
 	}
 //	void Warrior::Display();
 //private:
@@ -1092,7 +1087,7 @@ public:
 	Warrior*  CreateWarrior();
 	void DispLive()
 	{
-		fout << " " << m_total_live << " elements in blue headquarter" << endl;
+		cout << " " << m_total_live << " elements in blue headquarter" << endl;
 	}
 	WarriorType m_nextwarrior;
 
@@ -1204,7 +1199,7 @@ bool SystemOP::CheckTimeOver()
 
 void SystemOP::DispTime()
 {
-	fout << fixed << setw(3) << setfill('0')
+	cout << fixed << setw(3) << setfill('0')
 		<< m_CurHour << ":"	<< setw(2) << setfill('0') << m_CurMinute;	
 }
 
@@ -1405,13 +1400,13 @@ void SystemOP::SysWarriorMove()
 	if (m_pCity[m_pRedHead->m_pos].m_used)
 	{
 		DispTime();
-		fout << " red headquarter was taken" << endl;
+		cout << " red headquarter was taken" << endl;
 		m_game_is_over = true;
 	}
 	if (m_pCity[m_pBlueHead->m_pos].m_used)
 	{
 		DispTime();
-		fout << " blue headquarter was taken" << endl;
+		cout << " blue headquarter was taken" << endl;
 		m_game_is_over = true;
 	}
 }
@@ -1462,14 +1457,14 @@ bool SystemOP::SysFightIsOver(Warrior *pw1, Warrior *pw2)
 		DispTime();
 		if (pw1->m_pHeadquarter->m_Color == RED)
 		{
-			fout << " red " << pw1->m_Name[pw1->type] << " " << pw1->num
+			cout << " red " << pw1->m_Name[pw1->type] << " " << pw1->num
 				<< " killed blue " << pw2->m_Name[pw2->type]
 				<< " " << pw2->num << " in city " << pw1->m_pos
 				<< " remaining " << pw1->live << " elements" << endl;
 		}
 		else
 		{
-			fout << " blue " << pw1->m_Name[pw1->type] << " " << pw1->num
+			cout << " blue " << pw1->m_Name[pw1->type] << " " << pw1->num
 				<< " killed red " << pw2->m_Name[pw2->type]
 				<< " " << pw2->num << " in city " << pw1->m_pos
 				<< " remaining " << pw1->live << " elements" << endl;
@@ -1483,14 +1478,14 @@ bool SystemOP::SysFightIsOver(Warrior *pw1, Warrior *pw2)
 		DispTime();
 		if (pw2->m_pHeadquarter->m_Color == RED)
 		{
-			fout << " red " << pw2->m_Name[pw2->type] << " " << pw2->num
+			cout << " red " << pw2->m_Name[pw2->type] << " " << pw2->num
 				<< " killed blue " << pw1->m_Name[pw1->type]
 				<< " " << pw1->num << " in city " << pw2->m_pos
 				<< " remaining " << pw2->live << " elements" << endl;
 		}
 		else
 		{
-			fout << " blue " << pw2->m_Name[pw2->type] << " " << pw2->num
+			cout << " blue " << pw2->m_Name[pw2->type] << " " << pw2->num
 				<< " killed red " << pw1->m_Name[pw1->type]
 				<< " " << pw1->num << " in city " << pw2->m_pos
 				<< " remaining " << pw2->live << " elements" << endl;
@@ -1503,13 +1498,13 @@ bool SystemOP::SysFightIsOver(Warrior *pw1, Warrior *pw2)
 		DispTime();
 		if (pw1->m_pHeadquarter->m_Color == RED)
 		{
-			fout << " both red " << pw1->m_Name[pw1->type] << " " << pw1->num
+			cout << " both red " << pw1->m_Name[pw1->type] << " " << pw1->num
 				<< " and blue " << pw2->m_Name[pw2->type] << " " << pw2->num
 				<< " died in city " << pw1->m_pos << endl;
 		}
 		else
 		{
-			fout << " both red " << pw2->m_Name[pw2->type] << " " << pw2->num
+			cout << " both red " << pw2->m_Name[pw2->type] << " " << pw2->num
 				<< " and blue " << pw1->m_Name[pw1->type] << " " << pw1->num
 				<< " died in city " << pw2->m_pos << endl;
 		}
@@ -1521,7 +1516,7 @@ bool SystemOP::SysFightIsOver(Warrior *pw1, Warrior *pw2)
 		DispTime();
 		if (pw1->m_pHeadquarter->m_Color == RED)
 		{
-			fout << " both red " << pw1->m_Name[pw1->type]
+			cout << " both red " << pw1->m_Name[pw1->type]
 				<< " " << pw1->num << " and blue " <<
 				pw2->m_Name[pw2->type] << " " << pw2->num
 				<< " were alive in " << "city " << pw1->m_pos
@@ -1529,7 +1524,7 @@ bool SystemOP::SysFightIsOver(Warrior *pw1, Warrior *pw2)
 		}
 		else
 		{
-			fout << " both red " << pw2->m_Name[pw2->type]
+			cout << " both red " << pw2->m_Name[pw2->type]
 				<< " " << pw2->num << " and blue " <<
 				pw1->m_Name[pw1->type] << " " << pw1->num
 				<< " were alive in " << "city " << pw1->m_pos
@@ -1543,7 +1538,7 @@ bool SystemOP::SysFightIsOver(Warrior *pw1, Warrior *pw2)
 		DispTime();
 		if (pw1->m_pHeadquarter->m_Color == RED)
 		{
-			fout << " both red " << pw1->m_Name[pw1->type]
+			cout << " both red " << pw1->m_Name[pw1->type]
 				<< " " << pw1->num << " and blue " <<
 				pw2->m_Name[pw2->type] << " " << pw2->num
 				<< " were alive in " << "city " << pw1->m_pos
@@ -1551,7 +1546,7 @@ bool SystemOP::SysFightIsOver(Warrior *pw1, Warrior *pw2)
 		}
 		else
 		{
-			fout << " both red " << pw2->m_Name[pw2->type]
+			cout << " both red " << pw2->m_Name[pw2->type]
 				<< " " << pw2->num << " and blue " <<
 				pw1->m_Name[pw1->type] << " " << pw1->num
 				<< " were alive in " << "city " << pw1->m_pos
@@ -1805,27 +1800,27 @@ int main()
 
 	
 	
-	fin >> cnt;
+	cin >> cnt;
 	
 	for (int i = 0; i < cnt; i++)
 	{
-		fin >> live >> nCity >> nLoyalty >> tEnd;
+		cin >> live >> nCity >> nLoyalty >> tEnd;
 
 		for (int j = 0; j < WARRIOR_NUM; j++)
 		{
-			fin >> live_warrior[j];
+			cin >> live_warrior[j];
 		}
 		//武士攻击时的攻击力
 		for (int j = 0; j < WARRIOR_NUM; j++)
 		{
-			fin >> attack_live[j];
+			cin >> attack_live[j];
 		}
 
 
 		SystemOP sysOp;	
 		sysOp.Init(nCity, nLoyalty, live, tEnd, live_warrior, attack_live);
 				
-		fout << "Case " << i + 1 << ":" << endl;		
+		cout << "Case " << i + 1 << ":" << endl;		
 		sysOp.SysRun();
 		sysOp.Release();
 	}
