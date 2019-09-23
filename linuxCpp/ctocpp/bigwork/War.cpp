@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+
 ///////////////////////////////
 #include <fstream>
 ///////////////////////////////
@@ -51,13 +52,19 @@ public:
 	virtual int GetInjury(int force = 0);
 	virtual int GetBackInjury(Warrior *pw, int force = 0);
 	virtual int CheckWeapon();  //检查武器是否可用
+	virtual int MeasureInjury(int force = 0);
 	string m_Name;
 	WeaponType m_wType;
 };
 
-int CWeapons::GetInjury(int force)
+int CWeapons::MeasureInjury(int force)
 {
 	return 0;
+}
+
+int CWeapons::GetInjury(int force)
+{
+	return MeasureInjury(force);
 }
 
 int CWeapons::GetBackInjury(Warrior *pw, int force)
@@ -88,6 +95,8 @@ public:
 		m_pHeadquarter = NULL;
 		m_WCnt = 0;
 		m_usedWeapon = 0;
+		m_live_rec = 0;
+		m_weapon_rec = 0;
 	}
 	virtual ~Warrior()
 	{
@@ -124,7 +133,7 @@ public:
 	}
 
 	virtual void Move();
-	void DispPos();	
+	bool DispPos();	//显示武士所在的位置 如果已经到达对方司令部 返回 true 否则返回 false
 	void AddWeapon(CWeapons *pWeapon);
 	int CanRobWeaponsCnt();
 	WeaponType GetWeaponType(int idx)
@@ -158,6 +167,7 @@ public:
 	//void AttackWith(CWeapons *pWeapon, Warrior *pWarrior);
 	void Injury(int dlive);
 	void Report();
+	bool IsStaChange(); //判断武士在战斗中 武器状态和生命力的编号情况  不变返回1 编号返回0
 	//战斗开始前整理武器
 	int ResetWeapon()
 	{
@@ -166,12 +176,10 @@ public:
 protected:
 	CWeapons *m_pWeapons[WEAPON_NUM];
 	bool m_owned[WEAPON_NUM]; //表示对武器的拥有情况 当值为flash时，表示不再拥有此武器 表示被缴获
-	int m_usedWeapon;
-	
-	
-	
+	int m_usedWeapon;	
 	int m_aim_pos;  //目标
-
+	int m_live_rec; //记录生命力变化情况
+	int m_weapon_rec; //记录武器变化情况
 };
 
 
@@ -327,14 +335,20 @@ public:
 		
 	}
 	virtual int GetInjury(int force = 0);
+	virtual int MeasureInjury(int force = 0);
 };
 
-int CSword::GetInjury(int f)
+int CSword::MeasureInjury(int f)
 {
 	float tmp;
 	tmp = f;
 	tmp *= 0.2;
-	return (int)tmp;
+	return (int) tmp;
+}
+
+int CSword::GetInjury(int f)
+{
+	return MeasureInjury(f);
 }
 
 class CBomb : public CWeapons
@@ -347,6 +361,7 @@ public:
 	virtual int GetInjury(int f = 0);
 	virtual int GetBackInjury(Warrior *pw, int force = 0);
 	virtual int CheckWeapon();  //检查武器
+	virtual int MeasureInjury(int force = 0);
 	int m_nUsed;
 };
 
@@ -366,12 +381,18 @@ int CBomb::GetBackInjury(Warrior *pw, int f)
 	return (int)tmp;
 }
 
-int CBomb::GetInjury(int f)
+int CBomb::MeasureInjury(int f)
 {
 	float tmp = f;
 	tmp *= 0.4;
-	m_nUsed--;
 	return (int)tmp;
+}
+
+int CBomb::GetInjury(int f)
+{
+	int rsl = MeasureInjury(f);
+	m_nUsed--;
+	return rsl;
 }
 
 class CArrow : public CWeapons
@@ -385,6 +406,7 @@ public:
 
 	virtual int GetInjury(int f = 0);
 	virtual int CheckWeapon();  //检查武器
+	virtual int MeasureInjury(int force = 0);
 	int m_nUsed;  //使用次数  新武器可使用3次，用过3次后消亡
 };
 
@@ -393,12 +415,18 @@ int CArrow::CheckWeapon()
 	return m_nUsed;
 }
 
+int CArrow::MeasureInjury(int force)
+{
+	float tmp = force;
+	tmp *= 0.3;
+	return (int)tmp;
+}
+
 int CArrow::GetInjury(int f)
 {
-	float tmp = f;
-	tmp *= 0.3;
+	int rsl = MeasureInjury(f);
 	m_nUsed--;
-	return (int)tmp;
+	return rsl;
 }
 
 class CDragon : public Warrior
@@ -665,8 +693,8 @@ void Warrior::Move()
 }
 
 
-
-void Warrior::DispPos()
+//显示武士所在的位置 如果已经到达对方司令部 返回 true 否则返回 false
+bool Warrior::DispPos()
 {
 	if (m_pos == m_aim_pos)
 	{
@@ -676,8 +704,9 @@ void Warrior::DispPos()
 			<< " elements and force " << m_force << endl;
 		else
 			fout << " blue " << m_Name[type] << " " << num
-			<< " reached red headquarter witch " << live
+			<< " reached red headquarter with " << live
 			<< " elements and force " << m_force << endl;
+		return true;
 	}
 	else
 	{
@@ -689,6 +718,7 @@ void Warrior::DispPos()
 			fout << " blue " << m_Name[type] << " " << num
 			<< " marched to city " << m_pos << " with " << live
 			<< " elements and force " << m_force << endl;
+		return false;
 	}
 }
 
@@ -746,7 +776,7 @@ void Warrior::RemoveWeapon()
 		{
 			int j = i+1;
 			int k = i;
-			for (; j < m_WCnt; j ++, k ++)
+			for (; j < m_WCnt; j ++, k++)
 			{
 				m_pWeapons[k] = m_pWeapons[j];
 				m_owned[k] = m_owned[j];
@@ -910,6 +940,54 @@ void Warrior::Injury(int dlive)
 //{
 //	
 //}
+
+bool Warrior::IsStaChange()
+{
+	int i = 0;
+	//武器状态变化情况
+	bool weapon_sta = true; //变化
+	if (m_WCnt <= 0)
+	{
+		weapon_sta = false; //不变
+	}
+	else
+	{
+		if (m_weapon_rec == m_usedWeapon)
+		{
+			CWeapons *pWeapon = m_pWeapons[m_usedWeapon];
+			if (pWeapon->m_wType == SWORD)
+			{
+				weapon_sta = false;
+			}
+		}
+		m_weapon_rec = m_usedWeapon;
+	}
+
+	bool live_sta = true;
+	if (m_live_rec == live)
+	{
+		live_sta = false;
+	}
+	m_live_rec = live;
+
+	return (live_sta | weapon_sta);
+	/*if (live_sta && weapon_sta)
+	{
+
+	}
+
+
+	while (i < m_WCnt)
+	{
+		CWeapons *pWeapons = m_pWeapons[i];
+		if (pWeapons->MeasureInjury(m_force) < 1)
+			return true;
+		i++;
+	}
+	if (m_WCnt == 0)
+		return true;
+	return false;*/
+}
 
 //返回0表示失败 返回1 表示平局 返回2 表示胜利 返回3表示需要继续战斗
 int Warrior::Fight(Warrior *pWarrior)
@@ -1163,6 +1241,7 @@ public:
 private:
 	bool SysFightIsOver(Warrior *pw1, Warrior *pw2);
 	bool SysLionRunaway(Warrior *pw);
+	void SysCheckTakeover(int pos);
 	bool m_game_is_over;
 };
 
@@ -1194,7 +1273,7 @@ void SystemOP::Release() //析构
 bool SystemOP::CheckTimeOver()
 {
 	int total = m_CurHour * 60 + m_CurMinute;
-	if (total >= m_SysMinutes)
+	if (total > m_SysMinutes)
 	{
 		return false;
 	}
@@ -1369,7 +1448,7 @@ void SystemOP::SysWarriorMove()
 		}
 	}
 
-		
+	//输出位置信息
 	for (i = 0; i < m_nCity; i++)
 	{
 		Warrior **pw1, **pw2;
@@ -1380,7 +1459,8 @@ void SystemOP::SysWarriorMove()
 		case 1:
 			pw1 = m_pCity[i].Begin();
 			DispTime();
-			(*pw1)->DispPos();
+			if ((*pw1)->DispPos())
+				SysCheckTakeover((*pw1)->m_pos);
 			break;
 		case 2:
 			pw1 = m_pCity[i].Begin();
@@ -1388,21 +1468,43 @@ void SystemOP::SysWarriorMove()
 			if ((*pw1)->m_pHeadquarter->m_Color == RED)
 			{
 				DispTime();
-				(*pw1)->DispPos();
+				if ((*pw1)->DispPos())
+					SysCheckTakeover((*pw1)->m_pos);
 				DispTime();
-				(*pw2)->DispPos();
+				if ((*pw2)->DispPos())
+					SysCheckTakeover((*pw2)->m_pos);
 			}
 			else
 			{
 				DispTime();
-				(*pw2)->DispPos();
+				if((*pw2)->DispPos())
+					SysCheckTakeover((*pw2)->m_pos);
 				DispTime();
-				(*pw1)->DispPos();
+				if ((*pw1)->DispPos())
+					SysCheckTakeover((*pw1)->m_pos);
 			}
 		}		
 	}
+	
+}
+
+void SystemOP::SysCheckTakeover(int pos)
+{
 	//判断司令部是否被占领
-	if (m_pCity[m_pRedHead->m_pos].m_used)
+	if (m_pRedHead->m_pos == pos)
+	{
+		DispTime();
+		fout << " red headquarter was taken" << endl;
+		m_game_is_over = true;
+	}
+	if (m_pBlueHead->m_pos == pos)
+	{
+		DispTime();
+		fout << " blue headquarter was taken" << endl;
+		m_game_is_over = true;
+
+	}
+	/*if (m_pCity[m_pRedHead->m_pos].m_used)
 	{
 		DispTime();
 		fout << " red headquarter was taken" << endl;
@@ -1413,7 +1515,7 @@ void SystemOP::SysWarriorMove()
 		DispTime();
 		fout << " blue headquarter was taken" << endl;
 		m_game_is_over = true;
-	}
+	}*/
 }
 
 void SystemOP::SysWolfRobWappon()
@@ -1537,8 +1639,8 @@ bool SystemOP::SysFightIsOver(Warrior *pw1, Warrior *pw2)
 		}
 		return true;
 	}	
-	//4双方的攻击力太弱 不能对对方造成伤害
-	if (pw1->m_force <= 1 && pw2->m_force <= 1)
+	//4判断两个武士之间的战争还有继续下去的必要吗？  双方具有的武器攻击力太弱 不能对对方造成伤害
+	if ((!pw1->IsStaChange()) && (!pw2->IsStaChange()))
 	{
 		DispTime();
 		if (pw1->m_pHeadquarter->m_Color == RED)
@@ -1566,8 +1668,10 @@ void SystemOP::SysFight()
 {
 	//变量城市 找到有两个武士的开始战斗
 	int i = 0;
+	bool fight = true;
 	for (i = 1; i < m_nCity-1; i++)
-	{
+	{		
+		fight = true;
 		if (m_pCity[i].m_used >= 2)
 		{
 			Warrior **p1, **p2;
@@ -1577,30 +1681,25 @@ void SystemOP::SysFight()
 			(*p2)->ResetWeapon();
 			if (i%2) //奇数
 			{
-				while (!SysFightIsOver(*p1, *p2))  //部分胜负
+			//	while (!SysFightIsOver(*p1, *p2))  //部分胜负
+				while (fight)// !SysFightIsOver(*p1, *p2))  //部分胜负
 				{
 					//红方先进攻
 					if ((*p1)->m_pHeadquarter->m_Color == RED
 						&& (*p2)->m_pHeadquarter->m_Color == BLUE)
 					{
 						(*p1)->Fight(*p2);
-						if (SysFightIsOver(*p1, *p2))
-							break;
-						//还击
-						(*p2)->Fight(*p1);
-						if (SysFightIsOver(*p1, *p2))
-							break;
+						if ((*p2)->live > 0) //还击
+							(*p2)->Fight(*p1);
+						fight = !SysFightIsOver(*p1, *p2);
 					}
 					else if ((*p1)->m_pHeadquarter->m_Color == BLUE
 						&& (*p2)->m_pHeadquarter->m_Color == RED)
 					{
 						(*p2)->Fight(*p1);
-						if (SysFightIsOver(*p1, *p2))
-							break;
-						//还击
-						(*p1)->Fight(*p2);
-						if (SysFightIsOver(*p1, *p2))
-							break;						
+						if ((*p1)->live > 0)
+							(*p1)->Fight(*p2);
+						fight = !SysFightIsOver(*p1, *p2);								
 					}
 				}
 				//战斗结束  将牺牲的武士清除
@@ -1641,28 +1740,24 @@ void SystemOP::SysFight()
 			}
 			else
 			{
-				while (!SysFightIsOver(*p1, *p2))
+				while (fight)
 				{
 					//蓝方先攻击
 					if ((*p1)->m_pHeadquarter->m_Color == BLUE
 						&& (*p2)->m_pHeadquarter->m_Color == RED)
 					{
 						(*p1)->Fight(*p2);
-						if (SysFightIsOver(*p1, *p2))
-							break;
-						(*p2)->Fight(*p1);
-						if (SysFightIsOver(*p1, *p2))
-							break;						
+						if ((*p2)->live > 0) //还击
+							(*p2)->Fight(*p1);
+						fight = !SysFightIsOver(*p1, *p2);							
 					}
 					else if ((*p1)->m_pHeadquarter->m_Color == RED
 						&& (*p2)->m_pHeadquarter->m_Color == BLUE)
 					{
 						(*p2)->Fight(*p1);
-						if (SysFightIsOver(*p1, *p2))
-							break;
-						(*p1)->Fight(*p2);
-						if (SysFightIsOver(*p1, *p2))
-							break;
+						if ((*p1)->live > 0)
+							(*p1)->Fight(*p2);
+						fight = !SysFightIsOver(*p1, *p2);						
 					}
 				}
 				//战斗结束  将牺牲的武士清除
