@@ -13,7 +13,9 @@ namespace ConsoleDev
             int A = Convert.ToInt32(Console.ReadLine());
             int B = Convert.ToInt32(Console.ReadLine());
 
-            Console.WriteLine("{0}+{1}={2}", A, B, A+B);
+            int sum = A + B;
+            Console.WriteLine("{0}+{1}={2}", A, B, sum);
+
         }
     }
 }

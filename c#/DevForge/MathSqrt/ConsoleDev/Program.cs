@@ -10,8 +10,10 @@ namespace ConsoleDev
     {
         static void Main(string[] args)
         {
-            string name = Console.ReadLine();
-            Console.WriteLine("Welcome {0}", name);
+            double num = Convert.ToDouble(Console.ReadLine());
+            double rsl = Math.Sqrt(num);
+
+            Console.WriteLine("{0:F3}\n", rsl);            
         }
     }
 }
