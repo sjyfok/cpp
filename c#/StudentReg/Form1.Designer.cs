@@ -28,25 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.textStudentNum = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.textSpecialty = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.textPhoneNum = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.textBox7 = new System.Windows.Forms.TextBox();
+            this.textZip = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.textBox8 = new System.Windows.Forms.TextBox();
+            this.textAddress = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.radioFemale = new System.Windows.Forms.RadioButton();
+            this.radioMale = new System.Windows.Forms.RadioButton();
             this.textBirthday = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.textIDNumber = new System.Windows.Forms.TextBox();
@@ -54,15 +54,23 @@
             this.label11 = new System.Windows.Forms.Label();
             this.textStudentName = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
-            this.radioMale = new System.Windows.Forms.RadioButton();
-            this.radioFemale = new System.Windows.Forms.RadioButton();
-            this.listboxStudents = new System.Windows.Forms.ListBox();
             this.label13 = new System.Windows.Forms.Label();
-            this.textTime = new System.Windows.Forms.TextBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.checkProfessional = new System.Windows.Forms.CheckBox();
+            this.checkNum = new System.Windows.Forms.CheckBox();
             this.btnRegister = new System.Windows.Forms.Button();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.labRegTime = new System.Windows.Forms.Label();
+            this.lsvStudentInfo = new System.Windows.Forms.ListView();
+            this.columnNameHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnNumHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnMaleHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnDepartHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnProfessionalHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnClassHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.cboDepartmant = new System.Windows.Forms.ComboBox();
+            this.cboProfessional = new System.Windows.Forms.ComboBox();
+            this.cboClass = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -70,13 +78,13 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.textBox4);
+            this.groupBox1.Controls.Add(this.cboClass);
+            this.groupBox1.Controls.Add(this.cboProfessional);
+            this.groupBox1.Controls.Add(this.cboDepartmant);
+            this.groupBox1.Controls.Add(this.textStudentNum);
             this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Controls.Add(this.textBox3);
             this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.textBox2);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.textBox1);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(566, 43);
             this.groupBox1.Name = "groupBox1";
@@ -84,60 +92,12 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             // 
-            // label1
+            // textStudentNum
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 23);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(53, 12);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "系    部";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(93, 18);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 21);
-            this.textBox1.TabIndex = 1;
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(93, 42);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 21);
-            this.textBox2.TabIndex = 3;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 47);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(53, 12);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "专    业";
-            // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(93, 66);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(100, 21);
-            this.textBox3.TabIndex = 5;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(8, 71);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(53, 12);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "班    级";
-            // 
-            // textBox4
-            // 
-            this.textBox4.Location = new System.Drawing.Point(93, 90);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(100, 21);
-            this.textBox4.TabIndex = 7;
+            this.textStudentNum.Location = new System.Drawing.Point(93, 90);
+            this.textStudentNum.Name = "textStudentNum";
+            this.textStudentNum.Size = new System.Drawing.Size(100, 21);
+            this.textStudentNum.TabIndex = 7;
             // 
             // label4
             // 
@@ -148,15 +108,42 @@
             this.label4.TabIndex = 6;
             this.label4.Text = "学    号";
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(8, 71);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(53, 12);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "班    级";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(8, 47);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(53, 12);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "专    业";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(8, 23);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(53, 12);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "系    部";
+            // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.textBox5);
+            this.groupBox2.Controls.Add(this.textSpecialty);
             this.groupBox2.Controls.Add(this.label5);
-            this.groupBox2.Controls.Add(this.textBox6);
+            this.groupBox2.Controls.Add(this.textPhoneNum);
             this.groupBox2.Controls.Add(this.label6);
-            this.groupBox2.Controls.Add(this.textBox7);
+            this.groupBox2.Controls.Add(this.textZip);
             this.groupBox2.Controls.Add(this.label7);
-            this.groupBox2.Controls.Add(this.textBox8);
+            this.groupBox2.Controls.Add(this.textAddress);
             this.groupBox2.Controls.Add(this.label8);
             this.groupBox2.Location = new System.Drawing.Point(300, 43);
             this.groupBox2.Name = "groupBox2";
@@ -164,12 +151,12 @@
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             // 
-            // textBox5
+            // textSpecialty
             // 
-            this.textBox5.Location = new System.Drawing.Point(93, 90);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(100, 21);
-            this.textBox5.TabIndex = 7;
+            this.textSpecialty.Location = new System.Drawing.Point(93, 90);
+            this.textSpecialty.Name = "textSpecialty";
+            this.textSpecialty.Size = new System.Drawing.Size(100, 21);
+            this.textSpecialty.TabIndex = 7;
             // 
             // label5
             // 
@@ -180,12 +167,12 @@
             this.label5.TabIndex = 6;
             this.label5.Text = "特    长";
             // 
-            // textBox6
+            // textPhoneNum
             // 
-            this.textBox6.Location = new System.Drawing.Point(93, 66);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(100, 21);
-            this.textBox6.TabIndex = 5;
+            this.textPhoneNum.Location = new System.Drawing.Point(93, 66);
+            this.textPhoneNum.Name = "textPhoneNum";
+            this.textPhoneNum.Size = new System.Drawing.Size(100, 21);
+            this.textPhoneNum.TabIndex = 5;
             // 
             // label6
             // 
@@ -196,12 +183,12 @@
             this.label6.TabIndex = 4;
             this.label6.Text = "电    话";
             // 
-            // textBox7
+            // textZip
             // 
-            this.textBox7.Location = new System.Drawing.Point(93, 42);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(100, 21);
-            this.textBox7.TabIndex = 3;
+            this.textZip.Location = new System.Drawing.Point(93, 42);
+            this.textZip.Name = "textZip";
+            this.textZip.Size = new System.Drawing.Size(100, 21);
+            this.textZip.TabIndex = 3;
             // 
             // label7
             // 
@@ -212,12 +199,12 @@
             this.label7.TabIndex = 2;
             this.label7.Text = "邮    编";
             // 
-            // textBox8
+            // textAddress
             // 
-            this.textBox8.Location = new System.Drawing.Point(93, 18);
-            this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(100, 21);
-            this.textBox8.TabIndex = 1;
+            this.textAddress.Location = new System.Drawing.Point(93, 18);
+            this.textAddress.Name = "textAddress";
+            this.textAddress.Size = new System.Drawing.Size(100, 21);
+            this.textAddress.TabIndex = 1;
             // 
             // label8
             // 
@@ -244,6 +231,30 @@
             this.groupBox3.Size = new System.Drawing.Size(200, 131);
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
+            // 
+            // radioFemale
+            // 
+            this.radioFemale.AutoSize = true;
+            this.radioFemale.Location = new System.Drawing.Point(151, 44);
+            this.radioFemale.Name = "radioFemale";
+            this.radioFemale.Size = new System.Drawing.Size(35, 16);
+            this.radioFemale.TabIndex = 9;
+            this.radioFemale.Text = "女";
+            this.radioFemale.UseVisualStyleBackColor = true;
+            this.radioFemale.CheckedChanged += new System.EventHandler(this.radioFemale_CheckedChanged);
+            // 
+            // radioMale
+            // 
+            this.radioMale.AutoSize = true;
+            this.radioMale.Checked = true;
+            this.radioMale.Location = new System.Drawing.Point(99, 44);
+            this.radioMale.Name = "radioMale";
+            this.radioMale.Size = new System.Drawing.Size(35, 16);
+            this.radioMale.TabIndex = 8;
+            this.radioMale.TabStop = true;
+            this.radioMale.Text = "男";
+            this.radioMale.UseVisualStyleBackColor = true;
+            this.radioMale.CheckedChanged += new System.EventHandler(this.radioMale_CheckedChanged);
             // 
             // textBirthday
             // 
@@ -302,37 +313,6 @@
             this.label12.TabIndex = 0;
             this.label12.Text = "姓    名";
             // 
-            // radioMale
-            // 
-            this.radioMale.AutoSize = true;
-            this.radioMale.Location = new System.Drawing.Point(99, 44);
-            this.radioMale.Name = "radioMale";
-            this.radioMale.Size = new System.Drawing.Size(35, 16);
-            this.radioMale.TabIndex = 8;
-            this.radioMale.TabStop = true;
-            this.radioMale.Text = "男";
-            this.radioMale.UseVisualStyleBackColor = true;
-            // 
-            // radioFemale
-            // 
-            this.radioFemale.AutoSize = true;
-            this.radioFemale.Location = new System.Drawing.Point(151, 44);
-            this.radioFemale.Name = "radioFemale";
-            this.radioFemale.Size = new System.Drawing.Size(35, 16);
-            this.radioFemale.TabIndex = 9;
-            this.radioFemale.TabStop = true;
-            this.radioFemale.Text = "女";
-            this.radioFemale.UseVisualStyleBackColor = true;
-            // 
-            // listboxStudents
-            // 
-            this.listboxStudents.FormattingEnabled = true;
-            this.listboxStudents.ItemHeight = 12;
-            this.listboxStudents.Location = new System.Drawing.Point(34, 229);
-            this.listboxStudents.Name = "listboxStudents";
-            this.listboxStudents.Size = new System.Drawing.Size(732, 136);
-            this.listboxStudents.TabIndex = 3;
-            // 
             // label13
             // 
             this.label13.AutoSize = true;
@@ -342,33 +322,31 @@
             this.label13.TabIndex = 4;
             this.label13.Text = "注册时间";
             // 
-            // textTime
+            // checkProfessional
             // 
-            this.textTime.Enabled = false;
-            this.textTime.Location = new System.Drawing.Point(103, 399);
-            this.textTime.Name = "textTime";
-            this.textTime.Size = new System.Drawing.Size(131, 21);
-            this.textTime.TabIndex = 5;
+            this.checkProfessional.AutoSize = true;
+            this.checkProfessional.Checked = true;
+            this.checkProfessional.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkProfessional.Location = new System.Drawing.Point(265, 404);
+            this.checkProfessional.Name = "checkProfessional";
+            this.checkProfessional.Size = new System.Drawing.Size(72, 16);
+            this.checkProfessional.TabIndex = 6;
+            this.checkProfessional.Text = "显示专业";
+            this.checkProfessional.UseVisualStyleBackColor = true;
+            this.checkProfessional.CheckedChanged += new System.EventHandler(this.checkProfessional_CheckedChanged);
             // 
-            // checkBox1
+            // checkNum
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(265, 404);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(72, 16);
-            this.checkBox1.TabIndex = 6;
-            this.checkBox1.Text = "显示专业";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
-            // checkBox2
-            // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(357, 404);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(72, 16);
-            this.checkBox2.TabIndex = 7;
-            this.checkBox2.Text = "显示学号";
-            this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkNum.AutoSize = true;
+            this.checkNum.Checked = true;
+            this.checkNum.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkNum.Location = new System.Drawing.Point(357, 404);
+            this.checkNum.Name = "checkNum";
+            this.checkNum.Size = new System.Drawing.Size(72, 16);
+            this.checkNum.TabIndex = 7;
+            this.checkNum.Text = "显示学号";
+            this.checkNum.UseVisualStyleBackColor = true;
+            this.checkNum.CheckedChanged += new System.EventHandler(this.checkNum_CheckedChanged);
             // 
             // btnRegister
             // 
@@ -382,25 +360,110 @@
             // 
             // dateTimePicker1
             // 
+            this.dateTimePicker1.ImeMode = System.Windows.Forms.ImeMode.On;
             this.dateTimePicker1.Location = new System.Drawing.Point(103, 426);
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.Size = new System.Drawing.Size(205, 21);
             this.dateTimePicker1.TabIndex = 9;
-            this.dateTimePicker1.Value = new System.DateTime(2019, 9, 26, 17, 7, 0, 0);
             this.dateTimePicker1.Visible = false;
+            // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 1000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // labRegTime
+            // 
+            this.labRegTime.AutoSize = true;
+            this.labRegTime.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.labRegTime.Location = new System.Drawing.Point(107, 403);
+            this.labRegTime.Name = "labRegTime";
+            this.labRegTime.Size = new System.Drawing.Size(2, 14);
+            this.labRegTime.TabIndex = 10;
+            // 
+            // lsvStudentInfo
+            // 
+            this.lsvStudentInfo.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnNameHeader,
+            this.columnNumHeader,
+            this.columnMaleHeader,
+            this.columnDepartHeader,
+            this.columnProfessionalHeader,
+            this.columnClassHeader});
+            this.lsvStudentInfo.Location = new System.Drawing.Point(34, 194);
+            this.lsvStudentInfo.Name = "lsvStudentInfo";
+            this.lsvStudentInfo.Size = new System.Drawing.Size(725, 171);
+            this.lsvStudentInfo.TabIndex = 0;
+            this.lsvStudentInfo.UseCompatibleStateImageBehavior = false;
+            this.lsvStudentInfo.View = System.Windows.Forms.View.Details;
+            // 
+            // columnNameHeader
+            // 
+            this.columnNameHeader.Text = "姓    名";
+            this.columnNameHeader.Width = 120;
+            // 
+            // columnNumHeader
+            // 
+            this.columnNumHeader.Text = "学    号";
+            this.columnNumHeader.Width = 120;
+            // 
+            // columnMaleHeader
+            // 
+            this.columnMaleHeader.Text = "性    别";
+            this.columnMaleHeader.Width = 120;
+            // 
+            // columnDepartHeader
+            // 
+            this.columnDepartHeader.Text = "院    系";
+            this.columnDepartHeader.Width = 120;
+            // 
+            // columnProfessionalHeader
+            // 
+            this.columnProfessionalHeader.Text = "专    业";
+            this.columnProfessionalHeader.Width = 120;
+            // 
+            // columnClassHeader
+            // 
+            this.columnClassHeader.Text = "班    级";
+            this.columnClassHeader.Width = 120;
+            // 
+            // cboDepartmant
+            // 
+            this.cboDepartmant.FormattingEnabled = true;
+            this.cboDepartmant.Location = new System.Drawing.Point(93, 18);
+            this.cboDepartmant.Name = "cboDepartmant";
+            this.cboDepartmant.Size = new System.Drawing.Size(100, 20);
+            this.cboDepartmant.TabIndex = 8;
+            // 
+            // cboProfessional
+            // 
+            this.cboProfessional.FormattingEnabled = true;
+            this.cboProfessional.Location = new System.Drawing.Point(93, 42);
+            this.cboProfessional.Name = "cboProfessional";
+            this.cboProfessional.Size = new System.Drawing.Size(100, 20);
+            this.cboProfessional.TabIndex = 9;
+            // 
+            // cboClass
+            // 
+            this.cboClass.FormattingEnabled = true;
+            this.cboClass.Location = new System.Drawing.Point(93, 66);
+            this.cboClass.Name = "cboClass";
+            this.cboClass.Size = new System.Drawing.Size(100, 20);
+            this.cboClass.TabIndex = 10;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.lsvStudentInfo);
+            this.Controls.Add(this.labRegTime);
             this.Controls.Add(this.dateTimePicker1);
             this.Controls.Add(this.btnRegister);
-            this.Controls.Add(this.checkBox2);
-            this.Controls.Add(this.checkBox1);
-            this.Controls.Add(this.textTime);
+            this.Controls.Add(this.checkNum);
+            this.Controls.Add(this.checkProfessional);
             this.Controls.Add(this.label13);
-            this.Controls.Add(this.listboxStudents);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -421,22 +484,19 @@
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.TextBox textStudentNum;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.TextBox textSpecialty;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.TextBox textPhoneNum;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox textBox7;
+        private System.Windows.Forms.TextBox textZip;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox textBox8;
+        private System.Windows.Forms.TextBox textAddress;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.TextBox textBirthday;
@@ -448,13 +508,23 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.RadioButton radioFemale;
         private System.Windows.Forms.RadioButton radioMale;
-        private System.Windows.Forms.ListBox listboxStudents;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.TextBox textTime;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.CheckBox checkProfessional;
+        private System.Windows.Forms.CheckBox checkNum;
         private System.Windows.Forms.Button btnRegister;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Label labRegTime;
+        private System.Windows.Forms.ListView lsvStudentInfo;
+        private System.Windows.Forms.ColumnHeader columnNumHeader;
+        private System.Windows.Forms.ColumnHeader columnMaleHeader;
+        private System.Windows.Forms.ColumnHeader columnDepartHeader;
+        private System.Windows.Forms.ColumnHeader columnProfessionalHeader;
+        private System.Windows.Forms.ColumnHeader columnClassHeader;
+        private System.Windows.Forms.ColumnHeader columnNameHeader;
+        private System.Windows.Forms.ComboBox cboClass;
+        private System.Windows.Forms.ComboBox cboProfessional;
+        private System.Windows.Forms.ComboBox cboDepartmant;
     }
 }
 
