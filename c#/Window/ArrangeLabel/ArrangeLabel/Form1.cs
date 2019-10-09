@@ -46,7 +46,7 @@ namespace ArrangeLabel
         {
             Button btn = sender as Button;
             Button blank = FindHiddenButton();
-            if(IsNerghbor(btn, blank))
+            if(IsNeighbor(btn, blank))
             {
                 Swap(btn, blank);
                 blank.Focus();
@@ -55,6 +55,42 @@ namespace ArrangeLabel
             {
                 MessageBox.Show("ok");
             }
+        }
+
+        Button FindHiddenButton()
+        {
+            for(int r = 0; r < N; r++)
+                for(int c = 0; c < N; c ++)
+                {
+                    if (!buttons[r, c].Visible)
+                        return buttons[r, c];
+                }
+            return null;
+        }
+
+        bool IsNeighbor(Button btnA, Button btnB)
+        {
+            int a = (int)btnA.Tag;
+            int b = (int)btnB.Tag;
+            int r1 = a / N, c1 = a % N;
+            int r2 = b / N, c2 = b % N;
+
+            if (r1 == r2 && (c1 == c2 - 1 || c1 == c2 + 1)
+                || c1 == c2 && (r1 == r2 - 1 || r1 == r2 + 1))
+                return true;
+            return false;
+        }
+
+        bool ResultIsOk()
+        {
+            for(int r = 0; r<N; r++)
+                for(int c = 0; c<N; c++)
+                {
+                    if (buttons[r, c].Text != (r * N + c+1).ToString())
+                        return false;
+
+                }
+            return true;
         }
 
         void Shuffle()
@@ -75,6 +111,7 @@ namespace ArrangeLabel
             Shuffle();
         }
 
+        //按钮的位置一直没有改变 只改变按钮上面的文本和可见属性
         void Swap(Button btna, Button btnb)
         {
             string t = btna.Text;
