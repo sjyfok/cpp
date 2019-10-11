@@ -26,7 +26,7 @@ public class ATM
         string op = GetInput();
         if (op == "1")
         {
-            Show("balance: " + account.getMoney());
+            Show("balance: " + account.money);// getMoney());
         }
         else if (op == "2")
         {
@@ -36,7 +36,7 @@ public class ATM
             bool ok = account.SaveMoney(money);
             if (ok) Show("ok");
             else Show("error");
-            Show("balance: " + account.getMoney());
+            Show("balance: " + account.money);// getMoney());
         }
         else if(op == "3")
         {
@@ -47,7 +47,7 @@ public class ATM
             if (ok) Show("ok");
             else Show("error");
 
-            Show("balance:" + account.getMoney());
+            Show("balance:" + account.money);// getMoney());
         }
     }
 

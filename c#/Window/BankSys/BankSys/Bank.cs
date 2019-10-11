@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class Bank
 {
     List<Account> accounts = new List<Account>();
+   
 
     public Account OpenAccount(string id, string pwd, double money)
     {
@@ -14,7 +15,13 @@ public class Bank
 
         return account;
     }
-
+    public Account OpenCredit(double limit, string id, string pwd, double money)
+    {
+        CreditAccount caccount = new CreditAccount(limit, id, pwd, money);
+        accounts.Add(caccount);
+        return caccount;
+    }
+    
     public bool CloseAccount(Account account)
     {
         int idx = accounts.IndexOf(account);
