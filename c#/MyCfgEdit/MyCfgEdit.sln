@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2042
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCfgEdit", "MyCfgEdit\MyCfgEdit.csproj", "{52E65AFC-C234-4EE7-98B2-E79BB43720A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualGraph", "VisualGraph\VisualGraph.csproj", "{9D28A908-2021-41F4-B471-C951BF743154}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{52E65AFC-C234-4EE7-98B2-E79BB43720A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52E65AFC-C234-4EE7-98B2-E79BB43720A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52E65AFC-C234-4EE7-98B2-E79BB43720A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52E65AFC-C234-4EE7-98B2-E79BB43720A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D28A908-2021-41F4-B471-C951BF743154}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D28A908-2021-41F4-B471-C951BF743154}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D28A908-2021-41F4-B471-C951BF743154}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D28A908-2021-41F4-B471-C951BF743154}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {33F793F1-3247-4F05-9ACE-FC419BAED921}
+	EndGlobalSection
+EndGlobal
