@@ -45,6 +45,7 @@
     <Compile Include="DrawLine.cs" />
     <Compile Include="DrawObject.cs" />
     <Compile Include="DrawRectangle.cs" />
+    <Compile Include="DrawText.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="ObjList.cs" />
     <Compile Include="Tool.cs" />
