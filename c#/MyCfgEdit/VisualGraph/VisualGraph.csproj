@@ -44,10 +44,12 @@
     <Compile Include="DrawEllipse.cs" />
     <Compile Include="DrawLine.cs" />
     <Compile Include="DrawObject.cs" />
+    <Compile Include="DrawPic.cs" />
     <Compile Include="DrawRectangle.cs" />
     <Compile Include="DrawText.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="ObjList.cs" />
+    <Compile Include="SelectTool.cs" />
     <Compile Include="Tool.cs" />
     <Compile Include="VisualGraph.cs">
       <SubType>UserControl</SubType>
@@ -62,6 +64,9 @@
     <EmbeddedResource Include="VisualGraph.resx">
       <DependentUpon>VisualGraph.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

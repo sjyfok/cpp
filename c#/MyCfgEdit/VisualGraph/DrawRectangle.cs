@@ -210,7 +210,7 @@ namespace VisualGraph
 
         public static Rectangle GetNormalizedRectangle(Rectangle r)
         {
-            return GetNormalizedRectangle(r.X, r.Y, r.X + r.X+r.Width, r.Y + r.Height);
+            return GetNormalizedRectangle(r.X, r.Y, r.X +r.Width, r.Y + r.Height);
         }
     }
 }

@@ -32,10 +32,17 @@
             // 
             // VisualGraph
             // 
+            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Name = "VisualGraph";
-            this.Size = new System.Drawing.Size(417, 295);
+            this.Size = new System.Drawing.Size(151, 208);
+            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.VisualGraph_DragDrop);
+            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.VisualGraph_DragEnter);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.VisualGraph_Paint);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.VisualGraph_MouseDown);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.VisualGraph_MouseMove);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.VisualGraph_MouseUp);
             this.ResumeLayout(false);
 
         }

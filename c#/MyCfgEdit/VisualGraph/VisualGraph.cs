@@ -26,6 +26,12 @@ namespace VisualGraph
         public VisualGraph()
         {
             InitializeComponent();
+
+            ObjList = new ObjList();
+            tools = new SelectTool(); //创建工具
+            SetStyle(ControlStyles.AllPaintingInWmPaint |
+                ControlStyles.UserPaint | ControlStyles.DoubleBuffer, true);
+            ActivedObjType = Global.DrawType.POINTER;
         }
         public Global.DrawType ActivedObjType
         {
@@ -127,7 +133,55 @@ namespace VisualGraph
             }
             return ActivedObjType.ToString() + No.ToString();
         }
-    }
 
-   
+        private void VisualGraph_DragDrop(object sender, DragEventArgs e)
+        {
+            Point point = new Point(e.X, e.Y);
+            point = this.PointToClient(point);
+            switch(activedObjType)
+            {
+                case Global.DrawType.DrawText:
+                    DrawText text = new DrawText(point, this);
+                    objList.UnselectAll();
+                    objList.AddObject(text);
+                    text.Selected = true;
+                    break;
+                case Global.DrawType.DrawRectangle:
+                    DrawRectangle rect = new DrawRectangle(point, this);
+                    objList.UnselectAll();
+                    objList.AddObject(rect);
+                    rect.Selected = true;
+                    break;
+                case Global.DrawType.DrawEllipse:
+                    DrawEllipse elip = new DrawEllipse(point, this);
+                    objList.UnselectAll();
+                    objList.AddObject(elip);
+                    elip.Selected = true;
+                    break;
+                case Global.DrawType.DrawLine:
+                    DrawLine line = new DrawLine(point, this);
+                    objList.UnselectAll();
+                    objList.AddObject(line);
+                    line.Selected = true;
+                    break;
+                case Global.DrawType.DrawPic:
+                    DrawPic pic = new DrawPic(point, this);
+                    objList.UnselectAll();
+                    objList.AddObject(pic);
+                    pic.Selected = true;
+                    break;
+
+            }
+            activedObjType = Global.DrawType.POINTER;
+            this.Refresh();
+        }
+
+        private void VisualGraph_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.Text))
+                e.Effect = DragDropEffects.Copy;
+            else
+                e.Effect = DragDropEffects.None;
+        }
+    }   
 }

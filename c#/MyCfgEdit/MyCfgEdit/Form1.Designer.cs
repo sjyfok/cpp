@@ -29,6 +29,12 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Pointer");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Line");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Rectangle");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Ellipse");
+            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Text");
+            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Picture");
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.文件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.新建ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -47,14 +53,14 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.listView1 = new System.Windows.Forms.ListView();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.treeView1 = new System.Windows.Forms.TreeView();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.tabPage5 = new System.Windows.Forms.TabPage();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
             this.propertyGrid2 = new System.Windows.Forms.PropertyGrid();
-            this.listView1 = new System.Windows.Forms.ListView();
-            this.treeView1 = new System.Windows.Forms.TreeView();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
@@ -223,6 +229,14 @@
             this.tabPage2.Text = "画面";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // listView1
+            // 
+            this.listView1.Location = new System.Drawing.Point(0, 0);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(150, 361);
+            this.listView1.TabIndex = 0;
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.treeView1);
@@ -233,6 +247,34 @@
             this.tabPage3.TabIndex = 1;
             this.tabPage3.Text = "工具箱";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // treeView1
+            // 
+            this.treeView1.Location = new System.Drawing.Point(0, 0);
+            this.treeView1.Name = "treeView1";
+            treeNode1.Name = "Pointer";
+            treeNode1.Text = "Pointer";
+            treeNode2.Name = "Line";
+            treeNode2.Text = "Line";
+            treeNode3.Name = "Rectangle";
+            treeNode3.Text = "Rectangle";
+            treeNode4.Name = "Ellipse";
+            treeNode4.Text = "Ellipse";
+            treeNode5.Name = "Text";
+            treeNode5.Text = "Text";
+            treeNode6.Name = "Picture";
+            treeNode6.Text = "Picture";
+            this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            treeNode1,
+            treeNode2,
+            treeNode3,
+            treeNode4,
+            treeNode5,
+            treeNode6});
+            this.treeView1.Size = new System.Drawing.Size(150, 361);
+            this.treeView1.TabIndex = 0;
+            this.treeView1.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.treeView1_ItemDrag);
+            this.treeView1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treeView1_MouseDown);
             // 
             // tabControl2
             // 
@@ -255,6 +297,13 @@
             this.tabPage4.Text = "属性";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
+            // propertyGrid1
+            // 
+            this.propertyGrid1.Location = new System.Drawing.Point(0, 0);
+            this.propertyGrid1.Name = "propertyGrid1";
+            this.propertyGrid1.Size = new System.Drawing.Size(150, 328);
+            this.propertyGrid1.TabIndex = 0;
+            // 
             // tabPage5
             // 
             this.tabPage5.Controls.Add(this.propertyGrid2);
@@ -266,34 +315,12 @@
             this.tabPage5.Text = "动作";
             this.tabPage5.UseVisualStyleBackColor = true;
             // 
-            // propertyGrid1
-            // 
-            this.propertyGrid1.Location = new System.Drawing.Point(0, 0);
-            this.propertyGrid1.Name = "propertyGrid1";
-            this.propertyGrid1.Size = new System.Drawing.Size(150, 328);
-            this.propertyGrid1.TabIndex = 0;
-            // 
             // propertyGrid2
             // 
             this.propertyGrid2.Location = new System.Drawing.Point(0, 0);
             this.propertyGrid2.Name = "propertyGrid2";
             this.propertyGrid2.Size = new System.Drawing.Size(150, 328);
             this.propertyGrid2.TabIndex = 0;
-            // 
-            // listView1
-            // 
-            this.listView1.Location = new System.Drawing.Point(0, 0);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(150, 361);
-            this.listView1.TabIndex = 0;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            // 
-            // treeView1
-            // 
-            this.treeView1.Location = new System.Drawing.Point(0, 0);
-            this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(150, 361);
-            this.treeView1.TabIndex = 0;
             // 
             // button1
             // 

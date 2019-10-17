@@ -116,6 +116,17 @@ namespace VisualGraph
             {
                 DrawObject temp = (DrawObject)objList[GetSelectedObjectIndex()];
                 objList.RemoveAt(GetSelectedObjectIndex());
+                objList.Add(temp);
+                //objList.Insert(0, temp);
+            }
+        }
+
+        public void MoveSelectionToBack()
+        {
+            if(GetSelectedObjectIndex()>=0)
+            {
+                DrawObject temp = (DrawObject)objList[GetSelectedObjectIndex()];
+                objList.RemoveAt(GetSelectedObjectIndex());
                 objList.Insert(0, temp);
             }
         }
@@ -178,9 +189,38 @@ namespace VisualGraph
                         objList.Add(dr);
                         break;
                     case Global.DrawType.DrawText:
-                        DrawText 
+                        DrawText dt = new DrawText(point, drawArea);
+                        dt.Selected = false;
+                        objList.Add(dt);
+                        break;
+                    case Global.DrawType.DrawPic:
+                        DrawPic oldpic = (DrawPic)o;
+                        DrawPic dpic = new DrawPic(point, drawArea);
+                        Rectangle ret = new Rectangle(point.X, point.Y, oldpic.ShapeRect.Width,
+                            oldpic.ShapeRect.Height);
+                        dpic.ShapeRect = ret;
+                        dpic.TheImage = oldpic.TheImage;
+                        dpic.Selected = false;
+                        objList.Add(dpic);
+                        break;                
                 }
             }
+            drawArea.ActivedObjType = Global.DrawType.POINTER;
+        }
+        public bool DeleteSelection()
+        {
+            bool result = false;
+            int n = objList.Count;
+            for(int i = n-1;i >= 0; i --)
+            {
+                if(((DrawObject)objList[i]).Selected)
+                {
+                    DrawObject o = (DrawObject)objList[i];
+                    objList.RemoveAt(i);
+                    result = true;
+                }
+            }
+            return result;
         }
     }
 }

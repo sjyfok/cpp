@@ -11,6 +11,7 @@ namespace VisualGraph
     {
         public DrawObject()
         {
+            Initialize();
         }
 
         private bool selected;
@@ -124,9 +125,12 @@ namespace VisualGraph
             set { _FillColorName = value; }
         }
         public bool Selected
-        { get; set; }
-        public Color Color { get; set; }
-        public int PenWidth { get; set; }
+        {
+            get {return selected; }
+            set { selected = value; }
+        }
+        public Color Color { get { return color; } set { color = value; } }
+        public int PenWidth { get { return penWidth; } set { penWidth = value; } }
         private int _X = 0;
         public int X
         {
@@ -139,13 +143,13 @@ namespace VisualGraph
             get { return _Y; }
             set { _Y = value; }
         }
-        private int _Width = 0;
+        private int _Width = 50;
         public int Width
         {
             get { return _Width; }
             set { _Width = value; }
         }
-        private int _Height = 0;
+        private int _Height = 50;
         public int Height
         {
             get { return _Height; }
@@ -163,7 +167,11 @@ namespace VisualGraph
                 Height = Rect.Height;
             }
         }
-        public string ObjName { get; set; }
+        public string ObjName
+        {
+            get { return objName; }
+            set { objName = value; }
+        }
         public Global.DrawType ObjectType
         {
             get

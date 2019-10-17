@@ -1,69 +1,80 @@
 ﻿using System;
-using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Text;
 using System.Drawing.Drawing2D;
 using System.Drawing;
+using System.Windows.Forms;
+using System.IO;
 
 namespace VisualGraph
 {
-    public class DrawText:DrawObject
+    public class DrawPic : DrawObject
     {
-        private string curText = "text";
-        public DrawText(Point point, VisualGraph drawArea)
+        public DrawPic(Point point, VisualGraph drawArea)
         {
             ObjName = drawArea.CreateObjName();
+
             ShapeRect = new Rectangle(point.X, point.Y, Width, Height);
-            ObjectType = Global.DrawType.DrawText;
-            GenerateID(Global.DrawType.DrawText);
+            ObjectType = Global.DrawType.DrawPic;
+            GenerateID(Global.DrawType.DrawPic);
         }
-        public void SetAction(string name, object val)
+
+        private Bitmap _image = null;
+        private string _path = "";
+        public Bitmap TheImage
         {
-            if (name.Equals(textName))
+            get { return _image; }
+            set { _image = value; _path = ImageToString(_image); }
+        }
+
+        public string Path
+        {
+            get { return _path; }
+            set { _path = value; }
+        }
+
+        private Color _Color = Color.FromArgb(0, 0, 0);
+        public Color TransColor
+        {
+            get { return _Color; }
+            set { _Color = value; }
+        }
+
+        public static string ImageToString(Image img)
+        {
+            using (MemoryStream stream = new MemoryStream())
             {
-                curText = val.ToString();
-            }else if(name.Equals(xName))
-            {
-                X = Convert.ToInt32(val);
+                img.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
+                return Convert.ToBase64String(stream.GetBuffer());
             }
         }
-        
-        public string CurText
+
+        public static Image StringToImage(string sz)
         {
-            get { return curText; }
-            set { curText = value; }
+            byte[] buffer = Convert.FromBase64String(sz);
+            MemoryStream stream = new MemoryStream();
+            stream.Write(buffer, 0, buffer.Length);
+            return Image.FromStream(stream);
         }
 
-        private bool _Show = false;
-        public bool ShowEdge
-        { get { return _Show; }
-            set { _Show = value; }
-        }
-
-        private StringFormat _stringFormat = null;
-        public StringFormat StringFormat
-        {
-            get { return _stringFormat; }
-            set { _stringFormat = value; }
-        }
         public override void Draw(Graphics g, VisualGraph drawArea)
         {
-            SolidBrush drawBrush = new SolidBrush(Color.Black);
-            Pen fontPen = new Pen(Color, PenWidth);
-            if(_stringFormat == null)
+            if (_image == null)
             {
-                _stringFormat = new StringFormat();
-                _stringFormat.Alignment = StringAlignment.Center;
-                _stringFormat.LineAlignment = StringAlignment.Center;
+                if (_path.Length != 0)
+                {
+                    _image = (Bitmap)StringToImage(_path);
+                    _image.MakeTransparent(_Color);
+                    g.DrawImage(_image, ShapeRect, new Rectangle(0, 0, _image.Width, _image.Height), GraphicsUnit.Pixel);
+                }
             }
-            Font drawFont = new Font("Arial", 12);
-            g.DrawString(CurText, drawFont, drawBrush, ShapeRect, _stringFormat);
-            if(_Show)
+            else
             {
-                g.DrawRectangle(fontPen, DrawRectangle.GetNormalizedRectangle(ShapeRect));
+                _image.MakeTransparent(_Color);
+                g.DrawImage(_image, ShapeRect, new Rectangle(0, 0, _image.Width, _image.Height), GraphicsUnit.Pixel);
             }
-            drawFont.Dispose();
-            drawBrush.Dispose();
-            fontPen.Dispose();
         }
+
         public override int HandleCount
         {
             get { return 4; }
@@ -72,10 +83,11 @@ namespace VisualGraph
         public override Point GetHandle(int handleNumber)
         {
             int x, y;
+
             x = ShapeRect.X;
             y = ShapeRect.Y;
 
-            switch (handleNumber)
+            switch(handleNumber)
             {
                 case 1:
                     x = ShapeRect.X;
@@ -103,6 +115,7 @@ namespace VisualGraph
             int top = ShapeRect.Top;
             int right = ShapeRect.Right;
             int bottom = ShapeRect.Bottom;
+
             switch(handleNumber)
             {
                 case 1:
@@ -136,10 +149,8 @@ namespace VisualGraph
                     if (GetHandleRectangle(i).Contains(point))
                         return i;
             }
-
             if (PointInObject(point))
                 return 0;
-
             return -1;
         }
 
@@ -157,6 +168,7 @@ namespace VisualGraph
                     return Cursors.SizeNESW;
                 default:
                     return Cursors.Default;
+
             }
         }
 
