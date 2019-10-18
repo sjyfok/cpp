@@ -129,7 +129,7 @@ namespace VisualGraph
                 int n = drawArea.ObjList.SelectionCount;
                 for(int i = n-1; i >= 0; i --)
                 {
-                    drawArea.ObjList.GetSelectedObject(i);
+                    drawArea.ObjList.GetSelectedObject(i).Move(dx, dy);
                 }
                 DrawObject l = (DrawObject)drawArea.ObjList.GetSelectedObject(point);
                 if (l != null)

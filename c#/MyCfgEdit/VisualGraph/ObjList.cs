@@ -9,6 +9,7 @@ namespace VisualGraph
 {
     public class ObjList
     {
+        private const int MAX = int.MaxValue - 1;
         private ArrayList objList;
         private ArrayList tempList;
         public ObjList()
@@ -110,6 +111,232 @@ namespace VisualGraph
                 o.Selected = true;
         }
 
+        public void AlignLeft()
+        {
+            int MinLeft = MAX;
+            int temp;
+            int n = SelectionCount;
+            //找到最左边的X左边
+            for(int i = 0; i < n; i++)
+            {
+                DrawObject o = GetSelectedObject(i);
+                if (o.ObjectType == Global.DrawType.DrawLine)
+                {
+                    DrawLine l = (DrawLine)o;
+                    temp = Math.Min(l.StartPoint.X, l.EndPoint.X);
+                }
+                else
+                    temp = o.ShapeRect.Left;
+                if (temp < MinLeft)
+                    MinLeft = temp;
+            }
+
+            //修改所有选中元素到最左坐标
+            for(int i = 0; i < n; i ++)
+            {
+                DrawObject o = GetSelectedObject(i);
+                if (o.ObjectType == Global.DrawType.DrawLine)
+                {
+                    DrawLine l = (DrawLine)o;
+                    if (l.StartPoint.X < l.EndPoint.X)
+                        l.Move(MinLeft - l.StartPoint.X, 0);
+                    else
+                        l.Move(MinLeft - l.EndPoint.X, 0);
+                }
+                else
+                    o.ShapeRect = new Rectangle(MinLeft, o.ShapeRect.Top, o.ShapeRect.Width, o.ShapeRect.Height);
+            }
+        }
+
+        public void AlignRight()
+        {
+            int MaxRight = 0;
+            int temp;
+            int n = SelectionCount;
+            for(int i = 0; i < n; i ++)
+            {
+                DrawObject o = GetSelectedObject(i);
+                if (o.ObjectType == Global.DrawType.DrawLine)
+                {
+                    DrawLine l = (DrawLine)o;
+                    temp = Math.Max(l.StartPoint.X, l.EndPoint.X);
+                }
+                else
+                    temp = o.ShapeRect.Right;
+                if (temp > MaxRight)
+                    MaxRight = temp;
+            }
+            for(int i = 0; i < n; i ++)
+            {
+                DrawObject o = GetSelectedObject(i);
+                if (o.ObjectType == Global.DrawType.DrawLine)
+                {
+                    DrawLine l = (DrawLine)o;
+                    if (l.StartPoint.X > l.EndPoint.X)
+                        l.Move(MaxRight - l.StartPoint.X, 0);
+                    else l.Move(MaxRight - l.EndPoint.X, 0);
+                }
+                else
+                    o.ShapeRect = new Rectangle(MaxRight - o.ShapeRect.Width, o.ShapeRect.Top,
+                        o.ShapeRect.Width, o.ShapeRect.Height);
+            }
+        }
+
+        public void AlignTop()
+        {
+            int MinTop = MAX;
+            int temp;
+            int n = SelectionCount;
+            for(int i = 0; i < n; i ++)
+            {
+                DrawObject o = GetSelectedObject(i);
+                if (o.ObjectType == Global.DrawType.DrawLine)
+                {
+                    DrawLine l = (DrawLine)o;
+                    temp = Math.Min(l.StartPoint.Y, l.EndPoint.Y);
+                }
+                else temp = o.ShapeRect.Top;
+                if (temp < MinTop)
+                    MinTop = temp;
+            }
+            for (int i = 0; i < n; i++)
+            {
+                DrawObject o = GetSelectedObject(i);
+                if (o.ObjectType == Global.DrawType.DrawLine)
+                {
+                    DrawLine l = (DrawLine)o;
+                    if (l.StartPoint.Y < l.EndPoint.Y)
+                        l.Move(0, MinTop - l.StartPoint.Y);
+                    else l.Move(0, MinTop - l.EndPoint.Y);
+                }
+                else
+                    o.ShapeRect = new Rectangle(o.ShapeRect.Left, MinTop, o.ShapeRect.Width, o.ShapeRect.Height);
+            }
+        }
+
+        public void AlignBottom()
+        {
+            int MaxBottom = 0;
+            int temp;
+            int n = SelectionCount;
+            for(int i = 0; i < n; i ++)
+            {
+                DrawObject o = GetSelectedObject(i);
+                if (o.ObjectType == Global.DrawType.DrawLine)
+                {
+                    DrawLine l = (DrawLine)o;
+                    temp = Math.Max(l.StartPoint.Y, l.EndPoint.Y);
+                }
+                else temp = o.ShapeRect.Bottom;
+                if (temp > MaxBottom)
+                    MaxBottom = temp;
+            }
+            for(int i = 0; i < n; i++)
+            {
+                DrawObject o = GetSelectedObject(i);
+                if (o.ObjectType == Global.DrawType.DrawLine)
+                {
+                    DrawLine l = (DrawLine)o;
+                    if (l.StartPoint.Y > l.EndPoint.Y)
+                        l.Move(0, MaxBottom - l.StartPoint.Y);
+                    else l.Move(0, MaxBottom - l.EndPoint.Y);
+                }
+                else o.ShapeRect = new Rectangle(o.ShapeRect.Left,
+                    MaxBottom - o.ShapeRect.Height, o.ShapeRect.Width, o.ShapeRect.Height);
+            }
+        }
+
+        public void AlignVCenter()
+        {
+            int MinLeft = MAX;
+            int MaxRight = 0;
+            int VCenter = 0;
+            int tempL;
+            int tempR;
+            int n = SelectionCount;
+            for(int i = 0; i < n; i ++)
+            {
+                DrawObject o = GetSelectedObject(i);
+                if (o.ObjectType == Global.DrawType.DrawLine)
+                {
+                    DrawLine l = (DrawLine)o;
+                    tempL = Math.Min(l.StartPoint.X, l.EndPoint.X);
+                    tempR = Math.Max(l.StartPoint.X, l.EndPoint.X);
+                }
+                else
+                {
+                    tempL = o.ShapeRect.X;
+                    tempR = o.ShapeRect.Right;
+                }
+                if (tempL < MinLeft)
+                    MinLeft = tempL;
+                if (tempR > MaxRight)
+                    MaxRight = tempR;                
+            }
+
+            VCenter = (MinLeft + MaxRight) / 2;
+            for(int i = 0; i < n; i ++)
+            {
+                DrawObject o = GetSelectedObject(i);
+                if(o.ObjectType == Global.DrawType.DrawLine)
+                {
+                    DrawLine l = (DrawLine)o;
+                    l.Move(VCenter - (l.StartPoint.X + l.EndPoint.X) / 2, 0);
+                }
+                else
+                {
+                    int center = (o.ShapeRect.Left + o.ShapeRect.Right) / 2;
+                    o.ShapeRect = new Rectangle(o.ShapeRect.Left + (VCenter - center),
+                        o.ShapeRect.Top, o.ShapeRect.Width, o.ShapeRect.Height);
+                }
+            }
+        }
+
+        public void AlignHCenter()
+        {
+            int MinTop = MAX;
+            int MaxBottom = 0;
+            int HCenter = 0;
+            int tempT;
+            int tempB;
+            int n = SelectionCount;
+            for(int i = 0; i < n; i ++)
+            {
+                DrawObject o = GetSelectedObject(i);
+                if(o.ObjectType == Global.DrawType.DrawLine)
+                {
+                    DrawLine l = (DrawLine)o;
+                    tempT = Math.Min(l.StartPoint.Y, l.EndPoint.Y);
+                    tempB = Math.Max(l.StartPoint.Y, l.EndPoint.Y);
+                }
+                else
+                {
+                    tempT = o.ShapeRect.Top;
+                    tempB = o.ShapeRect.Bottom;
+                }
+                if (tempT < MinTop)
+                    MinTop = tempT;
+                if (tempB > MaxBottom)
+                    MaxBottom = tempB;
+            }
+            HCenter = (MinTop + MaxBottom) / 2;
+            for(int i = 0; i < n; i++)
+            {
+                DrawObject o = GetSelectedObject(i);
+                if(o.ObjectType == Global.DrawType.DrawLine)
+                {
+                    DrawLine l = (DrawLine)o;
+                    l.Move(0, HCenter - (l.StartPoint.Y + l.EndPoint.Y) / 2);
+                }
+                else
+                {
+                    int center = (o.ShapeRect.Top + o.ShapeRect.Bottom) / 2;
+                    o.ShapeRect = new Rectangle(o.ShapeRect.Left, o.ShapeRect.Top +
+                        (HCenter - center), o.ShapeRect.Width, o.ShapeRect.Height);
+                }
+            }
+        }
+            
         public void MoveSelectionToFront()
         {
             if (GetSelectedObjectIndex() >= 0)
@@ -120,6 +347,7 @@ namespace VisualGraph
                 //objList.Insert(0, temp);
             }
         }
+
 
         public void MoveSelectionToBack()
         {

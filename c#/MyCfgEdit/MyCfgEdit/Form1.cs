@@ -52,7 +52,17 @@ namespace MyCfgEdit
 
         void vs_MouseClick(object sender, MouseEventArgs e)
         {
-
+            VisualGraph.VisualGraph drawArea = (VisualGraph.VisualGraph)sender;
+            if(e.Button == MouseButtons.Left)
+            {
+                if (drawArea.ObjList.SelectionCount > 0)
+                {
+                    DrawObject obj = drawArea.ObjList.GetSelectedObject(0);
+                    this.propertyGrid1.SelectedObject = obj;
+                }
+                else
+                    this.propertyGrid1.SelectedObject = drawArea;
+            }
         }
 
         private void treeView1_MouseDown(object sender, MouseEventArgs e)
@@ -89,5 +99,70 @@ namespace MyCfgEdit
             if (s == "Text") drawArea.ActivedObjType = Global.DrawType.DrawText;
             if (s == "Picture") drawArea.ActivedObjType = Global.DrawType.DrawPic;
         }
+
+        private void toolStripButton5_Click(object sender, EventArgs e)
+        {
+            TabPage page = tabMain.SelectedTab;
+            VisualGraph.VisualGraph drawArea = (VisualGraph.VisualGraph)page.Controls[0];
+            drawArea.ObjList.AlignLeft();
+            drawArea.Invalidate();
+        }
+
+        private void toolStripButton6_Click(object sender, EventArgs e)
+        {
+            TabPage page = tabMain.SelectedTab;
+            VisualGraph.VisualGraph drawArea = (VisualGraph.VisualGraph)page.Controls[0];
+            drawArea.ObjList.AlignVCenter();
+            drawArea.Invalidate();
+        }
+
+        private void toolStripButton7_Click(object sender, EventArgs e)
+        {
+            TabPage page = tabMain.SelectedTab;
+            VisualGraph.VisualGraph drawArea = (VisualGraph.VisualGraph)page.Controls[0];
+            drawArea.ObjList.AlignRight();
+            drawArea.Invalidate();
+        }
+
+        private void toolStripButton8_Click(object sender, EventArgs e)
+        {
+            TabPage page = tabMain.SelectedTab;
+            VisualGraph.VisualGraph drawArea = (VisualGraph.VisualGraph)page.Controls[0];
+            drawArea.ObjList.AlignTop();
+            drawArea.Invalidate();
+        }
+
+        private void toolStripButton9_Click(object sender, EventArgs e)
+        {
+            TabPage page = tabMain.SelectedTab;
+            VisualGraph.VisualGraph drawArea = (VisualGraph.VisualGraph)page.Controls[0];
+            drawArea.ObjList.AlignHCenter();
+            drawArea.Invalidate();
+        }
+
+        private void toolStripButton10_Click(object sender, EventArgs e)
+        {
+            TabPage page = tabMain.SelectedTab;
+            VisualGraph.VisualGraph drawArea = (VisualGraph.VisualGraph)page.Controls[0];
+            drawArea.ObjList.AlignBottom();
+            drawArea.Invalidate();
+        }
+
+        private void toolStripButton11_Click(object sender, EventArgs e)
+        {
+            TabPage page = tabMain.SelectedTab;
+            VisualGraph.VisualGraph drawArea = (VisualGraph.VisualGraph)page.Controls[0];
+            drawArea.ObjList.MoveSelectionToFront();
+            drawArea.Invalidate();
+        }
+
+        private void toolStripButton12_Click(object sender, EventArgs e)
+        {
+            TabPage page = tabMain.SelectedTab;
+            VisualGraph.VisualGraph drawArea = (VisualGraph.VisualGraph)page.Controls[0];
+            drawArea.ObjList.MoveSelectionToBack();
+            drawArea.Invalidate();
+        }
     }
 }
+

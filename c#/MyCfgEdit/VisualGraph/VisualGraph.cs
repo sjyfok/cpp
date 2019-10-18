@@ -16,7 +16,7 @@ namespace VisualGraph
         private Global.DrawType activedObjType;
         private DrawBaseTool tools;
 
-        private ObjList objList;
+        private ObjList objList;  //联合属性ObjList
         private bool drawNetRectangle = false;
         private Rectangle netRectangle;
         private bool showGrid;
@@ -134,6 +134,7 @@ namespace VisualGraph
             return ActivedObjType.ToString() + No.ToString();
         }
 
+        //将所选工具加入到页面容器中
         private void VisualGraph_DragDrop(object sender, DragEventArgs e)
         {
             Point point = new Point(e.X, e.Y);
