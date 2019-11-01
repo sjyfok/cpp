@@ -34,7 +34,7 @@ namespace FileCopy
                     File.Delete(szFileNameCopy);
                 }
                 File.Copy(szFileName, szFileNameCopy);
-                MessageBox.Show("文件复制成功!");
+                MessageBox.Show("文件复制成功!");               
             }
         }
 
