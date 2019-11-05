@@ -4,8 +4,12 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using System.Reflection;
+
 using ICIDECode.Core;
-using ICIDECode.Develop;
+using ICIDECode.Core.WinForms;
+using ICIDECode.Develop.Gui;
+
 
 namespace ICIDECode.Develop.Logging
 {
@@ -138,7 +142,7 @@ namespace ICIDECode.Develop.Logging
             exceptionTextBox.Text = getClipboardString();
 
             try
-            {
+            {                                        
                 this.pictureBox.Image = WinFormsResourceService.GetBitmap("ErrorReport");
             }
             catch { }

@@ -6,7 +6,7 @@ namespace ICIDECode.Core
     [SDService("SD.AnalyticsMonitor", FallbackImplementation =typeof(AnalyticsMonitorFallback))]
     public interface IAnalyticsMonitor
     {
-
+        void TrackException(Exception exception);
     }
 
     public interface IAnalyticsMonitorTrackedFeature
@@ -17,6 +17,8 @@ namespace ICIDECode.Core
     sealed class AnalyticsMonitorFallback: IAnalyticsMonitor, IAnalyticsMonitorTrackedFeature
     {
         void IAnalyticsMonitorTrackedFeature.EndTracking()
+        { }
+        public void TrackException(Exception exception)
         { }
     }
 }

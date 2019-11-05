@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\Libraries\log4net\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -55,6 +58,8 @@
     <Compile Include="Logging\ExceptionBox.Designer.cs">
       <DependentUpon>ExceptionBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Logging\log4netLoggingService.cs" />
+    <Compile Include="Logging\LogMessageRecorder.cs" />
     <Compile Include="Resources\BitmapResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -82,9 +87,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\SplashScreen.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Configuration\" />
   </ItemGroup>
   <ItemGroup>
@@ -99,6 +101,13 @@
       <Project>{5a583118-43ab-41b9-b6ad-cbe048e8618e}</Project>
       <Name>ICIDECode.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ICIdeCode.Core.WinFroms\ICIDECode.Core.WinForms.csproj">
+      <Project>{e63f431e-2724-47e2-adfc-fe7357514abd}</Project>
+      <Name>ICIDECode.Core.WinForms</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SplashScreen.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -39,7 +39,7 @@ namespace ICIDECode.Develop.Startup
             StartPosition = FormStartPosition.CenterScreen;
             ShowInTaskbar = false;
             // Stream must be kept open for the lifetime of the bitmap
-            bitmap = new Bitmap(typeof(SplashScreenForm).Assembly.GetManifestResourceStream("Develop.Resources.SplashScreen.jpg"));
+            bitmap = new Bitmap(typeof(SplashScreenForm).Assembly.GetManifestResourceStream("Resources.SplashScreen.jpg"));
             this.ClientSize = bitmap.Size;
             using (Font font = new Font("Sans Serif", 4))
             {

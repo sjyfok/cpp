@@ -9,6 +9,8 @@ using System.IO;
 
 
 using ICIDECode.Core;
+using ICIDECode.Develop.Logging;
+
 namespace ICIDECode.Develop.Startup
 {
     static class DevelopMain
