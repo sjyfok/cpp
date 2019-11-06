@@ -151,10 +151,10 @@ namespace ICIDECode.Develop.Startup
             }
             #endif
 
-            //LoggingService.Info("Starting SharpDevelop...");
+            LoggingService.Info("Starting SharpDevelop...");
             try
             {
-              //  StartupSettings startup = new StartupSettings();
+                //StartupSettings startup = new StartupSettings();
                 #if DEBUG
                 //startup.UseSharpDevelopErrorHandler = UseExceptionBox;
                 #endif

@@ -10,6 +10,7 @@ namespace ICIDECode.Core
         void Debug(object message);
         void DebugFormatted(string format, params object[] args);
         void Info(object message);
+        void Info(object message, Exception exception);
         void InfoFormatted(string format, params object[] args);
         void Warn(object message);
         void Warn(object message, Exception exception);

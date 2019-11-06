@@ -35,6 +35,8 @@ namespace ICIDECode.Core.Implementation
 
         public void Info(object message)
         { }
+        public void Info(object message, Exception ex)
+        { }
         public void InfoFormatted(string format, params object[] args)
         { }
 

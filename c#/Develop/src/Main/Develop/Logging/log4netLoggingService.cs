@@ -33,6 +33,11 @@ namespace ICIDECode.Develop.Logging
             log.Info(message);
         }
 
+        public void Info(object message, Exception exception)
+        {
+            log.Info(message, exception);
+        }
+
         public void InfoFormatted(string format, params object[] args)
         {
             log.InfoFormat(CultureInfo.InvariantCulture, format, args);

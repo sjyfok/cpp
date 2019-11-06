@@ -25,5 +25,15 @@ namespace ICIDECode.Core
         }
         public static void Warn(object message, Exception ex)
         { }
+
+        public static void Info(object message)
+        {
+            Service.Info(message);
+        }
+        public static void Info(object message, Exception ex)
+        {
+            Service.Info(message, ex);
+        }
+        
     }
 }
