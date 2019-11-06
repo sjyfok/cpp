@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("Develop")]
+[assembly: AssemblyTitle("ResourceTest")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Develop")]
+[assembly: AssemblyProduct("ResourceTest")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // 如果此项目向 COM 公开，则下列 GUID 用于类型库的 ID
-[assembly: Guid("3602e3bf-7778-44b2-ae19-db862f1344f6")]
+[assembly: Guid("04673297-481b-47e4-87ef-e19199ec5398")]
 
 // 程序集的版本信息由下列四个值组成: 
 //
@@ -34,15 +34,3 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-
-internal static class RevisionClass
-{
-    public const string Major = "1";
-    public const string Minor = "0";
-    public const string Build = "0";
-    public const string Revision = "0";
-    public const string VersionName = null; // "" is not valid for no version name, you have to use null if you don't want a version name (eg "Beta 1")
-
-    public const string FullVersion = Major + "." + Minor + "." + Build + ".0";
-
-}

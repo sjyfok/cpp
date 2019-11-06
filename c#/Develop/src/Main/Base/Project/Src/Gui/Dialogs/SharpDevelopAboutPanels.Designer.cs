@@ -1,6 +1,6 @@
 ﻿namespace ICIDECode.Develop.Gui
 {
-    partial class SharpDevelopAboutPanels
+    partial class AboutSharpDevelopTabPage
     {
         /// <summary> 
         /// 必需的设计器变量。

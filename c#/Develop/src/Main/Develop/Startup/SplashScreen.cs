@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Reflection;
+using System.IO;
 
 
 namespace ICIDECode.Develop.Startup
@@ -25,7 +27,7 @@ namespace ICIDECode.Develop.Startup
         }
         public SplashScreenForm()
         {
-            InitializeComponent();
+           // InitializeComponent();
 
 
             const string versionText = "SharpDevelop"
@@ -38,8 +40,11 @@ namespace ICIDECode.Develop.Startup
             FormBorderStyle = FormBorderStyle.None;
             StartPosition = FormStartPosition.CenterScreen;
             ShowInTaskbar = false;
-            // Stream must be kept open for the lifetime of the bitmap
-            bitmap = new Bitmap(typeof(SplashScreenForm).Assembly.GetManifestResourceStream("Resources.SplashScreen.jpg"));
+            //Stream must be kept open for the lifetime of the bitmap
+            Type type = MethodBase.GetCurrentMethod().DeclaringType;
+            string _namespace = type.Namespace;            
+            string resourceName = _namespace + ".Resource.SplashScreen.jpg";
+            bitmap = new Bitmap(typeof(SplashScreenForm).Assembly.GetManifestResourceStream(resourceName));
             this.ClientSize = bitmap.Size;
             using (Font font = new Font("Sans Serif", 4))
             {
