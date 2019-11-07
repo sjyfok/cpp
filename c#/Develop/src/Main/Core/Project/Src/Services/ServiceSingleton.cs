@@ -21,6 +21,7 @@ namespace ICIDECode.Core
 
         public static T GetRequiredService<T>()
         {
+            //instance变量会调用FallbackServiceProvider构造函数
             object service = instance.GetService(typeof(T));
             if (service == null)
                 throw new ServiceNotFoundException(typeof(T));

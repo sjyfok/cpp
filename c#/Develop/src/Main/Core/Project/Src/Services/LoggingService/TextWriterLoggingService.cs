@@ -22,6 +22,17 @@ namespace ICIDECode.Core.Implementation
             this.IsDebugEnabled = true;
         }
 
+        void Write(object message, Exception exception)
+        {
+            if(message != null)
+            {
+                writer.WriteLine(message.ToString());
+            }
+            else
+            {
+                writer.WriteLine(exception.ToString());
+            }
+        }
         public bool IsDebugEnabled { get; set; }
         public bool IsInfoEnabled { get; set; }
         public bool IsWarnEnabled { get; set; }
@@ -34,9 +45,12 @@ namespace ICIDECode.Core.Implementation
         { }
 
         public void Info(object message)
-        { }
-        public void Info(object message, Exception ex)
-        { }
+        {
+            if (IsInfoEnabled)
+                Write(message, null);
+        }
+        //public void Info(object message, Exception ex)
+        //{ }
         public void InfoFormatted(string format, params object[] args)
         { }
 

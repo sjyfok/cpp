@@ -150,7 +150,8 @@ namespace ICIDECode.Develop.Startup
                 // can happen if SharpDevelop doesn't have a console
             }
             #endif
-
+            //调用LoggingService构造函数
+            //然后调用静态类的静态函数 info
             LoggingService.Info("Starting SharpDevelop...");
             try
             {

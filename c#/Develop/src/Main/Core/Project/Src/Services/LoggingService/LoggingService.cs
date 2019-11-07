@@ -28,12 +28,16 @@ namespace ICIDECode.Core
 
         public static void Info(object message)
         {
+            //Service是个属性 调用属性对应的方法
+            //然后又牵扯到一个静态类  并调用服务查找函数 如果服务不存在就要建立服务
+            //如果服务存在就直接利用此服务，最终返回一个TextWriterLoggingService的实例
+            //TextWriterLoggingService的构造函数 显示最终调用了Trace实现输出
             Service.Info(message);
         }
-        public static void Info(object message, Exception ex)
-        {
-            Service.Info(message, ex);
-        }
+        //public static void Info(object message, Exception ex)
+        //{
+        //    Service.Info(message, ex);
+        //}
         
     }
 }
