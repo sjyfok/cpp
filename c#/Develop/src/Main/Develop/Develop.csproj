@@ -37,6 +37,7 @@
       <HintPath>..\..\Libraries\log4net\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -61,6 +62,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>BitmapResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="Sda\CallHelper.cs" />
+    <Compile Include="Sda\DevelopHost.cs" />
+    <Compile Include="Sda\EventArgs.cs" />
+    <Compile Include="Sda\StartupSettings.cs" />
     <Compile Include="Startup\DevelopMain.cs" />
     <Compile Include="Startup\SplashScreen.cs">
       <SubType>Form</SubType>

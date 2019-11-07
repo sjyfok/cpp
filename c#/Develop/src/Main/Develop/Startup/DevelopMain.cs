@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Windows.Forms;
 using System.IO;
+using System.Reflection;
+using System.Configuration;
 
 
 using ICIDECode.Core;
 using ICIDECode.Develop.Logging;
+using ICIDECode.Develop.Sda;
 
 namespace ICIDECode.Develop.Startup
 {
@@ -155,51 +154,52 @@ namespace ICIDECode.Develop.Startup
             LoggingService.Info("Starting SharpDevelop...");
             try
             {
-                //StartupSettings startup = new StartupSettings();
+                StartupSettings startup = new StartupSettings();
                 #if DEBUG
-                //startup.UseSharpDevelopErrorHandler = UseExceptionBox;
+                startup.UseSharpDevelopErrorHandler = UseExceptionBox;
                 #endif
 
-            //    Assembly exe = typeof(SharpDevelopMain).Assembly;
-            //    startup.ApplicationRootPath = Path.Combine(Path.GetDirectoryName(exe.Location), "..");
-            //    startup.AllowUserAddIns = true;
+                Assembly exe = typeof(DevelopMain).Assembly;
+                //exe文件存在的位置 ..debug/bin/..
+                startup.ApplicationRootPath = Path.Combine(Path.GetDirectoryName(exe.Location), "..");
+                startup.AllowUserAddIns = true;
 
-            //    string configDirectory = ConfigurationManager.AppSettings["settingsPath"];
-            //    if (String.IsNullOrEmpty(configDirectory))
-            //    {
-            //       startup.ConfigDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            //                                              "ICSharpCode/SharpDevelop" + RevisionClass.Major);
-            //    }
-                //else
-                //{
-                //    startup.ConfigDirectory = Path.Combine(Path.GetDirectoryName(exe.Location), configDirectory);
-                //}
+                string configDirectory = ConfigurationManager.AppSettings["settingsPath"];
+                if (String.IsNullOrEmpty(configDirectory))
+                {
+                   startup.ConfigDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                                                          "ICIDECode/Develop" + RevisionClass.Major);
+                }
+                else
+                {
+                    startup.ConfigDirectory = Path.Combine(Path.GetDirectoryName(exe.Location), configDirectory);
+                }
 
-                //startup.DomPersistencePath = ConfigurationManager.AppSettings["domPersistencePath"];
-                //if (string.IsNullOrEmpty(startup.DomPersistencePath))
-                //{
-                //    startup.DomPersistencePath = Path.Combine(Path.GetTempPath(), "SharpDevelop" + RevisionClass.Major + "." + RevisionClass.Minor);
-                //    #if DEBUG
-                //    startup.DomPersistencePath = Path.Combine(startup.DomPersistencePath, "Debug");
-                //    #endif
-                //}
-                //else if (startup.DomPersistencePath == "none")
-                //{
-                //    startup.DomPersistencePath = null;
-                //}
+                startup.DomPersistencePath = ConfigurationManager.AppSettings["domPersistencePath"];
+                if (string.IsNullOrEmpty(startup.DomPersistencePath))
+                {
+                    startup.DomPersistencePath = Path.Combine(Path.GetTempPath(), "Develop" + RevisionClass.Major + "." + RevisionClass.Minor);
+                    #if DEBUG
+                    startup.DomPersistencePath = Path.Combine(startup.DomPersistencePath, "Debug");
+                    #endif
+                }
+                else if (startup.DomPersistencePath == "none")
+                {
+                    startup.DomPersistencePath = null;
+                }
 
-                //startup.AddAddInsFromDirectory(Path.Combine(startup.ApplicationRootPath, "AddIns"));
+                startup.AddAddInsFromDirectory(Path.Combine(startup.ApplicationRootPath, "AddIns"));
 
-                //// allows testing addins without having to install them
-                //foreach (string parameter in SplashScreenForm.GetParameterList())
-                //{
-                //    if (parameter.StartsWith("addindir:", StringComparison.OrdinalIgnoreCase))
-                //    {
-                //        startup.AddAddInsFromDirectory(parameter.Substring(9));
-                //    }
-                //}
+                // allows testing addins without having to install them
+                foreach (string parameter in SplashScreenForm.GetParameterList())
+                {
+                    if (parameter.StartsWith("addindir:", StringComparison.OrdinalIgnoreCase))
+                    {
+                        startup.AddAddInsFromDirectory(parameter.Substring(9));
+                    }
+                }
 
-                //SharpDevelopHost host = new SharpDevelopHost(AppDomain.CurrentDomain, startup);
+                DevelopHost host = new DevelopHost(AppDomain.CurrentDomain, startup);
 
                 //string[] fileList = SplashScreenForm.GetRequestedFileList();
                 //if (fileList.Length > 0)
