@@ -10,6 +10,20 @@ namespace ICIDECode.Core
     /// </summary>
     public static partial class FileUtility
     {
+        static string applicationRootPath = AppDomain.CurrentDomain.BaseDirectory;
+
+        public static string ApplicationRootPath
+        {
+            get
+            {
+                return applicationRootPath;
+            }
+            set
+            {
+                applicationRootPath = value;
+            }
+        }
+
         static string GetPathFromRegistryX86(string key, string valueName)
         {
             using (RegistryKey baseKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32))
@@ -95,5 +109,8 @@ namespace ICIDECode.Core
             //}
             return null;
         }
+
+        public static event EventHandler<FileNameEventArgs> FileLoaded;
+        public static event EventHandler<FileNameEventArgs> FileSaved;
     }
 }

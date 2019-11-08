@@ -22,5 +22,10 @@ namespace ICIDECode.Core
         {
             get { return Service.ProductName; }
         }
+
+        public static void ShowMessage(string message, string caption = null)
+        {
+            Service.ShowMessage(message, caption);
+        }
     }
 }

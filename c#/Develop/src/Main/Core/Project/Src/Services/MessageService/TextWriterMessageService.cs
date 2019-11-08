@@ -15,6 +15,16 @@ namespace ICIDECode.Core.Implementation
             this.DefaultMessageBoxTitle = this.ProductName = "SharpDevelop";
         }
 
+        public void ShowMessage(string message, string caption)
+        {
+            writer.WriteLine(caption + ": " + message);
+        }
+
+        public void ShowMessageFormatted(string formatstring, string caption, params object[] formatitems)
+        {
+            writer.WriteLine(StringParser.Format(formatstring, formatitems));
+        }
+
         public string DefaultMessageBoxTitle { get; set; }
         public string ProductName { get; set; }
     }

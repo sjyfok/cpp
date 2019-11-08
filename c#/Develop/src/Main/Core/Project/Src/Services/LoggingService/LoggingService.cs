@@ -3,12 +3,25 @@
 
 namespace ICIDECode.Core
 {
+    /// <summary>
+	/// Class for easy logging.
+	/// </summary>
     public static class LoggingService
     {
         static ILoggingService Service
         {
             get { return ServiceSingleton.GetRequiredService<ILoggingService>(); }
         }
+
+        public static void Debug(object message)
+        {
+            Service.Debug(message);
+        }
+        public static void DebugFormatted(string format, params object [] args)
+        {
+            Service.DebugFormatted(format, args);
+        }
+
         public static void Fatal(object message)
         { }
         public static void Fatal(object message, Exception ex)

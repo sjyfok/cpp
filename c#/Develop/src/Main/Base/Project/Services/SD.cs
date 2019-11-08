@@ -43,5 +43,11 @@ namespace ICIDECode.Develop
         {
             get { return GetRequiredService<IWinFormsService>(); }
         }
+
+        /// <inheritdoc see="ILoggingService"/>
+        public static ILoggingService Log
+        {
+            get { return GetRequiredService<ILoggingService>(); }
+        }
     }
 }

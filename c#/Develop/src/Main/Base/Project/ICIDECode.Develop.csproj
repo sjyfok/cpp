@@ -44,6 +44,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dom\IAssemblyModel.cs" />
+    <Compile Include="Parser\IAssemblyParserService.cs" />
     <Compile Include="Services\IClipboard.cs" />
     <Compile Include="Services\IMessageLoop.cs" />
     <Compile Include="Services\SD.cs" />
@@ -54,11 +56,16 @@
     <Compile Include="Src\Gui\Dialogs\SharpDevelopAboutPanels.Designer.cs">
       <DependentUpon>SharpDevelopAboutPanels.cs</DependentUpon>
     </Compile>
+    <Compile Include="Util\DevelopServiceContainer.cs" />
     <Compile Include="Util\FakeMessageLoop.cs" />
-    <Compile Include="Util\SharpDevelopExtensions.cs" />
+    <Compile Include="Util\DevelopExtensions.cs" />
     <Compile Include="WinForms\IWinFormsService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Libraries\NRefactory\ICIDECode.NRafactory\ICIDECode.NRafactory.csproj">
+      <Project>{e57220e7-ddcc-4b63-8cc8-bbf8e77b8df5}</Project>
+      <Name>ICIDECode.NRafactory</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\Project\ICIDECode.Core.csproj">
       <Project>{5a583118-43ab-41b9-b6ad-cbe048e8618e}</Project>
       <Name>ICIDECode.Core</Name>

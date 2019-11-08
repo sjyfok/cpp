@@ -29,6 +29,17 @@ namespace ICIDECode.Core
                 return new FileName(fileName);
         }
 
+        /// <summary>
+		/// Gets the file name (not the full path).
+		/// </summary>
+		/// <remarks>
+		/// Corresponds to <c>System.IO.Path.GetFileName</c>
+		/// </remarks>
+		public string GetFileName()
+        {
+            return Path.GetFileName(normalizedPath);
+        }
+
         #region Equals and GetHashCode implementation
         public override bool Equals(object obj)
         {

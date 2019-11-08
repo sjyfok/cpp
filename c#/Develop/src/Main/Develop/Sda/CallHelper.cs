@@ -17,16 +17,19 @@ using ICIDECode.Develop.Gui;
 //using ICSharpCode.SharpDevelop.Workbench;
 using ICIDECode.Develop.Logging;
 //using ICSharpCode.SharpDevelop.Parser;
-
+using ICIDECode.Develop;
 namespace ICIDECode.Develop.Sda
 {
     internal sealed class CallHelper : MarshalByRefObject
     {
+        DevelopHost.CallbackHelper callback;
+        bool useDevelopErrorHandler;
+
         #region Initialize Core
         public void InitDevelopCore(DevelopHost.CallbackHelper callback, StartupSettings properties)
         {
             // Initialize the most important services:
-            var container = new SharpDevelopServiceContainer();
+            var container = new DevelopServiceContainer();
             container.AddFallbackProvider(ServiceSingleton.FallbackServiceProvider);
             container.AddService(typeof(IMessageService), new SDMessageService());
             container.AddService(typeof(ILoggingService), new log4netLoggingService());
@@ -37,7 +40,7 @@ namespace ICIDECode.Develop.Sda
             CoreStartup startup = new CoreStartup(properties.ApplicationName);
             if (properties.UseSharpDevelopErrorHandler)
             {
-                this.useSharpDevelopErrorHandler = true;
+                this.useDevelopErrorHandler = true;
                 ExceptionBox.RegisterExceptionBoxForUnhandledExceptions();
             }
             string configDirectory = properties.ConfigDirectory;

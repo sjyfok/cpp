@@ -56,6 +56,8 @@
     <Compile Include="Logging\ExceptionBox.Designer.cs" />
     <Compile Include="Logging\log4netLoggingService.cs" />
     <Compile Include="Logging\LogMessageRecorder.cs" />
+    <Compile Include="Logging\SDMessageService.cs" />
+    <Compile Include="Parser\AssemblyParserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource\BitmapResource.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -75,6 +77,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\NRefactory\ICIDECode.NRafactory\ICIDECode.NRafactory.csproj">
+      <Project>{e57220e7-ddcc-4b63-8cc8-bbf8e77b8df5}</Project>
+      <Name>ICIDECode.NRafactory</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Base\Project\ICIDECode.Develop.csproj">
       <Project>{f74291ff-91fd-4e74-a2cd-c080130bc0b8}</Project>
       <Name>ICIDECode.Develop</Name>

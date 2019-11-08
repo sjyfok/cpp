@@ -213,6 +213,33 @@ namespace ICIDECode.Core
         }
 
         /// <summary>
+		/// Applies the StringParser to the formatstring; and then calls <c>string.Format</c> on the result.
+		/// 
+		/// This method is equivalent to:
+		/// <code>return string.Format(StringParser.Parse(formatstring), formatitems);</code>
+		/// but additionally includes error handling.
+		/// </summary>
+		public static string Format(string formatstring, params object[] formatitems)
+        {
+            try
+            {
+                return String.Format(StringParser.Parse(formatstring), formatitems);
+            }
+            catch (FormatException ex)
+            {
+                LoggingService.Warn(ex);
+
+                StringBuilder b = new StringBuilder(StringParser.Parse(formatstring));
+                foreach (object formatitem in formatitems)
+                {
+                    b.Append("\nItem: ");
+                    b.Append(formatitem);
+                }
+                return b.ToString();
+            }
+        }
+
+        /// <summary>
 		/// Allow special syntax to retrieve property values:
 		/// ${property:PropertyName}
 		/// ${property:PropertyName??DefaultValue}
