@@ -11,10 +11,10 @@ namespace ICIDECode.Core
     static partial class FileUtility
     {
         /// <summary>
-		/// Gets the normalized version of fileName.
-		/// Slashes are replaced with backslashes, backreferences "." and ".." are 'evaluated'.
-		/// </summary>
-		public static string NormalizePath(string fileName)
+        /// Gets the normalized version of fileName.
+        /// Slashes are replaced with backslashes, backreferences "." and ".." are 'evaluated'.
+        /// </summary>
+        public static string NormalizePath(string fileName)
         {
             if (string.IsNullOrEmpty(fileName)) return fileName;
 
@@ -126,6 +126,34 @@ namespace ICIDECode.Core
                     return ".";
             }
             return result.ToString();
+        }
+
+        public static bool IsEqualFileName(string fileName1, string fileName2)
+        {
+            return string.Equals(NormalizePath(fileName1),
+                                 NormalizePath(fileName2),
+                                 StringComparison.OrdinalIgnoreCase);
+        }
+
+        public static bool IsBaseDirectory(string baseDirectory, string testDirectory)
+        {
+            if (baseDirectory == null || testDirectory == null)
+                return false;
+            baseDirectory = NormalizePath(baseDirectory);
+            if (baseDirectory == ".")
+                return !Path.IsPathRooted(testDirectory);
+            baseDirectory = AddTrailingSeparator(baseDirectory);
+            testDirectory = AddTrailingSeparator(NormalizePath(testDirectory));
+
+            return testDirectory.StartsWith(baseDirectory, StringComparison.OrdinalIgnoreCase);
+        }
+
+        static string AddTrailingSeparator(string input)
+        {
+            if (input[input.Length - 1] == Path.DirectorySeparatorChar)
+                return input;
+            else
+                return input + Path.DirectorySeparatorChar.ToString();
         }
     }
 }

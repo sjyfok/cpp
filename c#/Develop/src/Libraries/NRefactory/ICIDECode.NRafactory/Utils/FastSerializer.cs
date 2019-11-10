@@ -8,7 +8,7 @@ using System.Runtime.Serialization;
 
 namespace ICIDECode.NRefactory.Utils
 {
-    public class FatSerializer
+    public class FastSerializer
     {
         #region Properties
         /// <summary>
@@ -1484,11 +1484,11 @@ namespace ICIDECode.NRefactory.Utils
     }
 
     /// <summary>
-	/// Specifies the version of the class.
-	/// The <see cref="FastSerializer"/> will refuse to deserialize an instance that was stored by
-	/// a different version of the class than the current one.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Enum)]
+    /// Specifies the version of the class.
+    /// The <see cref="FastSerializer"/> will refuse to deserialize an instance that was stored by
+    /// a different version of the class than the current one.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Enum)]
     public class FastSerializerVersionAttribute : Attribute
     {
         readonly int versionNumber;

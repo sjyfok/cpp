@@ -63,6 +63,7 @@
     <Compile Include="TypeSystem\ByReferenceType.cs" />
     <Compile Include="TypeSystem\DomRegion.cs" />
     <Compile Include="TypeSystem\EntityType.cs" />
+    <Compile Include="TypeSystem\Error.cs" />
     <Compile Include="TypeSystem\FullTypeName.cs" />
     <Compile Include="TypeSystem\IAssembly.cs" />
     <Compile Include="TypeSystem\IAttribute.cs" />
@@ -132,14 +133,17 @@
     <Compile Include="TypeSystem\TypeParameterSubstitution.cs" />
     <Compile Include="TypeSystem\TypeSystemExtensions.cs" />
     <Compile Include="TypeSystem\TypeVisitor.cs" />
+    <Compile Include="Utils\7BitEncodedInts.cs" />
     <Compile Include="Utils\BitVector16.cs" />
     <Compile Include="Utils\BusyManager.cs" />
     <Compile Include="Utils\CacheManager.cs" />
     <Compile Include="Utils\EmptyList.cs" />
-    <Compile Include="Utils\FatSerializer.cs" />
+    <Compile Include="Utils\ExtensionMethods.cs" />
+    <Compile Include="Utils\FastSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\LazyInit.cs" />
     <Compile Include="Utils\ProjectedList.cs" />
+    <Compile Include="Utils\ReferenceComparer.cs" />
     <Compile Include="Utils\TreeTraversal.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

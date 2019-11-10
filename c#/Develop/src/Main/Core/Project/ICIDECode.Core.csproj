@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Src\CoreException.cs" />
+    <Compile Include="Src\ExtensionMethods.cs" />
     <Compile Include="Src\Services\ApplicationStateInfoService.cs" />
     <Compile Include="Src\Services\FileUtility\DirectoryName.cs" />
     <Compile Include="Src\Services\FileUtility\FileName.cs" />

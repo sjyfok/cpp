@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NRefactory", "NRefactory", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICIDECode.NRafactory", "src\Libraries\NRefactory\ICIDECode.NRafactory\ICIDECode.NRafactory.csproj", "{E57220E7-DDCC-4B63-8CC8-BBF8E77B8DF5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICIDECode.AvalonEdit", "src\Libraries\ICIDECode.AvalonEdit\ICIDECode.AvalonEdit.csproj", "{0D3F3CAA-502F-423B-8EF4-5F5FA7832D1F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{E57220E7-DDCC-4B63-8CC8-BBF8E77B8DF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E57220E7-DDCC-4B63-8CC8-BBF8E77B8DF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E57220E7-DDCC-4B63-8CC8-BBF8E77B8DF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D3F3CAA-502F-423B-8EF4-5F5FA7832D1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D3F3CAA-502F-423B-8EF4-5F5FA7832D1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D3F3CAA-502F-423B-8EF4-5F5FA7832D1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D3F3CAA-502F-423B-8EF4-5F5FA7832D1F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,6 +62,7 @@ Global
 		{3602E3BF-7778-44B2-AE19-DB862F1344F6} = {A7AD0BCC-6C36-459A-B658-811254CC7E18}
 		{A05ADA14-EC73-4356-9FFE-1AA0395A1B0B} = {F9474418-163B-497B-AEDE-BAEA01B889B5}
 		{E57220E7-DDCC-4B63-8CC8-BBF8E77B8DF5} = {A05ADA14-EC73-4356-9FFE-1AA0395A1B0B}
+		{0D3F3CAA-502F-423B-8EF4-5F5FA7832D1F} = {F9474418-163B-497B-AEDE-BAEA01B889B5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {57953F61-D152-4C82-8EA5-6EEDDB5ABD6F}

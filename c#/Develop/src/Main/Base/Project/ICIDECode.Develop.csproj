@@ -31,6 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Build" />
+    <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -45,7 +47,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dom\IAssemblyModel.cs" />
+    <Compile Include="Dom\IEntityModel.cs" />
+    <Compile Include="Dom\IModelCollection.cs" />
+    <Compile Include="Dom\ISymbolModel.cs" />
+    <Compile Include="Dom\ITypeDefinitionModel.cs" />
+    <Compile Include="Dom\ITypeDefinitionModelCollection.cs" />
+    <Compile Include="Dom\ModelCollectionChangedEvent.cs" />
     <Compile Include="Parser\IAssemblyParserService.cs" />
+    <Compile Include="Project\Build\BuildError.cs" />
+    <Compile Include="Project\Build\BuildOutputVerbosity.cs" />
+    <Compile Include="Project\Build\BuildTarget.cs" />
+    <Compile Include="Project\Build\IBuildable.cs" />
+    <Compile Include="Project\Build\IBuildFeedbackSink.cs" />
+    <Compile Include="Project\Build\ProjectBuildOptions.cs" />
+    <Compile Include="Project\Configuration\ConfigurationAndPlatform.cs" />
+    <Compile Include="Project\Configuration\IConfigurable.cs" />
+    <Compile Include="Project\Configuration\IConfigurationOrPlatformNameCollection.cs" />
+    <Compile Include="Project\ISolution.cs" />
+    <Compile Include="Project\ISolutionFolder.cs" />
+    <Compile Include="Project\ISolutionItem.cs" />
+    <Compile Include="Project\SolutionSection.cs" />
     <Compile Include="Services\IClipboard.cs" />
     <Compile Include="Services\IMessageLoop.cs" />
     <Compile Include="Services\SD.cs" />
@@ -56,9 +77,13 @@
     <Compile Include="Src\Gui\Dialogs\SharpDevelopAboutPanels.Designer.cs">
       <DependentUpon>SharpDevelopAboutPanels.cs</DependentUpon>
     </Compile>
+    <Compile Include="Src\Project\IProject.cs" />
+    <Compile Include="Src\Project\MSBuildEnums.cs" />
+    <Compile Include="Src\Project\MSBuildInternals.cs" />
     <Compile Include="Util\DevelopServiceContainer.cs" />
     <Compile Include="Util\FakeMessageLoop.cs" />
     <Compile Include="Util\DevelopExtensions.cs" />
+    <Compile Include="Util\ICanBeDirty.cs" />
     <Compile Include="WinForms\IWinFormsService.cs" />
   </ItemGroup>
   <ItemGroup>
