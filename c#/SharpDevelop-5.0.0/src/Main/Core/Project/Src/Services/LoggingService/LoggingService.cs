@@ -25,8 +25,10 @@ namespace ICSharpCode.Core
 	/// </summary>
 	public static class LoggingService
 	{
-
-		static ILoggingService Service {
+        //Service 负责输出 类里面的函数 将信息转化
+        //GetRquiredService 将转化成一个 TextWriterLoggingService的实例 
+        //最终同Trace实施输出
+        static ILoggingService Service {
 			get { return ServiceSingleton.GetRequiredService<ILoggingService>(); }
 		}
 		

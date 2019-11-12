@@ -80,6 +80,7 @@ namespace ICSharpCode.Core
 					if (attrs.Length == 1) {
 						var attr = (SDServiceAttribute)attrs[0];
 						if (attr.FallbackImplementation != null) {
+                            //动态的创建一个对象实例
 							instance = Activator.CreateInstance(attr.FallbackImplementation);
 						}
 					}

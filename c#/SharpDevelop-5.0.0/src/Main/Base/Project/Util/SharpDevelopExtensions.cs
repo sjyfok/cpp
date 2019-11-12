@@ -883,7 +883,7 @@ namespace ICSharpCode.SharpDevelop
 		/// <summary>
 		/// Retrieves the service of type <c>T</c> from the provider.
 		/// If the service cannot be found, a <see cref="ServiceNotFoundException"/> will be thrown.
-		/// </summary>
+		/// </summary>s
 		public static T GetRequiredService<T>(this IServiceProvider provider) where T : class
 		{
 			return (T)GetRequiredService(provider, typeof(T));

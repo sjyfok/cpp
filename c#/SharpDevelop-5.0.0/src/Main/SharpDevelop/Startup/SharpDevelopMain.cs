@@ -162,6 +162,7 @@ namespace ICSharpCode.SharpDevelop.Startup
 			}
 			#endif
 			
+            //LoggingService的内部变量负责输出
 			LoggingService.Info("Starting SharpDevelop...");
 			try {
 				StartupSettings startup = new StartupSettings();
