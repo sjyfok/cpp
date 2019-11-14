@@ -76,11 +76,12 @@ namespace ICSharpCode.Core
 			object instance;
 			lock (fallbackServiceDict) {
 				if (!fallbackServiceDict.TryGetValue(serviceType, out instance)) {
+                    //此处调用的是Type类型的成员函数
 					var attrs = serviceType.GetCustomAttributes(typeof(SDServiceAttribute), false);
 					if (attrs.Length == 1) {
 						var attr = (SDServiceAttribute)attrs[0];
 						if (attr.FallbackImplementation != null) {
-                            //动态的创建一个对象实例
+                            //动态的创建一个对象实例  使用类型的无参构造函数进行
 							instance = Activator.CreateInstance(attr.FallbackImplementation);
 						}
 					}

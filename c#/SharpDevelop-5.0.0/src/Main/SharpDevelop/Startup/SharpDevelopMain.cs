@@ -168,13 +168,16 @@ namespace ICSharpCode.SharpDevelop.Startup
 				StartupSettings startup = new StartupSettings();
 				#if DEBUG
 				startup.UseSharpDevelopErrorHandler = UseExceptionBox;
-				#endif
-				
-				Assembly exe = typeof(SharpDevelopMain).Assembly;
-				startup.ApplicationRootPath = Path.Combine(Path.GetDirectoryName(exe.Location), "..");
+#endif
+                //获取包含SharpDevelopMain类型的程序集 Assembly实例
+                Assembly exe = typeof(SharpDevelopMain).Assembly; 
+                //exe.Location 可执行程序的位置    
+                //可执行程序的上级目录 ApplicationRootPath
+				startup.ApplicationRootPath = Path.Combine(Path.GetDirectoryName(exe.Location), ".."); 
 				startup.AllowUserAddIns = true;
 				
 				string configDirectory = ConfigurationManager.AppSettings["settingsPath"];
+                //此处是对软件的配置信息目录进行处理的部分
 				if (String.IsNullOrEmpty(configDirectory)) {
 					startup.ConfigDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
 					                                       "ICSharpCode/SharpDevelop" + RevisionClass.Major);
@@ -201,7 +204,10 @@ namespace ICSharpCode.SharpDevelop.Startup
 						startup.AddAddInsFromDirectory(parameter.Substring(9));
 					}
 				}
-				
+                //以上将startup这个实例对象进行设置 作为后续调用的参数
+				//AppDomain 是一个独立的环境 应用程序在其中执行
+                //在当前环境中，执行另外一段程序集， 有点类似linux的Fork，创建一个进程后
+                //在进程环境中执行exec系列函数，去执行其他程序
 				SharpDevelopHost host = new SharpDevelopHost(AppDomain.CurrentDomain, startup);
 				
 				string[] fileList = SplashScreenForm.GetRequestedFileList();
