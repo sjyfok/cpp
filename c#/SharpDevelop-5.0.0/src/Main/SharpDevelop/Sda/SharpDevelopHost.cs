@@ -394,10 +394,11 @@ namespace ICSharpCode.SharpDevelop.Sda
 				if (host.EndBuild != null) host.EndBuild(host, EventArgs.Empty);
 			}
 			
+            //点击界面上的最近项目时，调用此方法 加载解决方案
 			internal void SolutionLoaded()
 			{
 				if (InvokeRequired) { Invoke(SolutionLoaded); return; }
-				if (host.SolutionLoaded != null) host.SolutionLoaded(host, EventArgs.Empty);
+				if (host.SolutionLoaded != null) host.SolutionLoaded(host, EventArgs.Empty);//产生事件
 			}
 			
 			internal void SolutionClosed()

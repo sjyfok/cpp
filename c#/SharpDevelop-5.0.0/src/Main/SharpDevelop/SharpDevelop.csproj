@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -23,7 +23,7 @@
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <DelaySign>False</DelaySign>
     <AssemblyOriginatorKeyMode>File</AssemblyOriginatorKeyMode>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -258,6 +258,7 @@
     <None Include="..\..\..\data\resources\StringResources.resx">
       <Link>StringResources.resx</Link>
     </None>
+    <EmbeddedResource Include="Resources\BitmapResources.resources" />
     <None Include="..\GlobalAssemblyInfo.cs.template">
       <Link>Configuration\GlobalAssemblyInfo.cs.template</Link>
     </None>

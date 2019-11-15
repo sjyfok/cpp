@@ -19,7 +19,6 @@
 using System;
 using System.Collections.Generic;
 
-//控制如何被加载
 namespace ICSharpCode.SharpDevelop.Sda
 {
 	/// <summary>

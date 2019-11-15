@@ -25,6 +25,7 @@ using ICSharpCode.SharpDevelop.Project;
 
 namespace ICSharpCode.CodeCoverage
 {
+    //解决方案
 	public class SolutionCodeCoverageResults
 	{
 		ISolution solution;
@@ -41,6 +42,7 @@ namespace ICSharpCode.CodeCoverage
 			this.fileSystem = fileSystem;
 		}
 		
+        //从解决方案中获得工程
 		public IEnumerable<CodeCoverageResults> GetCodeCoverageResultsForAllProjects()
 		{
 			foreach (IProject project in solution.Projects) {

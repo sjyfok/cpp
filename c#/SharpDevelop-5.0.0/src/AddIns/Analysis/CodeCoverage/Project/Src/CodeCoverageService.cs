@@ -163,6 +163,7 @@ namespace ICSharpCode.CodeCoverage
 			}
 		}
 		
+        //加载解决方案的时间处理
 		static void SolutionLoaded(object sender, SolutionEventArgs e)
 		{
 			var solutionCodeCoverageResults = new SolutionCodeCoverageResults(e.Solution);
